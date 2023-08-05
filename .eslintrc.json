@@ -1,0 +1,68 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:storybook/recommended",
+    "airbnb",
+    "airbnb/hooks",
+    "airbnb-typescript",
+    "plugin:jest/recommended",
+    "prettier"
+  ],
+  "ignorePatterns": [
+    "dist",
+    ".eslintrc.json",
+    "*.config.[jt]s",
+    "jest.setup.ts"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react-refresh"],
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/**/*.[jt]s?(x)",
+        "**/?(*.)+(spec|test).[jt]s?(x)"
+      ],
+      "extends": ["plugin:testing-library/react"]
+    }
+  ],
+  "rules": {
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": ["arrow-function", "function-declaration"],
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+    "react/jsx-props-no-spreading": "off",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-refresh/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true
+      }
+    ],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/return-await": "off"
+  }
+}
