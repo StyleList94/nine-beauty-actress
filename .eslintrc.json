@@ -13,15 +13,9 @@
     "airbnb",
     "airbnb/hooks",
     "airbnb-typescript",
-    "plugin:jest/recommended",
     "prettier"
   ],
-  "ignorePatterns": [
-    "dist",
-    ".eslintrc.json",
-    "*.config.[jt]s",
-    "jest.setup.ts"
-  ],
+  "ignorePatterns": ["dist", ".eslintrc.json", "*.config.[jt]s"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.json",

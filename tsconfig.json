@@ -21,9 +21,12 @@
     "noFallthroughCasesInSwitch": true,
 
     "esModuleInterop": true,
-    "baseUrl": "src"
+
+    "types": ["vitest/globals"],
+
+    "baseUrl": "."
   },
-  "include": ["src"],
+  "include": ["src", "lib", ".storybook"],
   "exclude": ["node_modules", "**/*.test.ts?(x)"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
