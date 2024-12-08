@@ -25,14 +25,17 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react-refresh"],
+  "plugins": ["react-refresh", "@typescript-eslint", "testing-library"],
   "overrides": [
     {
       "files": [
         "**/__tests__/**/*.[jt]s?(x)",
         "**/?(*.)+(spec|test).[jt]s?(x)"
       ],
-      "extends": ["plugin:testing-library/react"]
+      "extends": [
+        "plugin:@vitest/legacy-recommended",
+        "plugin:testing-library/react"
+      ]
     }
   ],
   "rules": {
