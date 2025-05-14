@@ -6,19 +6,12 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import dtsPlugin from 'vite-plugin-dts';
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
-import tailwindcss from '@tailwindcss/vite';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    dtsPlugin({ include: ['lib'], insertTypesEntry: true }),
-    cssInjectedByJsPlugin(),
-    tailwindcss(),
-  ],
+  plugins: [react(), dtsPlugin({ include: ['lib'], insertTypesEntry: true })],
   test: {
     globals: true,
     environment: 'jsdom',

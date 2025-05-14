@@ -8,6 +8,7 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@storybook/addon-onboarding',
     '@storybook/addon-interactions',
+    '@storybook/addon-themes',
     '@chromatic-com/storybook',
   ],
 
@@ -23,6 +24,18 @@ const config: StorybookConfig = {
     reactDocgenTypescriptOptions: {
       tsconfigPath: './tsconfig.json',
     },
+  },
+
+  async viteFinal(config) {
+    const { mergeConfig, defineConfig } = await import('vite');
+    const { default: tailwindcss } = await import('@tailwindcss/vite');
+
+    return mergeConfig(
+      config,
+      defineConfig({
+        plugins: [tailwindcss()],
+      }),
+    );
   },
 };
 export default config;
