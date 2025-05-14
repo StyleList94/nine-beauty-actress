@@ -1,13 +1,15 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import { resolve } from 'path';
 import { defineConfig } from 'vite';
-import path from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import dtsPlugin from 'vite-plugin-dts';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import tailwindcss from '@tailwindcss/vite';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -24,18 +26,17 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'lib/main.ts'),
+      entry: resolve(__dirname, 'lib/main.ts'),
       name: 'NineBeautyActress',
       formats: ['es', 'umd'],
       fileName: (format) => `nine-beauty-actress.${format}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'tailwindcss'],
+      external: ['react', 'react-dom', 'tailwindcss', 'motion'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
-          tailwindcss: 'tailwindcss',
         },
       },
     },

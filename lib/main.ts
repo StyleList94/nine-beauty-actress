@@ -1,3 +1,7 @@
 import './styles.css';
 
-export * from 'lib/components';
+import { Button } from './components/Button';
+import { FileUploader, FileUploaderProps } from './components/FileUploader';
+
+export { Button, FileUploader };
+export type { FileUploaderProps };

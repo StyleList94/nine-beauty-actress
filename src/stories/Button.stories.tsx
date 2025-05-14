@@ -4,7 +4,7 @@ import { Button } from '../../lib/components';
 
 const meta: Meta<typeof Button> = {
   component: Button,
-  // 👇 Enables auto-generated documentation for the component story
+  title: 'UI/Button',
   tags: ['autodocs'],
   argTypes: {},
 };
