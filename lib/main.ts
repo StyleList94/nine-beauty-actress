@@ -1,7 +1,9 @@
-import './styles.css';
-
 import { Button } from './components/Button';
 import { FileUploader, FileUploaderProps } from './components/FileUploader';
+import {
+  AppearanceSwitch,
+  AppearanceSwitchProps,
+} from './components/AppearanceSwitch';
 
-export { Button, FileUploader };
-export type { FileUploaderProps };
+export { AppearanceSwitch, Button, FileUploader };
+export type { AppearanceSwitchProps, FileUploaderProps };
