@@ -17,8 +17,8 @@ export const UploadImage: Story = {
   args: {
     name: 'icon',
     accept: 'image/png',
-    placeholder: 'somthing icon',
-    id: 'somthing-icon',
+    placeholder: 'something icon',
+    id: 'something-icon',
     required: true,
   },
   render: function Render(args) {

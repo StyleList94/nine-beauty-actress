@@ -100,6 +100,7 @@ export const FileUploader = ({
           fileBoxStyle,
           className,
         )}
+        aria-label="nine-file-uploader"
       >
         {children}
       </motion.div>
