@@ -1,3 +1,3 @@
-export * from 'lib/components/Button';
-export * from 'lib/components/FileUploader';
-export * from 'lib/components/AppearanceSwitch';
+export * from './button';
+export * from './file-uploader';
+export * from './appearance-switch';
