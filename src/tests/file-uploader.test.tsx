@@ -35,6 +35,6 @@ describe('FileUploader', () => {
     expect(input.files?.item(0)).toBe(image);
     expect(input.files).toHaveLength(1);
 
-    expect(screen.getByText('plug-in-baby.png')).toBeInTheDocument();
+    expect(await screen.findByText('plug-in-baby.png')).toBeInTheDocument();
   });
 });
