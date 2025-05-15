@@ -23,6 +23,7 @@ export default defineConfig({
       name: 'NineBeautyActress',
       formats: ['es', 'umd'],
       fileName: (format) => `nine-beauty-actress.${format}.js`,
+      cssFileName: 'style',
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'tailwindcss', 'motion'],

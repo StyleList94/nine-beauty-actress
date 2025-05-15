@@ -5,5 +5,7 @@ import {
   AppearanceSwitchProps,
 } from './components/AppearanceSwitch';
 
+import './style.css';
+
 export { AppearanceSwitch, Button, FileUploader };
 export type { AppearanceSwitchProps, FileUploaderProps };
