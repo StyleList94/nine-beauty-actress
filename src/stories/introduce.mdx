@@ -33,12 +33,19 @@ Github Packages에 배포되었기 때문에 레지스트리도 바꿔줘야 한
 
 그리고 설치하면 된다.
 
-근데 사실 이거 프라이빗 패키지다.
-
-나만 쓸꺼임
-
 ```bash
 pnpm add @stylelist94/nine-beauty-actress
 ```
 
-더 끄적일 예정
+### 스타일 적용
+
+`tailwindcss`가 이 패키지에 사용된 스타일도 알아차릴 수 있도록 최상위 CSS를 업데이트 해야한다.
+
+```css
+/* global.css */
+
+@import 'tailwindcss';
+
+/* 상대경로이므로 센스있게 바꿔보자! */
+@source '../node_modules/@stylelist94/nine-beauty-actress/**/*.{ts,tsx}';
+```
