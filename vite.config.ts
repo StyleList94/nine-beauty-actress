@@ -11,7 +11,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), dtsPlugin({ include: ['lib'], insertTypesEntry: true })],
+  plugins: [
+    react(),
+    dtsPlugin({
+      include: ['lib'],
+      insertTypesEntry: true,
+    }),
+  ],
   test: {
     globals: true,
     environment: 'jsdom',
@@ -19,18 +25,30 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(__dirname, 'lib/main.ts'),
+      entry: {
+        main: resolve(__dirname, 'lib/main.ts'),
+        styles: resolve(__dirname, 'lib/core/styles.ts'),
+      },
       name: 'NineBeautyActress',
-      formats: ['es', 'umd'],
-      fileName: (format) => `nine-beauty-actress.${format}.js`,
+      formats: ['es', 'cjs'],
+      fileName: (format, entryName) => `${entryName}.${format}.js`,
       cssFileName: 'style',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'tailwindcss', 'motion'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        /^react\/.*/,
+        'motion',
+      ],
       output: {
+        chunkFileNames: () => `bundle/[name]-[hash].js`,
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'jsxRuntime',
+          motion: 'motion',
         },
       },
     },

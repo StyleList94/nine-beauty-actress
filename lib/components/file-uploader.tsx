@@ -6,9 +6,10 @@ import {
   useRef,
   useState,
 } from 'react';
-import { motion } from 'motion/react';
+import { LazyMotion, domAnimation } from 'motion/react';
+import * as m from 'motion/react-m';
 
-import { cn, isFileAccepted } from 'lib/utils';
+import { cn, isFileAccepted } from 'lib/core/utils';
 
 export type FileUploaderProps = {
   /* 박스 안 내용을 구현할 때 사용합니다 */
@@ -86,33 +87,35 @@ export const FileUploader = ({
   };
 
   return (
-    <div className="relative">
-      <motion.div
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        animate={{
-          scale: isDragging ? 1.02 : 1,
-        }}
-        onClick={handleClickBox}
-        className={cn(
-          'flex justify-center items-center border-2 rounded-sm p-4 border-dashed select-none',
-          fileBoxStyle,
-          className,
-        )}
-        aria-label="nine-file-uploader"
-      >
-        {children}
-      </motion.div>
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChangeCapture={handleChangeCapture}
-        onChange={onChange}
-        className="absolute bottom-0 -z-10 opacity-0 w-full"
-        {...rest}
-      />
-    </div>
+    <LazyMotion features={domAnimation}>
+      <div className="relative">
+        <m.div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          animate={{
+            scale: isDragging ? 1.02 : 1,
+          }}
+          onClick={handleClickBox}
+          className={cn(
+            'flex justify-center items-center border-2 rounded-sm p-4 border-dashed select-none',
+            fileBoxStyle,
+            className,
+          )}
+          aria-label="nine-file-uploader"
+        >
+          {children}
+        </m.div>
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChangeCapture={handleChangeCapture}
+          onChange={onChange}
+          className="absolute bottom-0 -z-10 opacity-0 w-full"
+          {...rest}
+        />
+      </div>
+    </LazyMotion>
   );
 };
 

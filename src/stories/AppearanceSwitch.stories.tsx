@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { cn } from 'lib/utils';
+import { cn } from 'lib/core/utils';
 
 import type { Meta, StoryObj } from '@storybook/react';
 
@@ -22,6 +22,9 @@ export const LightDarkTheme: Story = {
 
     const handleClick = () => {
       setIsDarkTheme(!isDarkTheme);
+      document.getElementsByTagName('html')[0].className = isDarkTheme
+        ? 'dark'
+        : 'light';
     };
     return (
       <AppearanceSwitch

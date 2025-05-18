@@ -1,3 +1,19 @@
 @import 'tailwindcss';
 
 @import '../lib/style.css';
+
+@custom-variant dark (&:is(.dark *));
+
+html.light body {
+  background: #fff;
+}
+
+html.dark body {
+  background: #181818;
+}
+
+
+@theme {
+  --font-sans: "Pretendard", "sans-serif";
+  --font-display: "Titillium Web", "sans-serif";
+}
