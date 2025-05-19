@@ -65,7 +65,12 @@ export const StyleList94: Story = {
 
     return (
       <Header {...args}>
-        <div className="flex justify-between w-full select-none">
+        <div
+          className={cn(
+            'flex justify-between w-full select-none',
+            'text-black dark:text-white',
+          )}
+        >
           <a
             href="https://stylelist94.dev/"
             target="_blank"
