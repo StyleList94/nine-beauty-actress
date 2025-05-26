@@ -26,7 +26,7 @@ const LightDarkTemplateBox = ({ isDarkTheme }: { isDarkTheme?: boolean }) => (
   <div
     className={cn(
       'w-8 h-8',
-      'flex items-center justify-center text-2xl rounded-lg text-neutral-600',
+      'flex items-center justify-center text-xl rounded-lg text-neutral-600',
       'transition ease-in-out duration-200',
       'bg-white hover:bg-neutral-100',
       'dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-300',
@@ -81,7 +81,7 @@ export const StyleList94: Story = {
             <span className="text-sm leading-relaxed tracking-wider">.DEV</span>
           </a>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-0.5">
             <LightDarkTemplateBox isDarkTheme={isDarkTheme} />
             <a
               href="https://github.com/StyleList94"
@@ -89,7 +89,7 @@ export const StyleList94: Story = {
               rel="noopener noreferrer"
               className={cn(
                 'w-8 h-8',
-                'flex items-center justify-center text-2xl text-neutral-700',
+                'flex items-center justify-center text-xl text-neutral-700',
                 'rounded-lg bg-white hover:bg-neutral-100',
                 'dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-300',
                 'transition duration-200 ease-in-out',
@@ -116,7 +116,7 @@ export const StyleList94: Story = {
 };
 
 export const StylishLog: Story = {
-  name: 'STYLISH.LOG',
+  name: 'Stylish.LOG',
   args: {
     boxStyle: 'lg:max-w-[64rem]',
   },
@@ -137,7 +137,7 @@ export const StylishLog: Story = {
             rel="noopener noreferrer"
             className="flex items-end gap-0.5 font-display text-xl tracking-wide"
           >
-            STYLISH
+            Stylish
             <span className="text-sm leading-relaxed tracking-wider">.LOG</span>
           </a>
 

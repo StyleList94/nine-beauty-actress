@@ -1,0 +1,40 @@
+import { Meta, Primary, Controls, Story, Source } from '@storybook/blocks';
+import * as useDebounceStories from './useDebounce.stories';
+
+<Meta of={useDebounceStories} />
+
+# useDebounce
+
+`delay` 밀리초 동안 입력 된 `value`를 디바운싱 합니다.
+
+## Parameter
+
+- `value`: 디바운싱할 상태값을 지정합니다. `T = string`
+- `delay`: 상태변경을 지연시킬 시간을 밀리초 단위로 입력합니다. `number`
+
+## Return
+
+`debouncedValue`: `value`를 `delay` 밀리초 동안 지연시킨 이후에 변화된 값.  `T = string`
+
+## Example
+
+<Story of={useDebounceStories.Example} />
+
+```tsx
+const InputSomething = ({ delay }: { delay: number }) => {
+  const [inputValue, setInputValue] = useState('');
+  const debouncedValue = useDebounce(inputValue, delay);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        className="border-2 border-zinc-200 dark:border-zinc-800 outline-0 rounded-sm w-48"
+      />
+      <p>Result: {debouncedValue}</p>
+    </div>
+  );
+};
+```

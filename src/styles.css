@@ -13,7 +13,7 @@ html.dark body {
 }
 
 
-@theme {
+@theme inline {
   --font-sans: "Pretendard", "sans-serif";
   --font-display: "Titillium Web", "sans-serif";
 }
