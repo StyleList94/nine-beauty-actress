@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { MainContainer } from 'lib/components';
+import { MainContainer } from 'lib/components/main-container';
 
 const meta: Meta<typeof MainContainer> = {
   title: 'UI/Layout/MainContainer',

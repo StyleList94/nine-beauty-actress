@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { cn } from 'lib/core/utils';
 
-import { Footer } from 'lib/components';
+import { Footer } from 'lib/components/footer';
 
 const meta: Meta<typeof Footer> = {
   title: 'UI/Layout/Footer',

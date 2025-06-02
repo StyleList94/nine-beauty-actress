@@ -4,7 +4,7 @@ import { cn } from 'lib/core/utils';
 
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { AppearanceSwitch } from 'lib/components';
+import { AppearanceSwitch } from 'lib/components/appearance-switch';
 
 const meta: Meta<typeof AppearanceSwitch> = {
   component: AppearanceSwitch,
