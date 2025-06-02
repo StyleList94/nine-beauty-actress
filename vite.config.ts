@@ -40,10 +40,16 @@ export default defineConfig({
         'react-dom',
         'react/jsx-runtime',
         /^react\/.*/,
-        'motion',
+        /^motion\/.*/,
       ],
       output: {
         chunkFileNames: () => `bundle/[name]-[hash].js`,
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            const module = id.split('node_modules/').pop().split('/')[0];
+            return `${module}`;
+          }
+        },
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
