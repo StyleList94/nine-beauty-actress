@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { cn } from 'lib/core/utils';
 
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { AppearanceSwitch } from 'lib/components/appearance-switch';
 

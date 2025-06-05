@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import { composeStories } from '@storybook/react';
+import { composeStories } from '@storybook/react-vite';
 
 import * as stories from '../stories/Footer.stories';
 

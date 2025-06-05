@@ -1,5 +1,5 @@
-import { addons } from '@storybook/manager-api';
-import { STORY_RENDERED, DOCS_RENDERED } from '@storybook/core-events';
+import { addons } from 'storybook/manager-api';
+import { STORY_RENDERED, DOCS_RENDERED } from 'storybook/internal/core-events';
 
 import theme from './theme';
 

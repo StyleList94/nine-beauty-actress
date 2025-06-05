@@ -5,10 +5,9 @@ const config: StorybookConfig = {
 
   addons: [
     '@storybook/addon-links',
-    '@storybook/addon-essentials',
     '@storybook/addon-onboarding',
-    '@storybook/addon-interactions',
     '@storybook/addon-themes',
+    '@storybook/addon-docs',
   ],
 
   framework: {
@@ -16,12 +15,10 @@ const config: StorybookConfig = {
     options: {},
   },
 
-  docs: {},
-
   typescript: {
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
-      tsconfigPath: './tsconfig.json',
+      tsconfigPath: './tsconfig.node.json',
     },
   },
 

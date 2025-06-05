@@ -1,6 +1,6 @@
 import { withThemeByClassName } from '@storybook/addon-themes';
 
-import type { Preview } from '@storybook/react';
+import type { Preview } from '@storybook/react-vite';
 
 import '../src/styles.css';
 
