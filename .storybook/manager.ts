@@ -8,9 +8,6 @@ addons.register('TitleAddon', (api) => {
 
   const setDocumentTitle = () => {
     const storyData = api.getCurrentStoryData();
-    if (!storyData) {
-      document.title = projectName;
-    }
     document.title = `${storyData.title} - ${storyData.name} :: ${projectName}`;
   };
 

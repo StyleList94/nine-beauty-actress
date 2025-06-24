@@ -58,7 +58,7 @@ export const FileUploader = ({
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (fileInputRef.current && e.dataTransfer.files) {
+    if (fileInputRef.current && e.dataTransfer.files.length > 0) {
       if (!isFileAccepted(e.dataTransfer.files[0], rest.accept)) {
         setFileBoxStyle('border-red-500/50 border-solid');
         onDropError?.(e);

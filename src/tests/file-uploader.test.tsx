@@ -25,9 +25,8 @@ describe('FileUploader', () => {
       type: 'image/png',
     });
 
-    const input = screen.getByPlaceholderText(
-      'something icon',
-    ) as HTMLInputElement;
+    const input: HTMLInputElement =
+      screen.getByPlaceholderText('something icon');
 
     await user.upload(input, image);
 

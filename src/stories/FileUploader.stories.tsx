@@ -1,5 +1,6 @@
-import { type ChangeEvent, useCallback, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { type ChangeEvent, useCallback, useState } from 'react';
 
 import { FileUploader } from 'lib/components/file-uploader';
 

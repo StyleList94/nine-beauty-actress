@@ -1,6 +1,6 @@
-import { cn } from 'lib/core/utils';
-
 import type { MouseEventHandler, ReactNode } from 'react';
+
+import { cn } from 'lib/core/utils';
 
 export type AppearanceSwitchProps = {
   /* 비활성화 상태, 활성화 상태 순서로 노드를 구성해야 합니다. */
