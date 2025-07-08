@@ -1,6 +1,7 @@
 import tseslint from 'typescript-eslint';
 import stylish from 'eslint-config-stylish';
 import stylishReact from 'eslint-config-stylish/react';
+import stylishReactHooks from 'eslint-config-stylish/react-hooks';
 import stylishTypeScript from 'eslint-config-stylish/typescript';
 import vitest from '@vitest/eslint-plugin';
 import testingLibrary from 'eslint-plugin-testing-library';
@@ -20,7 +21,11 @@ export default tseslint.config(
   },
   {
     files: ['**/*.{js,jsx,tsx}'],
-    extends: [stylishReact],
+    extends: [stylishReact, stylishReactHooks],
+  },
+  {
+    files: ['**/use*.ts'],
+    extends: [stylishReactHooks],
   },
   {
     files: ['**/*.{ts,mts,cts,tsx}'],

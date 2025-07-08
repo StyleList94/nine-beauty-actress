@@ -59,7 +59,7 @@ export const StyleList94: Story = {
 };
 
 export const StylishLog: Story = {
-  name: 'STYLISH.LOG',
+  name: 'Stylish.LOG',
   args: {
     className: 'max-w-[64rem]',
   },
