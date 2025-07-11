@@ -16,10 +16,7 @@ const config: StorybookConfig = {
   },
 
   typescript: {
-    reactDocgen: 'react-docgen-typescript',
-    reactDocgenTypescriptOptions: {
-      tsconfigPath: './tsconfig.node.json',
-    },
+    reactDocgen: 'react-docgen',
   },
 
   async viteFinal(viteConfig) {

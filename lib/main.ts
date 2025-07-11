@@ -1,7 +1,4 @@
-import {
-  AppearanceSwitch,
-  AppearanceSwitchProps,
-} from './components/appearance-switch';
+import { Switch, SwitchProps } from './components/switch';
 import { Button } from './components/button';
 import { FileUploader, FileUploaderProps } from './components/file-uploader';
 import { Footer, FooterProps } from './components/footer';
@@ -16,7 +13,7 @@ import useVirtualScroll from './hooks/use-virtual-scroll';
 import './style.css';
 
 export {
-  AppearanceSwitch,
+  Switch,
   Button,
   FileUploader,
   Footer,
@@ -29,7 +26,7 @@ export {
 };
 
 export type {
-  AppearanceSwitchProps,
+  SwitchProps,
   FileUploaderProps,
   FooterProps,
   HeaderProps,
