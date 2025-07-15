@@ -1,8 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { useState } from 'react';
+
 import { cn } from 'lib/core/utils';
 
 import { Header } from 'lib/components/header';
+import { Switch } from 'lib/components/switch';
 
 const meta: Meta<typeof Header> = {
   title: 'UI/Layout/Header',
@@ -22,38 +25,65 @@ export default meta;
 
 type Story = StoryObj<typeof Header>;
 
-const LightDarkTemplateBox = ({ isDarkTheme }: { isDarkTheme?: boolean }) => (
-  <div
-    className={cn(
-      'w-8 h-8',
-      'flex items-center justify-center text-xl rounded-lg text-neutral-600',
-      'transition ease-in-out duration-200',
-      'bg-white hover:bg-neutral-100',
-      'dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-300',
-    )}
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      className=""
-      aria-label={isDarkTheme ? 'icon-dark-mode' : 'icon-light-mode'}
+const ThemeControlSwitch = ({
+  isInitialDarkTheme,
+}: {
+  isInitialDarkTheme?: boolean;
+}) => {
+  const [isDarkTheme, setIsDarkTheme] = useState(isInitialDarkTheme);
+
+  const toggleTheme = (checked: boolean) => {
+    setIsDarkTheme(checked);
+    document.getElementsByTagName('html')[0].className = checked
+      ? 'dark'
+      : 'light';
+  };
+
+  return (
+    <Switch
+      isChecked={isDarkTheme}
+      onCheckedChange={toggleTheme}
+      iconClassName="text-zinc-500/80 dark:text-zinc-400"
     >
-      {isDarkTheme ? (
-        <g fill="currentColor">
-          <path d="M19 12a7 7 0 11-7-7 7 7 0 017 7z" />
-          <path d="M12 22.96a.969.969 0 01-1-.96v-.08a1 1 0 012 0 1.038 1.038 0 01-1 1.04zm7.14-2.82a1.024 1.024 0 01-.71-.29l-.13-.13a1 1 0 011.41-1.41l.13.13a1 1 0 010 1.41.984.984 0 01-.7.29zm-14.28 0a1.024 1.024 0 01-.71-.29 1 1 0 010-1.41l.13-.13a1 1 0 011.41 1.41l-.13.13a1 1 0 01-.7.29zM22 13h-.08a1 1 0 010-2 1.038 1.038 0 011.04 1 .969.969 0 01-.96 1zM2.08 13H2a1 1 0 010-2 1.038 1.038 0 011.04 1 .969.969 0 01-.96 1zm16.93-7.01a1.024 1.024 0 01-.71-.29 1 1 0 010-1.41l.13-.13a1 1 0 011.41 1.41l-.13.13a.984.984 0 01-.7.29zm-14.02 0a1.024 1.024 0 01-.71-.29l-.13-.14a1 1 0 011.41-1.41l.13.13a1 1 0 010 1.41.97.97 0 01-.7.3zM12 3.04a.969.969 0 01-1-.96V2a1 1 0 012 0 1.038 1.038 0 01-1 1.04z" />
-        </g>
-      ) : (
-        <path
-          fill="currentColor"
-          d="M12 21q-3.775 0-6.387-2.613T3 12q0-3.45 2.25-5.988T11 3.05q.325-.05.575.088t.4.362t.163.525t-.188.575q-.425.65-.638 1.375T11.1 7.5q0 2.25 1.575 3.825T16.5 12.9q.775 0 1.538-.225t1.362-.625q.275-.175.563-.162t.512.137q.25.125.388.375t.087.6q-.35 3.45-2.937 5.725T12 21"
-        />
-      )}
-    </svg>
-  </div>
-);
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-label="icon-light-mode"
+      >
+        <circle cx={12} cy={12} r={4} />
+        <path d="M12 2v2" />
+        <path d="M12 20v2" />
+        <path d="m4.93 4.93 1.41 1.41" />
+        <path d="m17.66 17.66 1.41 1.41" />
+        <path d="M2 12h2" />
+        <path d="M20 12h2" />
+        <path d="m6.34 17.66-1.41 1.41" />
+        <path d="m19.07 4.93-1.41 1.41" />
+      </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-label="icon-dark-mode"
+      >
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+      </svg>
+    </Switch>
+  );
+};
 
 export const StyleList94: Story = {
   name: 'StyleList94',
@@ -81,14 +111,13 @@ export const StyleList94: Story = {
             <span className="text-sm leading-relaxed tracking-wider">.DEV</span>
           </a>
 
-          <div className="flex items-center gap-0.5">
-            <LightDarkTemplateBox isDarkTheme={isDarkTheme} />
+          <div className="flex items-center gap-2">
             <a
               href="https://github.com/StyleList94"
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
-                'w-8 h-8',
+                'size-6',
                 'flex items-center justify-center text-xl text-neutral-700',
                 'rounded-lg bg-white hover:bg-neutral-100',
                 'dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-300',
@@ -108,6 +137,8 @@ export const StyleList94: Story = {
                 />
               </svg>
             </a>
+            <div className="w-px h-5 bg-zinc-200 rounded-md" />
+            <ThemeControlSwitch isInitialDarkTheme={isDarkTheme} />
           </div>
         </div>
       </Header>
@@ -142,7 +173,7 @@ export const StylishLog: Story = {
           </a>
 
           <div className="flex items-center gap-2">
-            <LightDarkTemplateBox isDarkTheme={isDarkTheme} />
+            <ThemeControlSwitch isInitialDarkTheme={isDarkTheme} />
           </div>
         </div>
       </Header>

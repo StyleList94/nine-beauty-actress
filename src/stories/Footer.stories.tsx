@@ -23,16 +23,17 @@ export const StyleList94: Story = {
   name: 'StyleList94',
   render: function Render() {
     return (
-      <Footer>
+      <Footer className="bg-white dark:bg-neutral-900">
         <div
           className={cn(
             'flex flex-col gap-3',
             'sm:flex-row sm:justify-between sm:gap-4',
+            'text-zinc-950 dark:text-zinc-50',
           )}
         >
           <div className="flex items-center gap-4 ">
             <a
-              href="https://blog.stylelist94.dev"
+              href="https://github.com/StyleList94/blog/tree/main/src/posts"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm"
@@ -65,21 +66,16 @@ export const StylishLog: Story = {
   },
   render: function Render(args) {
     return (
-      <Footer {...args}>
-        <div
-          className={cn(
-            'flex flex-col gap-3',
-            'sm:flex-row sm:justify-between sm:gap-4',
-          )}
-        >
+      <Footer className="bg-white dark:bg-neutral-900" {...args}>
+        <div className="flex justify-between gap-4, text-zinc-950 dark:text-zinc-50">
           <div className="flex items-center gap-4">
             <a
               href="https://github.com/StyleList94/blog"
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
-                'text-2xl text-neutral-700',
-                'dark:text-neutral-300',
+                'text-3xl text-zinc-800/50',
+                'dark:text-zinc-300/50',
                 'transition duration-200 ease-in-out',
               )}
               aria-label="GitHub"
