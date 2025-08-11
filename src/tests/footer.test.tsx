@@ -8,13 +8,13 @@ import * as stories from '../stories/Footer.stories';
 
 const { StyleList94, StylishLog } = composeStories(stories);
 
-describe('Header', () => {
+describe('Footer', () => {
   it('should be rendered stylelist94.dev', () => {
     render(<StyleList94 />);
 
     expect(screen.getByText('Blog')).toHaveAttribute(
       'href',
-      'https://blog.stylelist94.dev',
+      'https://github.com/StyleList94/blog/tree/main/src/posts',
     );
 
     expect(screen.getByText(/© 2025./)).toBeInTheDocument();
