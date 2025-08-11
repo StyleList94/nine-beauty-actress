@@ -8,12 +8,18 @@ export type MainContainerProps = {
   children: ReactNode;
   /* main 요소의 스타일을 추가지정할 때 지정합니다. */
   className?: string;
+  /* 배경 요소의 스타일을 추가지정할 때 지정합니다. */
+  backdropClassName?: string;
 };
 
 /* 페이지 레이아웃의 본문 컨텐츠 영역 컨테이너 */
-export const MainContainer = ({ children, className }: MainContainerProps) => (
+export const MainContainer = ({
+  children,
+  className,
+  backdropClassName,
+}: MainContainerProps) => (
   <>
-    <div className={backdropStyle} />
+    <div className={cn(backdropStyle, backdropClassName)} />
     <main className={cn(mainContainerStyle, className)}>{children}</main>
   </>
 );

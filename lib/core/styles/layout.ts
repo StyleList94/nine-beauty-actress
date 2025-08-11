@@ -2,9 +2,7 @@ import { cn } from '../utils';
 
 export const headerContainerStyle = cn(
   'fixed top-0 left-0 flex w-full h-14 z-10',
-  'border-b border-b-neutral-200/80 dark:border-b-neutral-700/80',
   'bg-white dark:bg-neutral-900',
-  'transition ease-in-out duration-200',
 );
 
 export const headerContentBoxStyle = cn(
@@ -13,7 +11,6 @@ export const headerContentBoxStyle = cn(
 
 export const backdropStyle = cn(
   'fixed inset-0 z-[-1]',
-  'transition ease-in-out duration-200',
   'bg-white dark:bg-neutral-900',
 );
 
