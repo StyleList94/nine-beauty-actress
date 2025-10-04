@@ -1,4 +1,4 @@
-import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 import stylish from 'eslint-config-stylish';
 import stylishReact from 'eslint-config-stylish/react';
 import stylishReactHooks from 'eslint-config-stylish/react-hooks';
@@ -8,7 +8,7 @@ import testingLibrary from 'eslint-plugin-testing-library';
 import storybook from 'eslint-plugin-storybook';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
-export default tseslint.config(
+export default defineConfig(
   {
     ignores: ['dist', '!.storybook', '*.config.[jt]s', '*.config.m[jt]s'],
   },
@@ -30,13 +30,9 @@ export default tseslint.config(
   {
     files: ['**/*.{ts,mts,cts,tsx}'],
     languageOptions: {
+      ecmaVersion: 'latest',
       parserOptions: {
         project: ['./tsconfig.json', './tsconfig.storybook.json'],
-        ecmaFeatures: {
-          jsx: true,
-        },
-        ecmaVersion: 12,
-        sourceType: 'module',
       },
     },
     extends: [stylishTypeScript],
