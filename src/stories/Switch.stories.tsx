@@ -8,6 +8,13 @@ const meta: Meta<typeof Switch> = {
   component: Switch,
   title: 'UI/Switch',
   tags: ['autodocs'],
+  argTypes: {
+    children: {
+      table: {
+        type: { summary: '[ReactNode, ReactNode]' },
+      },
+    },
+  },
 };
 
 export default meta;
