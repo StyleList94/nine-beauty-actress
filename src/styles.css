@@ -1,7 +1,5 @@
 @import 'tailwindcss';
 
-@import '../lib/style.css';
-
 @custom-variant dark (&:is(.dark *));
 
 html.light body {
@@ -12,8 +10,7 @@ html.dark body {
   background: #181818;
 }
 
-
 @theme inline {
-  --font-sans: "Pretendard", "sans-serif";
-  --font-display: "Titillium Web", "sans-serif";
+  --font-sans: 'Pretendard', 'sans-serif';
+  --font-display: 'Titillium Web', 'sans-serif';
 }

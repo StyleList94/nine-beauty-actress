@@ -5,13 +5,14 @@ import { defineConfig } from 'vite';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import sexyDeclareType from 'vite-plugin-sexy-declare-type';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), sexyDeclareType()],
+  plugins: [react(), sexyDeclareType(), vanillaExtractPlugin()],
   test: {
     globals: true,
     environment: 'jsdom',
@@ -37,13 +38,7 @@ export default defineConfig({
         /^motion\/.*/,
       ],
       output: {
-        chunkFileNames: () => `bundle/[name]-[hash].js`,
-        manualChunks: (id) => {
-          if (id.includes('node_modules')) {
-            const module = id.split('node_modules/').pop().split('/')[0];
-            return `${module}`;
-          }
-        },
+        chunkFileNames: 'bundle/[name]-[hash].js',
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',

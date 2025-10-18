@@ -1,7 +1,8 @@
 import { type ReactNode } from 'react';
 
-import { backdropStyle, mainContainerStyle } from 'lib/core/styles/layout';
 import { cn } from 'lib/core/utils';
+
+import { backdrop, mainContainer } from './style.css';
 
 export type MainContainerProps = {
   /** 본문에 해당하는 컨텐츠 요소를 렌더링 합니다. */
@@ -19,8 +20,8 @@ export const MainContainer = ({
   backdropClassName,
 }: MainContainerProps) => (
   <>
-    <div className={cn(backdropStyle, backdropClassName)} />
-    <main className={cn(mainContainerStyle, className)}>{children}</main>
+    <div className={cn(backdrop, backdropClassName)} />
+    <main className={cn(mainContainer, className)}>{children}</main>
   </>
 );
 

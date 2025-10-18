@@ -1,7 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 
-export const cn = (...args: ClassValue[]) => twMerge(clsx(args));
+export const cn = (...args: ClassValue[]) => clsx(args);
 
 export const isFileAccepted = (file: File, accept?: string) => {
   if (!accept) return true; // accept 미설정 시 모두 허용

@@ -12,6 +12,16 @@ import * as m from 'motion/react-m';
 
 import { cn, isFileAccepted } from 'lib/core/utils';
 
+import {
+  fileUploaderContainer,
+  fileUploaderBox,
+  fileUploaderBoxNeutral,
+  fileUploaderBoxDragging,
+  fileUploaderBoxError,
+  fileUploaderBoxSelected,
+  fileUploaderInput,
+} from './style.css';
+
 export type FileUploaderProps = {
   /** 박스 안 내용을 구현할 때 사용합니다 */
   children: ReactNode;
@@ -33,6 +43,25 @@ export type FileUploaderProps = {
   required?: InputHTMLAttributes<HTMLInputElement>['required'];
 };
 
+type BorderState = 'neutral' | 'dragging' | 'error' | 'selected';
+
+const getBorderClass = (state: BorderState) => {
+  switch (state) {
+    case 'neutral':
+      return fileUploaderBoxNeutral;
+    case 'dragging':
+      return fileUploaderBoxDragging;
+    case 'error':
+      return fileUploaderBoxError;
+    case 'selected':
+      return fileUploaderBoxSelected;
+    default: {
+      const exhaustiveCheck: never = state;
+      return exhaustiveCheck;
+    }
+  }
+};
+
 /** 클릭해서 파일을 선택하거나, 파일을 끌어놓아 Form Data에 포함하고 싶을 때, 사용합니다. */
 export const FileUploader = ({
   children,
@@ -42,26 +71,26 @@ export const FileUploader = ({
   ...rest
 }: FileUploaderProps) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [fileBoxStyle, setFileBoxStyle] = useState('border-zinc-400');
+  const [borderState, setBorderState] = useState<BorderState>('neutral');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
-    setFileBoxStyle('border-green-600/50');
+    setBorderState('dragging');
   };
 
   const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
-    setFileBoxStyle('border-zinc-400');
+    setBorderState('neutral');
   };
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (fileInputRef.current && e.dataTransfer.files.length > 0) {
       if (!isFileAccepted(e.dataTransfer.files[0], rest.accept)) {
-        setFileBoxStyle('border-red-500/50 border-solid');
+        setBorderState('error');
         onDropError?.(e);
         return;
       }
@@ -69,7 +98,7 @@ export const FileUploader = ({
       fileInputRef.current.dispatchEvent(
         new Event('change', { bubbles: true }),
       );
-      setFileBoxStyle('border-zinc-700 dark:border-zinc-300 border-solid');
+      setBorderState('selected');
     }
     setIsDragging(false);
   };
@@ -80,16 +109,12 @@ export const FileUploader = ({
   };
 
   const handleChangeCapture = (e: ChangeEvent<HTMLInputElement>) => {
-    setFileBoxStyle(
-      e.target.files
-        ? 'border-zinc-700 dark:border-zinc-300 border-solid'
-        : 'border-zinc-400',
-    );
+    setBorderState(e.target.files ? 'selected' : 'neutral');
   };
 
   return (
     <LazyMotion features={domAnimation}>
-      <div className="relative">
+      <div className={fileUploaderContainer}>
         <m.div
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -99,8 +124,8 @@ export const FileUploader = ({
           }}
           onClick={handleClickBox}
           className={cn(
-            'flex justify-center items-center border-2 rounded-sm p-4 border-dashed select-none',
-            fileBoxStyle,
+            fileUploaderBox,
+            getBorderClass(borderState),
             className,
           )}
           aria-label="nine-file-uploader"
@@ -112,7 +137,7 @@ export const FileUploader = ({
           ref={fileInputRef}
           onChangeCapture={handleChangeCapture}
           onChange={onChange}
-          className="absolute bottom-0 -z-10 opacity-0 w-full"
+          className={fileUploaderInput}
           {...rest}
         />
       </div>

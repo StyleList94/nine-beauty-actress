@@ -8,7 +8,9 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 ## 특징
 
-- React, Tailwind CSS 기반 UI Kit
+- React 기반 UI Kit
+- vanilla-extract로 타입 안전한 CSS-in-TS
+- 제로 런타임, 번들 최적화
 - 유틸리티 컴포넌트 위주로 구성(할 예정)
 
 ## 시작
@@ -18,18 +20,19 @@ import { Meta } from '@storybook/addon-docs/blocks';
 이걸 사용하고 싶다면 프로젝트에 다음 패키지가 필수로 설치되어 있어야 한다.
 
 - `react`, `react-dom` v18 이상
-- `tailwindcss` v4 이상
 - `motion` v12 이상
 
 ```bash
 # dependencies
 pnpm add react@latest react-dom@latest motion@latest
-
-# devDependencies
-pnpm add -D tailwindcss@latest
 ```
 
 Github Packages에 배포되었기 때문에 레지스트리도 바꿔줘야 한다.
+
+```text
+[.npmrc]
+@stylelist94:registry=https://npm.pkg.github.com
+```
 
 그리고 설치하면 된다.
 
@@ -39,22 +42,16 @@ pnpm add @stylelist94/nine-beauty-actress
 
 ### 스타일 적용
 
-`tailwindcss`가 이 패키지에 사용된 스타일도 알아차릴 수 있도록 최상위 CSS를 업데이트 해야한다.
+엔트리 CSS에서 import하면 된다.
 
 ```css
-/* global.css */
-
-@import 'tailwindcss';
-
-/* 상대경로이므로 센스있게 바꿔보자! */
-@source '../node_modules/@stylelist94/nine-beauty-actress';
+/* app/globals.css (Next.js) 또는 src/styles/global.css */
+@import '@stylelist94/nine-beauty-actress/style.css';
 ```
 
-스타일 가이드를 사용하기 위해 스타일시트를 추가해준다.
+또는 엔트리 포인트에서 import해도 된다.
 
-```css
-/* global.css */
-
-@import 'tailwindcss';
-@import '@stylelist94/nine-beauty-actress/style.css';
+```tsx
+// main.tsx
+import '@stylelist94/nine-beauty-actress/style.css';
 ```

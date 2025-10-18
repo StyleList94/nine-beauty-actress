@@ -10,8 +10,6 @@ import useEffectEvent from './hooks/use-effect-event';
 import useMounted from './hooks/use-mounted';
 import useVirtualScroll from './hooks/use-virtual-scroll';
 
-import './style.css';
-
 export {
   Switch,
   Button,
@@ -20,6 +18,7 @@ export {
   Header,
   MainContainer,
   useDebounce,
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
   useEffectEvent,
   useMounted,
   useVirtualScroll,
