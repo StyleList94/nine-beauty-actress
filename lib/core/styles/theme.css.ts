@@ -5,13 +5,27 @@ import { createGlobalTheme, globalStyle } from '@vanilla-extract/css';
  *
  * @description
  * 다크모드를 자동으로 지원하는 CSS 변수 시스템입니다.
- * 다음 방식으로 다크모드가 자동 감지됩니다:
- * - Tailwind CSS: `<html class="dark">`
- * - next-themes: `<html data-theme="dark">`
- * - 시스템 테마: `prefers-color-scheme: dark`
+ * 다음 3가지 방식을 지원합니다:
+ *
+ * 1. Class 기반 (Tailwind CSS 방식)
+ *    - Dark 모드: class="dark"
+ *    - Light 모드: class="light"
+ *
+ * 2. Data Attribute 기반 (next-themes 방식)
+ *    - Dark 모드: data-theme="dark"
+ *    - Light 모드: data-theme="light"
+ *
+ * 3. 시스템 테마 자동 감지
+ *    - 클래스/속성 없이 prefers-color-scheme 자동 감지
+ *
+ * @important
+ * 시스템 다크모드 환경에서 Light 모드를 명시적으로 유지하려면
+ * class="light" 또는 data-theme="light" 설정이 필요합니다.
+ * 그렇지 않으면 시스템 설정에 따라 자동으로 다크모드가 적용됩니다.
  *
  * @example
  * ```typescript
+ * // 스타일에서 사용
  * import { style } from '@vanilla-extract/css';
  * import { vars } from '@stylelist94/nine-beauty-actress/styles';
  *
@@ -20,6 +34,14 @@ import { createGlobalTheme, globalStyle } from '@vanilla-extract/css';
  *   color: vars.color.foreground,
  *   border: `1px solid ${vars.color.border}`,
  * });
+ *
+ * // Tailwind 방식 - html 요소에 class 추가
+ * document.documentElement.className = isDark ? 'dark' : 'light';
+ *
+ * // next-themes 방식 - ThemeProvider의 attribute="data-theme" 사용
+ * // data-theme 속성이 자동으로 html 요소에 추가됨
+ *
+ * // 시스템 자동 감지 - 별도 설정 없이 OS 테마를 자동으로 따름
  * ```
  *
  * @public
