@@ -1,0 +1,39 @@
+import { Canvas, Meta, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as ToggleGroupStories from './ToggleGroup.stories';
+import { ToggleGroup, ToggleGroupItem } from 'lib/components/toggle-group';
+
+<Meta of={ToggleGroupStories} />
+
+# ToggleGroup
+
+여러 개의 토글 버튼을 그룹으로 묶어 단일 또는 다중 선택을 관리할 때 사용합니다.
+
+<Canvas of={ToggleGroupStories.ControlMe} />
+
+<Controls />
+
+### ToggleGroupItem Props
+
+<ArgTypes of={ToggleGroupItem} />
+
+## 사용 예시
+
+### 단일 선택 (Single Selection)
+
+<Canvas of={ToggleGroupStories.SingleSelection} />
+
+### 다중 선택 (Multiple Selection)
+
+<Canvas of={ToggleGroupStories.MultipleSelection} />
+
+### Variants
+
+<Canvas of={ToggleGroupStories.Variants} />
+
+### Sizes
+
+<Canvas of={ToggleGroupStories.Sizes} />
+
+### Spacing
+
+<Canvas of={ToggleGroupStories.Spacing} />
