@@ -105,10 +105,9 @@ export const StyleList94: Story = {
             href="https://stylelist94.dev/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-end gap-0.5 font-display text-xl tracking-wide"
+            className="flex items-end font-display text-xl tracking-wide"
           >
             StyleList94
-            <span className="text-sm leading-relaxed tracking-wider">.DEV</span>
           </a>
 
           <div className="flex items-center gap-2">
@@ -166,10 +165,12 @@ export const StylishLog: Story = {
             href="https://blog.stylelist94.dev/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-end gap-0.5 font-display text-xl tracking-wide"
+            className="flex items-end font-display text-xl tracking-wider"
           >
-            Stylish
-            <span className="text-sm leading-relaxed tracking-wider">.LOG</span>
+            stylish
+            <span className="text-sm font-bold leading-relaxed tracking-wide">
+              .LOG
+            </span>
           </a>
 
           <div className="flex items-center gap-2">
