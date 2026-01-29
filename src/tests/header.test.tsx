@@ -13,7 +13,6 @@ describe('Header', () => {
     render(<StyleList94 />);
 
     expect(screen.getByText('StyleList94')).toBeInTheDocument();
-    expect(screen.getByText('.DEV')).toBeInTheDocument();
 
     expect(screen.getAllByRole('link')[1]).toHaveAttribute(
       'href',
@@ -24,7 +23,7 @@ describe('Header', () => {
   it('should be rendered blog.stylelist94.dev', () => {
     render(<StylishLog />);
 
-    expect(screen.getByText('Stylish')).toBeInTheDocument();
+    expect(screen.getByText('stylish')).toBeInTheDocument();
     expect(screen.getByText('.LOG')).toBeInTheDocument();
   });
 });

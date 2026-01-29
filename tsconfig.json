@@ -24,7 +24,9 @@
 
     "types": ["vitest/globals"],
 
-    "baseUrl": "."
+    "paths": {
+      "lib/*": ["./lib/*"]
+    }
   },
   "include": ["src", "lib", ".storybook"],
   "exclude": ["node_modules", "**/*.test.ts?(x)"],

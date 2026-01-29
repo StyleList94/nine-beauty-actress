@@ -1,10 +1,7 @@
-# Workflow name
 name: Deploy Storybook to GitHub Pages
 
 on:
-  push:
-    branches:
-      - 'main' # Replace with the branch you want to deploy from
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -14,16 +11,36 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: pnpm/action-setup@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 10
-      - uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          install_command: pnpm install --frozen-lockfile
-          build_command: pnpm run build-storybook
+          node-version: 24
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook
+        run: pnpm build-storybook
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
           path: storybook-static
-          checkout: false
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
