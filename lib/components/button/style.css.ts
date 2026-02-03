@@ -1,36 +1,32 @@
 import { style, styleVariants } from '@vanilla-extract/css';
 
-const buttonColors = {
-  violet: 'oklch(60% 0.25 280)',
-  indigo: 'oklch(55% 0.22 270)',
-  glow: 'oklch(75% 0.15 280)',
-  foxfireAmber: 'oklch(70% 0.18 50)',
-} as const;
-
-const buttonColorsDark = {
-  violet: 'oklch(65% 0.28 280)',
-  indigo: 'oklch(60% 0.25 270)',
-  glow: 'oklch(80% 0.18 280)',
-  foxfireAmber: 'oklch(75% 0.20 50)',
-} as const;
+import { vars } from 'lib/core/styles/theme.css';
+import {
+  palette,
+  spacing,
+  radius,
+  motion,
+  font,
+  shadows,
+} from 'lib/core/styles/tokens';
 
 export const buttonBase = style({
   position: 'relative',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '0.5rem',
-  borderRadius: '0.5rem',
-  fontWeight: 500,
+  gap: spacing[8],
+  borderRadius: radius.lg,
+  fontWeight: font.weight.medium,
   cursor: 'pointer',
   outline: 'none',
   overflow: 'hidden',
-  transition: 'all 200ms ease',
+  transition: `all ${motion.duration.normal} ${motion.easing.ease}`,
   userSelect: 'none',
   WebkitTapHighlightColor: 'transparent',
   selectors: {
     '&:focus-visible': {
-      boxShadow: `0 0 0 2px ${buttonColors.glow}`,
+      boxShadow: `0 0 0 2px ${vars.color.ring}`,
     },
     '&:disabled': {
       opacity: 0.5,
@@ -41,100 +37,46 @@ export const buttonBase = style({
 
 export const buttonVariant = styleVariants({
   solid: {
-    background: `linear-gradient(135deg, ${buttonColors.violet}, ${buttonColors.indigo})`,
-    color: '#ffffff',
+    background: vars.color.primary.base,
+    color: vars.color.primary.foreground,
     border: 'none',
-    boxShadow: `0 1px 3px oklch(60% 0.25 280 / 0.12)`,
+    boxShadow: shadows.sm,
     selectors: {
       '&:hover:not(:disabled)': {
-        boxShadow: `0 2px 6px oklch(60% 0.25 280 / 0.2)`,
+        background: vars.color.primary.strong,
+        boxShadow: shadows.md,
       },
-      '.dark &, [data-theme="dark"] &': {
-        background: `linear-gradient(135deg, ${buttonColorsDark.violet}, ${buttonColorsDark.indigo})`,
-        boxShadow: `0 1px 4px oklch(65% 0.28 280 / 0.2)`,
-      },
-      '.dark &:hover:not(:disabled), [data-theme="dark"] &:hover:not(:disabled)': {
-        boxShadow: `0 2px 8px oklch(65% 0.28 280 / 0.3)`,
-      },
-    },
-    '@media': {
-      '(prefers-color-scheme: dark)': {
-        selectors: {
-          ':root:not(.light):not([data-theme="light"]) &': {
-            background: `linear-gradient(135deg, ${buttonColorsDark.violet}, ${buttonColorsDark.indigo})`,
-            boxShadow: `0 1px 4px oklch(65% 0.28 280 / 0.2)`,
-          },
-          ':root:not(.light):not([data-theme="light"]) &:hover:not(:disabled)': {
-            boxShadow: `0 2px 8px oklch(65% 0.28 280 / 0.3)`,
-          },
-        },
+      '&:active:not(:disabled)': {
+        background: vars.color.primary.strong,
+        boxShadow: shadows.sm,
       },
     },
   },
   outline: {
     background: 'transparent',
-    color: buttonColors.violet,
-    border: `1.5px solid ${buttonColors.violet}`,
+    color: vars.color.primary.base,
+    border: `1.5px solid ${vars.color.primary.base}`,
     selectors: {
       '&:hover:not(:disabled)': {
-        background: `oklch(60% 0.25 280 / 0.1)`,
-        borderColor: buttonColors.glow,
+        background: palette.purple['500/10'],
+        borderColor: vars.color.primary.muted,
       },
       '&:active:not(:disabled)': {
-        background: `oklch(60% 0.25 280 / 0.15)`,
-      },
-      '.dark &, [data-theme="dark"] &': {
-        color: buttonColorsDark.glow,
-        borderColor: buttonColorsDark.violet,
-      },
-      '.dark &:hover:not(:disabled), [data-theme="dark"] &:hover:not(:disabled)': {
-        background: `oklch(65% 0.28 280 / 0.15)`,
-        borderColor: buttonColorsDark.glow,
-      },
-    },
-    '@media': {
-      '(prefers-color-scheme: dark)': {
-        selectors: {
-          ':root:not(.light):not([data-theme="light"]) &': {
-            color: buttonColorsDark.glow,
-            borderColor: buttonColorsDark.violet,
-          },
-          ':root:not(.light):not([data-theme="light"]) &:hover:not(:disabled)': {
-            background: `oklch(65% 0.28 280 / 0.15)`,
-            borderColor: buttonColorsDark.glow,
-          },
-        },
+        background: palette.purple['500/15'],
       },
     },
   },
   glow: {
-    background: `linear-gradient(135deg, ${buttonColors.violet}, ${buttonColors.foxfireAmber})`,
-    color: '#ffffff',
+    background: `linear-gradient(135deg, ${palette.purple[500]}, ${palette.orange[400]})`,
+    color: vars.color.primary.foreground,
     border: 'none',
-    boxShadow: `0 0 6px oklch(60% 0.25 280 / 0.2)`,
+    boxShadow: `0 0 8px ${palette.purple['500/20']}`,
     selectors: {
       '&:hover:not(:disabled)': {
-        boxShadow: `0 0 10px oklch(60% 0.25 280 / 0.3), 0 0 20px oklch(70% 0.18 50 / 0.15)`,
+        boxShadow: `0 0 12px ${palette.purple['500/20']}, 0 0 24px ${palette.orange[400]}40`,
       },
-      '.dark &, [data-theme="dark"] &': {
-        background: `linear-gradient(135deg, ${buttonColorsDark.violet}, ${buttonColorsDark.foxfireAmber})`,
-        boxShadow: `0 0 8px oklch(65% 0.28 280 / 0.25)`,
-      },
-      '.dark &:hover:not(:disabled), [data-theme="dark"] &:hover:not(:disabled)': {
-        boxShadow: `0 0 12px oklch(65% 0.28 280 / 0.35), 0 0 24px oklch(75% 0.20 50 / 0.2)`,
-      },
-    },
-    '@media': {
-      '(prefers-color-scheme: dark)': {
-        selectors: {
-          ':root:not(.light):not([data-theme="light"]) &': {
-            background: `linear-gradient(135deg, ${buttonColorsDark.violet}, ${buttonColorsDark.foxfireAmber})`,
-            boxShadow: `0 0 8px oklch(65% 0.28 280 / 0.25)`,
-          },
-          ':root:not(.light):not([data-theme="light"]) &:hover:not(:disabled)': {
-            boxShadow: `0 0 12px oklch(65% 0.28 280 / 0.35), 0 0 24px oklch(75% 0.20 50 / 0.2)`,
-          },
-        },
+      '&:active:not(:disabled)': {
+        boxShadow: `0 0 6px ${palette.purple['500/15']}`,
       },
     },
   },
@@ -142,19 +84,19 @@ export const buttonVariant = styleVariants({
 
 export const buttonSize = styleVariants({
   sm: {
-    height: '2rem',
-    paddingInline: '0.75rem',
-    fontSize: '0.75rem',
+    height: spacing[32],
+    paddingInline: spacing[12],
+    fontSize: font.size.xs,
   },
   md: {
-    height: '2.5rem',
-    paddingInline: '1rem',
-    fontSize: '0.875rem',
+    height: spacing[40],
+    paddingInline: spacing[16],
+    fontSize: font.size.sm,
   },
   lg: {
-    height: '3rem',
-    paddingInline: '1.5rem',
-    fontSize: '1rem',
+    height: spacing[48],
+    paddingInline: spacing[24],
+    fontSize: font.size.base,
   },
 });
 
@@ -168,7 +110,7 @@ export const rippleContainer = style({
 
 export const ripple = style({
   position: 'absolute',
-  borderRadius: '50%',
+  borderRadius: radius.full,
   backgroundColor: 'currentColor',
   willChange: 'opacity, transform',
 });

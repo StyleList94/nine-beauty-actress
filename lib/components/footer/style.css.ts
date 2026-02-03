@@ -1,17 +1,19 @@
 import { style } from '@vanilla-extract/css';
 
+import { spacing } from 'lib/core/styles/tokens';
+
 const footer = style({
   display: 'flex',
   flexDirection: 'column',
-  gap: '1.5rem',
+  gap: spacing[24],
   width: '100%',
-  maxWidth: '96rem',
+  maxWidth: '96rem', // 레이아웃 특수값 유지
   marginLeft: 'auto',
   marginRight: 'auto',
-  paddingLeft: '1.5rem',
-  paddingRight: '1.5rem',
-  paddingTop: '2rem',
-  paddingBottom: '2rem',
+  paddingLeft: spacing[24],
+  paddingRight: spacing[24],
+  paddingTop: spacing[32],
+  paddingBottom: spacing[32],
 });
 
 export default footer;

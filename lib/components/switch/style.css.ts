@@ -1,33 +1,38 @@
 import { style } from '@vanilla-extract/css';
 
+import { vars } from 'lib/core/styles/theme.css';
+import {
+  palette,
+  spacing,
+  radius,
+  motion,
+  shadows,
+} from 'lib/core/styles/tokens';
+
 export const switchTrack = style({
   position: 'relative',
   display: 'inline-flex',
-  height: '1.5rem',
-  width: '3rem',
+  height: spacing[24],
+  width: spacing[48],
   flexShrink: 0,
   alignItems: 'center',
-  borderRadius: '9999px',
+  borderRadius: radius.full,
   border: '1px solid transparent',
-  backgroundColor: 'rgba(244, 244, 245, 0.8)',
-  boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-  transition: 'all 200ms ease-in-out',
+  backgroundColor: vars.color.surfaceSubtle,
+  boxShadow: shadows.sm,
+  transition: `all ${motion.duration.normal} ${motion.easing.easeInOut}`,
   outline: 'none',
   selectors: {
     '&:focus-visible': {
-      borderColor: '#d1d5db',
-      boxShadow: '0 0 0 2px rgba(209, 213, 219, 0.5)',
+      borderColor: palette.neutral[300],
+      boxShadow: `0 0 0 2px ${vars.color.ring}`,
     },
     '&:disabled': {
       cursor: 'not-allowed',
       opacity: 0.5,
     },
-    '.dark &, [data-theme="dark"] &': {
-      backgroundColor: 'rgba(39, 39, 42, 0.8)',
-    },
     '.dark &:focus-visible, [data-theme="dark"] &:focus-visible': {
-      borderColor: '#4b5563',
-      boxShadow: '0 0 0 2px rgba(75, 85, 99, 0.5)',
+      borderColor: palette.neutral[600],
     },
   },
 });
@@ -36,14 +41,14 @@ export const switchThumb = style({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  width: '1.5rem',
-  height: '1.5rem',
-  backgroundColor: '#fafafa',
-  color: '#52525b',
-  border: '1px solid rgba(228, 228, 231, 0.8)',
-  borderRadius: '9999px',
+  width: spacing[24],
+  height: spacing[24],
+  backgroundColor: palette.neutral[50],
+  color: palette.neutral[600],
+  border: `1px solid ${vars.color.borderSubtle}`,
+  borderRadius: radius.full,
   pointerEvents: 'none',
-  transition: 'transform 200ms ease-in-out',
+  transition: `transform ${motion.duration.normal} ${motion.easing.easeInOut}`,
   selectors: {
     '&[data-state="checked"]': {
       transform: 'translateX(calc(100%))',
@@ -52,21 +57,20 @@ export const switchThumb = style({
       transform: 'translateX(0)',
     },
     '.dark &, [data-theme="dark"] &': {
-      backgroundColor: '#18181b',
-      color: '#d4d4d8',
-      borderColor: 'rgba(63, 63, 70, 0.8)',
+      backgroundColor: palette.neutral[900],
+      color: palette.neutral[300],
     },
   },
 });
 
 export const switchIconBase = style({
   position: 'absolute',
-  left: '0.25rem',
-  color: '#3f3f46',
-  transition: 'transform 200ms ease-in-out',
+  left: spacing[4],
+  color: palette.neutral[700],
+  transition: `transform ${motion.duration.normal} ${motion.easing.easeInOut}`,
   selectors: {
     '.dark &, [data-theme="dark"] &': {
-      color: '#d4d4d8',
+      color: palette.neutral[300],
     },
   },
 });
@@ -76,5 +80,5 @@ export const switchIconChecked = style({
 });
 
 export const switchIconUnchecked = style({
-  transform: 'translateX(calc(100% + 0.375rem))',
+  transform: `translateX(calc(100% + ${spacing[6]}))`,
 });

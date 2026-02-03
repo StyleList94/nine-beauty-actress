@@ -19,6 +19,11 @@
       "import": "./dist/styles.es.js",
       "require": "./dist/styles.cjs.js"
     },
+    "./tokens": {
+      "types": "./dist/core/tokens.d.ts",
+      "import": "./dist/tokens.es.js",
+      "require": "./dist/tokens.cjs.js"
+    },
     "./style.css": "./dist/style.css"
   },
   "types": "./dist/main.d.ts",

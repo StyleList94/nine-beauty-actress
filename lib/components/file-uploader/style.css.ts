@@ -1,5 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
+import { vars } from 'lib/core/styles/theme.css';
+import { palette, spacing, radius } from 'lib/core/styles/tokens';
+
 export const fileUploaderContainer = style({
   position: 'relative',
 });
@@ -9,30 +12,30 @@ export const fileUploaderBox = style({
   justifyContent: 'center',
   alignItems: 'center',
   border: '2px dashed',
-  borderRadius: '2px',
-  padding: '1rem',
+  borderRadius: radius.sm,
+  padding: spacing[16],
   userSelect: 'none',
 });
 
 export const fileUploaderBoxNeutral = style({
-  borderColor: '#a1a1aa',
+  borderColor: palette.neutral[400],
 });
 
 export const fileUploaderBoxDragging = style({
-  borderColor: 'rgba(22, 163, 74, 0.5)',
+  borderColor: vars.color.success.overlay,
 });
 
 export const fileUploaderBoxError = style({
-  borderColor: 'rgba(239, 68, 68, 0.5)',
+  borderColor: vars.color.error.overlay,
   borderStyle: 'solid',
 });
 
 export const fileUploaderBoxSelected = style({
-  borderColor: '#3f3f46',
+  borderColor: palette.neutral[700],
   borderStyle: 'solid',
   selectors: {
     '.dark &, [data-theme="dark"] &': {
-      borderColor: '#d4d4d8',
+      borderColor: palette.neutral[300],
     },
   },
 });

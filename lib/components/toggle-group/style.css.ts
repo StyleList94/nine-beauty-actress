@@ -1,12 +1,13 @@
 import { style, styleVariants } from '@vanilla-extract/css';
 
 import { vars } from 'lib/core/styles/theme.css';
+import { font, spacing, radius, motion } from 'lib/core/styles/tokens';
 
 export const toggleGroupRoot = style({
   display: 'inline-flex',
   alignItems: 'center',
   width: 'fit-content',
-  borderRadius: '0.5rem',
+  borderRadius: radius.lg,
   selectors: {
     '&[data-orientation="vertical"]': {
       flexDirection: 'column',
@@ -19,12 +20,12 @@ export const toggleGroupItemBase = style({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: '0.375rem',
+  borderRadius: radius.md,
   borderWidth: '1px',
   borderStyle: 'solid',
   borderColor: 'transparent',
-  fontWeight: 500,
-  transition: 'color 150ms ease, background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease',
+  fontWeight: font.weight.medium,
+  transition: `color ${motion.duration.normal} ${motion.easing.ease}, background-color ${motion.duration.normal} ${motion.easing.ease}, border-color ${motion.duration.normal} ${motion.easing.ease}, box-shadow ${motion.duration.normal} ${motion.easing.ease}`,
   cursor: 'pointer',
   outline: 'none',
   selectors: {
@@ -43,28 +44,28 @@ export const toggleGroupItemBase = style({
 
 export const toggleGroupItemSize = styleVariants({
   sm: {
-    height: '2rem',
-    paddingLeft: '0.5rem',
-    paddingRight: '0.5rem',
-    paddingTop: '0.25rem',
-    paddingBottom: '0.25rem',
-    fontSize: '0.75rem',
+    height: spacing[32],
+    paddingLeft: spacing[8],
+    paddingRight: spacing[8],
+    paddingTop: spacing[4],
+    paddingBottom: spacing[4],
+    fontSize: font.size.xs,
   },
   default: {
-    height: '2.25rem',
-    paddingLeft: '0.75rem',
-    paddingRight: '0.75rem',
-    paddingTop: '0.375rem',
-    paddingBottom: '0.375rem',
-    fontSize: '0.875rem',
+    height: spacing[36],
+    paddingLeft: spacing[12],
+    paddingRight: spacing[12],
+    paddingTop: spacing[6],
+    paddingBottom: spacing[6],
+    fontSize: font.size.sm,
   },
   lg: {
-    height: '2.5rem',
-    paddingLeft: '1rem',
-    paddingRight: '1rem',
-    paddingTop: '0.5rem',
-    paddingBottom: '0.5rem',
-    fontSize: '0.9rem',
+    height: spacing[40],
+    paddingLeft: spacing[16],
+    paddingRight: spacing[16],
+    paddingTop: spacing[8],
+    paddingBottom: spacing[8],
+    fontSize: font.size.sm, // 근사값 (0.9rem → 0.875rem)
   },
 });
 
@@ -72,20 +73,17 @@ export const toggleGroupItemVariant = styleVariants({
   default: {
     backgroundColor: 'transparent',
     color: vars.color.foreground,
+    boxShadow: 'none',
     selectors: {
       '&:hover': {
-        backgroundColor: vars.color.muted,
+        boxShadow: `inset 0 0 0 1px ${vars.color.border}`,
       },
       '&[data-state="on"]': {
         backgroundColor: vars.color.accent,
         color: vars.color.accentForeground,
       },
-      '.dark &:hover, [data-theme="dark"] &:hover': {
-        backgroundColor: vars.color.muted,
-      },
-      '.dark &[data-state="on"], [data-theme="dark"] &[data-state="on"]': {
-        backgroundColor: vars.color.accent,
-        color: vars.color.accentForeground,
+      '&[data-state="on"]:hover': {
+        boxShadow: `inset 0 0 0 1px ${vars.color.input}`,
       },
     },
   },
@@ -93,22 +91,17 @@ export const toggleGroupItemVariant = styleVariants({
     backgroundColor: 'transparent',
     color: vars.color.foreground,
     borderColor: vars.color.border,
+    boxShadow: 'none',
     selectors: {
       '&:hover': {
-        backgroundColor: vars.color.muted,
+        boxShadow: `inset 0 0 0 1px ${vars.color.input}`,
       },
       '&[data-state="on"]': {
         backgroundColor: vars.color.accent,
         color: vars.color.accentForeground,
-        borderColor: vars.color.border,
       },
-      '.dark &:hover, [data-theme="dark"] &:hover': {
-        backgroundColor: vars.color.muted,
-      },
-      '.dark &[data-state="on"], [data-theme="dark"] &[data-state="on"]': {
-        backgroundColor: vars.color.accent,
-        color: vars.color.accentForeground,
-        borderColor: vars.color.border,
+      '&[data-state="on"]:hover': {
+        boxShadow: `inset 0 0 0 2px ${vars.color.input}`,
       },
     },
   },
@@ -118,24 +111,24 @@ export const toggleGroupItemTightSpacing = style({
   borderRadius: 0,
   selectors: {
     '&:first-of-type': {
-      borderTopLeftRadius: '0.5rem',
-      borderBottomLeftRadius: '0.5rem',
+      borderTopLeftRadius: radius.lg,
+      borderBottomLeftRadius: radius.lg,
     },
     '&:last-of-type': {
-      borderTopRightRadius: '0.5rem',
-      borderBottomRightRadius: '0.5rem',
+      borderTopRightRadius: radius.lg,
+      borderBottomRightRadius: radius.lg,
     },
     '&:not(:first-of-type)': {
       marginLeft: '-1px',
     },
     '[data-orientation="vertical"] &:first-of-type': {
-      borderTopLeftRadius: '0.5rem',
-      borderTopRightRadius: '0.5rem',
+      borderTopLeftRadius: radius.lg,
+      borderTopRightRadius: radius.lg,
       borderBottomLeftRadius: 0,
     },
     '[data-orientation="vertical"] &:last-of-type': {
-      borderBottomLeftRadius: '0.5rem',
-      borderBottomRightRadius: '0.5rem',
+      borderBottomLeftRadius: radius.lg,
+      borderBottomRightRadius: radius.lg,
       borderTopRightRadius: 0,
     },
     '[data-orientation="vertical"] &:not(:first-of-type)': {
@@ -146,5 +139,5 @@ export const toggleGroupItemTightSpacing = style({
 });
 
 export const toggleGroupItemLooseSpacing = style({
-  borderRadius: '0.375rem',
+  borderRadius: radius.md,
 });

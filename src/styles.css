@@ -4,10 +4,12 @@
 
 html.light body {
   background: #fff;
+  color: #171717;
 }
 
 html.dark body {
   background: #181818;
+  color: #fafafa;
 }
 
 @theme inline {

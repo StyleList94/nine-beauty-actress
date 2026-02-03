@@ -1,10 +1,14 @@
 import { createGlobalTheme, globalStyle } from '@vanilla-extract/css';
 
+import { palette } from './tokens';
+
 /**
- * 테마 색상 변수
+ * Semantic 색상 토큰
  *
  * @description
- * 다크모드를 자동으로 지원하는 CSS 변수 시스템입니다.
+ * Primitive 색상에 의미를 부여한 CSS 변수 시스템입니다.
+ * 다크모드를 자동으로 지원합니다.
+ *
  * 다음 3가지 방식을 지원합니다:
  *
  * 1. Class 기반 (Tailwind CSS 방식)
@@ -18,105 +22,144 @@ import { createGlobalTheme, globalStyle } from '@vanilla-extract/css';
  * 3. 시스템 테마 자동 감지
  *    - 클래스/속성 없이 prefers-color-scheme 자동 감지
  *
- * @important
- * 시스템 다크모드 환경에서 Light 모드를 명시적으로 유지하려면
- * class="light" 또는 data-theme="light" 설정이 필요합니다.
- * 그렇지 않으면 시스템 설정에 따라 자동으로 다크모드가 적용됩니다.
- *
  * @example
  * ```typescript
- * // 스타일에서 사용
- * import { style } from '@vanilla-extract/css';
+ * // Vanilla Extract에서 사용
  * import { vars } from '@stylelist94/nine-beauty-actress/styles';
  *
  * const customButton = style({
- *   background: vars.color.background,
- *   color: vars.color.foreground,
- *   border: `1px solid ${vars.color.border}`,
+ *   background: vars.color.primary.base,
+ *   color: vars.color.primary.foreground,
  * });
  *
- * // Tailwind 방식 - html 요소에 class 추가
- * document.documentElement.className = isDark ? 'dark' : 'light';
- *
- * // next-themes 방식 - ThemeProvider의 attribute="data-theme" 사용
- * // data-theme 속성이 자동으로 html 요소에 추가됨
- *
- * // 시스템 자동 감지 - 별도 설정 없이 OS 테마를 자동으로 따름
+ * // 일반 CSS에서 사용
+ * // .custom { background: var(--color-primary-base); }
  * ```
  *
  * @public
  */
 export const vars = createGlobalTheme(':root', {
   color: {
-    /** 메인 배경색 (light: #ffffff, dark: #18181b) */
-    background: '#ffffff',
-    /** 메인 텍스트색 (light: #18181b, dark: #fafafa) */
-    foreground: '#18181b',
-    /** 약한 배경색 - hover, disabled 등에 사용 (light: #f4f4f5, dark: #27272a) */
-    muted: '#f4f4f5',
-    /** 약한 텍스트색 - 보조 텍스트에 사용 (light: #71717a, dark: #a1a1aa) */
-    mutedForeground: '#71717a',
-    /** 테두리색 (light: #e4e4e7, dark: #3f3f46) */
-    border: '#e4e4e7',
-    /** 입력 필드 테두리색 (light: #d4d4d8, dark: #52525b) */
-    input: '#d4d4d8',
-    /** 강조 배경색 (light: #f4f4f5, dark: #27272a) */
-    accent: '#f4f4f5',
-    /** 강조 텍스트색 (light: #18181b, dark: #fafafa) */
-    accentForeground: '#18181b',
+    // Layout (flat - 단일값)
+    /** 메인 배경색 */
+    background: palette.neutral[50],
+    /** 메인 텍스트색 */
+    foreground: palette.neutral[900],
+    /** 약한 배경색 - hover, disabled 등에 사용 */
+    muted: palette.neutral[100],
+    /** 약한 텍스트색 - 보조 텍스트에 사용 */
+    mutedForeground: palette.neutral[500],
+    /** 테두리색 */
+    border: palette.neutral[200],
+    /** 입력 필드 테두리색 */
+    input: palette.neutral[300],
+    /** 강조 배경색 */
+    accent: palette.neutral[100],
+    /** 강조 텍스트색 */
+    accentForeground: palette.neutral[900],
+
+    // Primary (nested - 주요 액션 색상)
+    primary: {
+      /** 기본 색상 */
+      base: palette.purple[500],
+      /** 강조 색상 (hover, active) */
+      strong: palette.purple[600],
+      /** 약한 색상 (disabled, subtle) */
+      muted: palette.purple[300],
+      /** 전경 색상 (텍스트) */
+      foreground: palette.neutral[50],
+    },
+
+    // Brand (nested - 브랜드 색상)
+    brand: {
+      /** 기본 색상 */
+      base: palette.orange[400],
+      /** 강조 색상 */
+      strong: palette.orange[500],
+      /** 약한 색상 */
+      muted: palette.orange[200],
+      /** 전경 색상 */
+      foreground: palette.neutral[50],
+    },
+
+    // Status (nested)
+    success: {
+      base: palette.green[500],
+      strong: palette.green[600],
+      muted: palette.green[200],
+      foreground: palette.neutral[50],
+      /** 반투명 오버레이 (드래그, 선택 등) */
+      overlay: palette.green['500/50'],
+    },
+    warning: {
+      base: palette.yellow[500],
+      strong: palette.yellow[600],
+      muted: palette.yellow[200],
+      foreground: palette.neutral[900],
+    },
+    error: {
+      base: palette.red[500],
+      strong: palette.red[600],
+      muted: palette.red[200],
+      foreground: palette.neutral[50],
+      /** 반투명 오버레이 (에러 보더 등) */
+      overlay: palette.red['500/50'],
+    },
+    info: {
+      base: palette.blue[500],
+      strong: palette.blue[600],
+      muted: palette.blue[200],
+      foreground: palette.neutral[50],
+    },
+
+    // Surface & Ring (반투명 UI 요소)
+    /** 반투명 표면 배경 */
+    surfaceSubtle: palette.neutral['100/80'],
+    /** 반투명 보더 */
+    borderSubtle: palette.neutral['200/80'],
+    /** 포커스 링 */
+    ring: palette.neutral['300/50'],
   },
 });
 
 /**
- * CSS 변수 export
- *
- * @description
- * Tailwind CSS 및 순수 CSS에서 사용 가능한 CSS 변수를 제공합니다.
- *
- * @example
- * ```css
- * // Tailwind config
- * colors: {
- *   'nine-fox': 'var(--color-nine-tailed-fox)',
- * }
- *
- * // 순수 CSS
- * .custom {
- *   background: var(--color-nine-tailed-fox);
- * }
- * ```
+ * 다크모드 오버라이드 (Class/Attribute 기반)
+ * Layout 색상만 오버라이드, action/status는 동일 유지
  */
-globalStyle(':root', {
-  vars: {
-    '--color-nine-tailed-fox': 'oklch(81% 0.117 11.638)',
-  },
-});
-
 globalStyle('.dark, :root.dark, [data-theme="dark"]', {
   vars: {
-    [vars.color.background]: '#18181b',
-    [vars.color.foreground]: '#fafafa',
-    [vars.color.muted]: '#27272a',
-    [vars.color.mutedForeground]: '#a1a1aa',
-    [vars.color.border]: '#3f3f46',
-    [vars.color.input]: '#52525b',
-    [vars.color.accent]: '#27272a',
-    [vars.color.accentForeground]: '#fafafa',
+    [vars.color.background]: palette.neutral[900],
+    [vars.color.foreground]: palette.neutral[50],
+    [vars.color.muted]: palette.neutral[800],
+    [vars.color.mutedForeground]: palette.neutral[400],
+    [vars.color.border]: palette.neutral[700],
+    [vars.color.input]: palette.neutral[700],
+    [vars.color.accent]: palette.neutral[800],
+    [vars.color.accentForeground]: palette.neutral[50],
+    [vars.color.surfaceSubtle]: palette.neutral['800/80'],
+    [vars.color.borderSubtle]: palette.neutral['700/80'],
+    [vars.color.ring]: palette.neutral['600/50'],
   },
 });
 
+/**
+ * 시스템 다크모드 자동 감지
+ */
 globalStyle(':root:not(.light):not([data-theme="light"])', {
   '@media': {
     '(prefers-color-scheme: dark)': {
       vars: {
-        [vars.color.background]: '#18181b',
-        [vars.color.foreground]: '#fafafa',
-        [vars.color.muted]: '#27272a',
-        [vars.color.mutedForeground]: '#a1a1aa',
-        [vars.color.border]: '#3f3f46',
-        [vars.color.input]: '#52525b',
-        [vars.color.accent]: '#27272a',
-        [vars.color.accentForeground]: '#fafafa',
+        [vars.color.background]: palette.neutral[900],
+        [vars.color.foreground]: palette.neutral[50],
+        [vars.color.muted]: palette.neutral[800],
+        [vars.color.mutedForeground]: palette.neutral[400],
+        [vars.color.border]: palette.neutral[700],
+        [vars.color.input]: palette.neutral[700],
+        [vars.color.accent]: palette.neutral[800],
+        [vars.color.accentForeground]: palette.neutral[50],
+        [vars.color.surfaceSubtle]: palette.neutral['800/80'],
+        [vars.color.borderSubtle]: palette.neutral['700/80'],
+        [vars.color.ring]: palette.neutral['600/50'],
       },
     },
   },

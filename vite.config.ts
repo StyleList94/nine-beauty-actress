@@ -23,6 +23,7 @@ export default defineConfig({
       entry: {
         main: resolve(__dirname, 'lib/main.ts'),
         styles: resolve(__dirname, 'lib/core/styles.ts'),
+        tokens: resolve(__dirname, 'lib/core/tokens.ts'),
       },
       name: 'NineBeautyActress',
       formats: ['es', 'cjs'],
