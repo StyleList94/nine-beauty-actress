@@ -3,6 +3,7 @@ import {
   useCallback,
   useRef,
   useState,
+  type ComponentProps,
   type FocusEvent,
   type KeyboardEvent,
   type PointerEvent,
@@ -16,6 +17,7 @@ import {
   type HTMLMotionProps,
 } from 'motion/react';
 import * as m from 'motion/react-m';
+import { Slot } from '@radix-ui/react-slot';
 
 import { cn } from 'lib/core/utils';
 
@@ -37,10 +39,13 @@ type RippleItem = {
 export type ButtonVariant = keyof typeof buttonVariant;
 export type ButtonSize = keyof typeof buttonSize;
 
-export type ButtonProps = HTMLMotionProps<'button'> & {
+export type ButtonProps = (
+  | (HTMLMotionProps<'button'> & { asChild?: false })
+  | (ComponentProps<'button'> & { asChild: true })
+) & {
   /**
    * 버튼 스타일을 지정합니다
-   * @defaultValue 'solid'
+   * @defaultValue 'default'
    */
   variant?: ButtonVariant;
   /**
@@ -53,30 +58,29 @@ export type ButtonProps = HTMLMotionProps<'button'> & {
    * @defaultValue false
    */
   disableRipple?: boolean;
+  /**
+   * 자식 요소를 버튼 대신 렌더링합니다
+   * @defaultValue false
+   */
+  asChild?: boolean;
   /** 버튼 내부에 렌더링할 요소를 지정합니다 */
   children?: ReactNode;
 };
 
-/**
- * 모든 UI가 결국 여기서 시작된다
- *
- * @remarks
- * - Ripple 효과 내장
- * - 키보드 접근성 지원 (Enter, Space)
- *
- * @example
- * ```tsx
- * <Button variant="solid" size="md">Click me</Button>
- * <Button variant="glow" disabled>Disabled</Button>
- * ```
- */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+type ButtonWithRippleProps = HTMLMotionProps<'button'> & {
+  variant: ButtonVariant;
+  size: ButtonSize;
+  disableRipple: boolean;
+  children?: ReactNode;
+};
+
+const ButtonWithRipple = forwardRef<HTMLButtonElement, ButtonWithRippleProps>(
   (
     {
       className,
-      variant = 'solid',
-      size = 'md',
-      disableRipple = false,
+      variant,
+      size,
+      disableRipple,
       disabled,
       children,
       onPointerDown,
@@ -89,7 +93,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...props
     },
     ref,
-  ): ReactElement<HTMLMotionProps<'button'>> => {
+  ) => {
     const [ripples, setRipples] = useState<RippleItem[]>([]);
     const idRef = useRef(0);
     const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -206,15 +210,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       [disableRipple, removeLastRipple, onKeyUp],
     );
 
-    // 외부 ref와 내부 ref 병합
     const setRefs = useCallback(
       (node: HTMLButtonElement | null) => {
         buttonRef.current = node;
         if (typeof ref === 'function') {
           ref(node);
         } else if (ref) {
-          // eslint-disable-next-line no-param-reassign
-          ref.current = node;
+          const mutableRef = ref;
+          mutableRef.current = node;
         }
       },
       [ref],
@@ -276,6 +279,75 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           )}
         </m.button>
       </LazyMotion>
+    );
+  },
+);
+
+ButtonWithRipple.displayName = 'ButtonWithRipple';
+
+/**
+ * 모든 UI가 결국 여기서 시작된다
+ *
+ * @remarks
+ * - Ripple 효과 내장 (asChild 모드에서는 비활성화)
+ * - 키보드 접근성 지원 (Enter, Space)
+ * - asChild로 다른 요소를 버튼 스타일로 렌더링
+ *
+ * @example
+ * ```tsx
+ * <Button variant="default" size="md">Click me</Button>
+ * <Button variant="glow" disabled>Disabled</Button>
+ * <Button asChild variant="outline">
+ *   <a href="/link">Link Button</a>
+ * </Button>
+ * ```
+ */
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      className,
+      variant = 'default',
+      size = 'md',
+      disableRipple = false,
+      asChild = false,
+      disabled,
+      children,
+      ...props
+    },
+    ref,
+  ): ReactElement => {
+    if (asChild) {
+      return (
+        <Slot
+          ref={ref}
+          className={cn(
+            buttonBase,
+            buttonVariant[variant],
+            buttonSize[size],
+            className,
+          )}
+          data-slot="button"
+          data-variant={variant}
+          data-size={size}
+          {...(props as ComponentProps<'button'>)}
+        >
+          {children}
+        </Slot>
+      );
+    }
+
+    return (
+      <ButtonWithRipple
+        ref={ref}
+        className={className}
+        variant={variant}
+        size={size}
+        disableRipple={disableRipple}
+        disabled={disabled}
+        {...(props as HTMLMotionProps<'button'>)}
+      >
+        {children}
+      </ButtonWithRipple>
     );
   },
 );

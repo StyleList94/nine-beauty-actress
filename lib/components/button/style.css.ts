@@ -36,7 +36,7 @@ export const buttonBase = style({
 });
 
 export const buttonVariant = styleVariants({
-  solid: {
+  default: {
     background: vars.color.primary.base,
     color: vars.color.primary.foreground,
     border: 'none',
@@ -52,17 +52,67 @@ export const buttonVariant = styleVariants({
       },
     },
   },
-  outline: {
-    background: 'transparent',
-    color: vars.color.primary.base,
-    border: `1.5px solid ${vars.color.primary.base}`,
+  destructive: {
+    background: vars.color.destructive.base,
+    color: vars.color.destructive.foreground,
+    border: 'none',
+    boxShadow: shadows.sm,
     selectors: {
       '&:hover:not(:disabled)': {
-        background: palette.purple['500/10'],
-        borderColor: vars.color.primary.muted,
+        background: vars.color.destructive.strong,
+        boxShadow: shadows.md,
       },
       '&:active:not(:disabled)': {
-        background: palette.purple['500/15'],
+        background: vars.color.destructive.strong,
+        boxShadow: shadows.sm,
+      },
+    },
+  },
+  outline: {
+    background: 'transparent',
+    color: vars.color.foreground,
+    border: `1px solid ${vars.color.input}`,
+    boxShadow: shadows.sm,
+    selectors: {
+      '&:hover:not(:disabled)': {
+        background: vars.color.accent,
+        color: vars.color.accentForeground,
+      },
+    },
+  },
+  secondary: {
+    background: vars.color.secondary.base,
+    color: vars.color.secondary.foreground,
+    border: 'none',
+    boxShadow: shadows.sm,
+    selectors: {
+      '&:hover:not(:disabled)': {
+        opacity: 0.8,
+      },
+    },
+  },
+  ghost: {
+    background: 'transparent',
+    color: vars.color.foreground,
+    border: 'none',
+    boxShadow: 'none',
+    selectors: {
+      '&:hover:not(:disabled)': {
+        background: vars.color.accent,
+        color: vars.color.accentForeground,
+      },
+    },
+  },
+  link: {
+    background: 'transparent',
+    color: vars.color.primary.base,
+    border: 'none',
+    boxShadow: 'none',
+    textDecoration: 'none',
+    selectors: {
+      '&:hover:not(:disabled)': {
+        textDecoration: 'underline',
+        textUnderlineOffset: '4px',
       },
     },
   },
@@ -89,14 +139,20 @@ export const buttonSize = styleVariants({
     fontSize: font.size.xs,
   },
   md: {
-    height: spacing[40],
+    height: spacing[36],
     paddingInline: spacing[16],
     fontSize: font.size.sm,
   },
   lg: {
-    height: spacing[48],
+    height: spacing[40],
     paddingInline: spacing[24],
-    fontSize: font.size.base,
+    fontSize: font.size.sm,
+  },
+  icon: {
+    height: spacing[36],
+    width: spacing[36],
+    padding: 0,
+    fontSize: font.size.sm,
   },
 });
 

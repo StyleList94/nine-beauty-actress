@@ -9,16 +9,27 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['solid', 'outline', 'glow'],
+      options: [
+        'default',
+        'destructive',
+        'outline',
+        'secondary',
+        'ghost',
+        'link',
+        'glow',
+      ],
       description: '버튼 스타일을 지정합니다',
       table: {
-        type: { summary: "'solid' | 'outline' | 'glow'" },
-        defaultValue: { summary: 'solid' },
+        type: {
+          summary:
+            "'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | 'glow'",
+        },
+        defaultValue: { summary: 'default' },
       },
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
+      options: ['sm', 'md', 'lg', 'icon'],
       description: '버튼 크기를 지정합니다',
       table: {
         type: { summary: "'sm' | 'md' | 'lg'" },
@@ -50,10 +61,10 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof Button>;
 
-export const Solid: Story = {
+export const Default: Story = {
   args: {
     children: 'Button',
-    variant: 'solid',
+    variant: 'default',
     size: 'md',
   },
 };
@@ -88,14 +99,14 @@ export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <Button variant="solid" size="sm">
-          Solid
+        <Button variant="default" size="sm">
+          Default
         </Button>
-        <Button variant="solid" size="md">
-          Solid
+        <Button variant="default" size="md">
+          Default
         </Button>
-        <Button variant="solid" size="lg">
-          Solid
+        <Button variant="default" size="lg">
+          Default
         </Button>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -127,8 +138,8 @@ export const AllVariants: Story = {
 export const Disabled: Story = {
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-      <Button variant="solid" disabled>
-        Solid
+      <Button variant="default" disabled>
+        Default
       </Button>
       <Button variant="outline" disabled>
         Outline
@@ -143,7 +154,7 @@ export const Disabled: Story = {
 export const WithoutRipple: Story = {
   args: {
     children: 'Button',
-    variant: 'solid',
+    variant: 'default',
     disableRipple: true,
   },
 };

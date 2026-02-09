@@ -112,6 +112,36 @@ export const vars = createGlobalTheme(':root', {
       foreground: palette.neutral[50],
     },
 
+    // Popover (팝오버/드롭다운)
+    /** 팝오버 배경색 */
+    popover: palette.neutral[50],
+    /** 팝오버 텍스트색 */
+    popoverForeground: palette.neutral[900],
+
+    // Card (카드 컨테이너)
+    /** 카드 배경색 */
+    card: palette.neutral[50],
+    /** 카드 텍스트색 */
+    cardForeground: palette.neutral[900],
+
+    // Secondary (보조 색상)
+    secondary: {
+      /** 보조 배경색 */
+      base: palette.neutral[100],
+      /** 보조 전경색 */
+      foreground: palette.neutral[900],
+    },
+
+    // Destructive (파괴적 액션 색상)
+    destructive: {
+      /** 파괴적 액션 기본 색상 */
+      base: palette.red[500],
+      /** 파괴적 액션 강조 색상 */
+      strong: palette.red[600],
+      /** 파괴적 액션 전경색 */
+      foreground: palette.neutral[50],
+    },
+
     // Surface & Ring (반투명 UI 요소)
     /** 반투명 표면 배경 */
     surfaceSubtle: palette.neutral['100/80'],
@@ -136,6 +166,12 @@ globalStyle('.dark, :root.dark, [data-theme="dark"]', {
     [vars.color.input]: palette.neutral[700],
     [vars.color.accent]: palette.neutral[800],
     [vars.color.accentForeground]: palette.neutral[50],
+    [vars.color.popover]: palette.neutral[800],
+    [vars.color.popoverForeground]: palette.neutral[50],
+    [vars.color.card]: palette.neutral[900],
+    [vars.color.cardForeground]: palette.neutral[50],
+    [vars.color.secondary.base]: palette.neutral[800],
+    [vars.color.secondary.foreground]: palette.neutral[50],
     [vars.color.surfaceSubtle]: palette.neutral['800/80'],
     [vars.color.borderSubtle]: palette.neutral['700/80'],
     [vars.color.ring]: palette.neutral['600/50'],
@@ -157,6 +193,12 @@ globalStyle(':root:not(.light):not([data-theme="light"])', {
         [vars.color.input]: palette.neutral[700],
         [vars.color.accent]: palette.neutral[800],
         [vars.color.accentForeground]: palette.neutral[50],
+        [vars.color.popover]: palette.neutral[800],
+        [vars.color.popoverForeground]: palette.neutral[50],
+        [vars.color.card]: palette.neutral[900],
+        [vars.color.cardForeground]: palette.neutral[50],
+        [vars.color.secondary.base]: palette.neutral[800],
+        [vars.color.secondary.foreground]: palette.neutral[50],
         [vars.color.surfaceSubtle]: palette.neutral['800/80'],
         [vars.color.borderSubtle]: palette.neutral['700/80'],
         [vars.color.ring]: palette.neutral['600/50'],

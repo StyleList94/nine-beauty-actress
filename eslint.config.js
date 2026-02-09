@@ -10,7 +10,7 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
 export default defineConfig(
   {
-    ignores: ['dist', '!.storybook', '*.config.[jt]s', '*.config.m[jt]s'],
+    ignores: ['dist', 'storybook-static', '!.storybook', '*.config.[jt]s', '*.config.m[jt]s'],
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
