@@ -1,4 +1,4 @@
-import { style, styleVariants } from '@vanilla-extract/css';
+import { globalStyle, style, styleVariants } from '@vanilla-extract/css';
 
 import { vars } from 'lib/core/styles/theme.css';
 import {
@@ -16,23 +16,44 @@ export const buttonBase = style({
   alignItems: 'center',
   justifyContent: 'center',
   gap: spacing[8],
-  borderRadius: radius.lg,
+  whiteSpace: 'nowrap',
+  borderRadius: radius.md,
+  fontSize: font.size.sm,
   fontWeight: font.weight.medium,
   cursor: 'pointer',
   outline: 'none',
   overflow: 'hidden',
   transition: `all ${motion.duration.normal} ${motion.easing.ease}`,
   userSelect: 'none',
+  flexShrink: 0,
   WebkitTapHighlightColor: 'transparent',
   selectors: {
     '&:focus-visible': {
-      boxShadow: `0 0 0 2px ${vars.color.ring}`,
+      borderColor: vars.color.ring,
+      boxShadow: `0 0 0 3px ${vars.color.ring}`,
     },
     '&:disabled': {
       opacity: 0.5,
-      cursor: 'not-allowed',
+      pointerEvents: 'none',
+    },
+    '&[aria-invalid="true"]': {
+      borderColor: vars.color.destructive.base,
+      boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 20%, transparent)`,
+    },
+    ':is(.dark, [data-theme="dark"]) &[aria-invalid="true"]': {
+      boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 40%, transparent)`,
     },
   },
+});
+
+globalStyle(`${buttonBase} svg`, {
+  pointerEvents: 'none',
+  flexShrink: 0,
+});
+
+globalStyle(`${buttonBase} svg:not([class*="size-"])`, {
+  width: '1rem',
+  height: '1rem',
 });
 
 export const buttonVariant = styleVariants({
@@ -43,40 +64,46 @@ export const buttonVariant = styleVariants({
     boxShadow: shadows.sm,
     selectors: {
       '&:hover:not(:disabled)': {
-        background: vars.color.primary.strong,
-        boxShadow: shadows.md,
-      },
-      '&:active:not(:disabled)': {
-        background: vars.color.primary.strong,
-        boxShadow: shadows.sm,
+        background: `color-mix(in oklch, ${vars.color.primary.base} 90%, transparent)`,
       },
     },
   },
   destructive: {
     background: vars.color.destructive.base,
-    color: vars.color.destructive.foreground,
+    color: 'white',
     border: 'none',
     boxShadow: shadows.sm,
     selectors: {
       '&:hover:not(:disabled)': {
-        background: vars.color.destructive.strong,
-        boxShadow: shadows.md,
+        background: `color-mix(in oklch, ${vars.color.destructive.base} 90%, transparent)`,
       },
-      '&:active:not(:disabled)': {
-        background: vars.color.destructive.strong,
-        boxShadow: shadows.sm,
+      '&:focus-visible': {
+        boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 20%, transparent)`,
+      },
+      ':is(.dark, [data-theme="dark"]) &': {
+        background: `color-mix(in oklch, ${vars.color.destructive.base} 60%, transparent)`,
+      },
+      ':is(.dark, [data-theme="dark"]) &:focus-visible': {
+        boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 40%, transparent)`,
       },
     },
   },
   outline: {
-    background: 'transparent',
+    background: vars.color.background,
     color: vars.color.foreground,
-    border: `1px solid ${vars.color.input}`,
+    border: `1px solid ${vars.color.border}`,
     boxShadow: shadows.sm,
     selectors: {
       '&:hover:not(:disabled)': {
         background: vars.color.accent,
         color: vars.color.accentForeground,
+      },
+      ':is(.dark, [data-theme="dark"]) &': {
+        background: `color-mix(in oklch, ${vars.color.input} 30%, transparent)`,
+        borderColor: vars.color.input,
+      },
+      ':is(.dark, [data-theme="dark"]) &:hover:not(:disabled)': {
+        background: `color-mix(in oklch, ${vars.color.input} 50%, transparent)`,
       },
     },
   },
@@ -87,7 +114,7 @@ export const buttonVariant = styleVariants({
     boxShadow: shadows.sm,
     selectors: {
       '&:hover:not(:disabled)': {
-        opacity: 0.8,
+        background: `color-mix(in oklch, ${vars.color.secondary.base} 80%, transparent)`,
       },
     },
   },
@@ -100,6 +127,9 @@ export const buttonVariant = styleVariants({
       '&:hover:not(:disabled)': {
         background: vars.color.accent,
         color: vars.color.accentForeground,
+      },
+      ':is(.dark, [data-theme="dark"]) &:hover:not(:disabled)': {
+        background: `color-mix(in oklch, ${vars.color.accent} 50%, transparent)`,
       },
     },
   },
@@ -136,23 +166,35 @@ export const buttonSize = styleVariants({
   sm: {
     height: spacing[32],
     paddingInline: spacing[12],
-    fontSize: font.size.xs,
+    gap: spacing[6],
+    selectors: {
+      '&:has(> svg)': {
+        paddingInline: spacing[10],
+      },
+    },
   },
   md: {
     height: spacing[36],
     paddingInline: spacing[16],
-    fontSize: font.size.sm,
+    selectors: {
+      '&:has(> svg)': {
+        paddingInline: spacing[12],
+      },
+    },
   },
   lg: {
     height: spacing[40],
     paddingInline: spacing[24],
-    fontSize: font.size.sm,
+    selectors: {
+      '&:has(> svg)': {
+        paddingInline: spacing[16],
+      },
+    },
   },
   icon: {
     height: spacing[36],
     width: spacing[36],
     padding: 0,
-    fontSize: font.size.sm,
   },
 });
 

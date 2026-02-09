@@ -44,7 +44,7 @@ export const vars = createGlobalTheme(':root', {
     /** 메인 배경색 */
     background: palette.neutral[50],
     /** 메인 텍스트색 */
-    foreground: palette.neutral[900],
+    foreground: palette.neutral[950],
     /** 약한 배경색 - hover, disabled 등에 사용 */
     muted: palette.neutral[100],
     /** 약한 텍스트색 - 보조 텍스트에 사용 */
@@ -52,7 +52,7 @@ export const vars = createGlobalTheme(':root', {
     /** 테두리색 */
     border: palette.neutral[200],
     /** 입력 필드 테두리색 */
-    input: palette.neutral[300],
+    input: palette.neutral[200],
     /** 강조 배경색 */
     accent: palette.neutral[100],
     /** 강조 텍스트색 */
@@ -61,11 +61,11 @@ export const vars = createGlobalTheme(':root', {
     // Primary (nested - 주요 액션 색상)
     primary: {
       /** 기본 색상 */
-      base: palette.purple[500],
+      base: palette.neutral[900],
       /** 강조 색상 (hover, active) */
-      strong: palette.purple[600],
+      strong: palette.neutral[950],
       /** 약한 색상 (disabled, subtle) */
-      muted: palette.purple[300],
+      muted: palette.neutral[400],
       /** 전경 색상 (텍스트) */
       foreground: palette.neutral[50],
     },
@@ -116,13 +116,13 @@ export const vars = createGlobalTheme(':root', {
     /** 팝오버 배경색 */
     popover: palette.neutral[50],
     /** 팝오버 텍스트색 */
-    popoverForeground: palette.neutral[900],
+    popoverForeground: palette.neutral[950],
 
     // Card (카드 컨테이너)
     /** 카드 배경색 */
     card: palette.neutral[50],
     /** 카드 텍스트색 */
-    cardForeground: palette.neutral[900],
+    cardForeground: palette.neutral[950],
 
     // Secondary (보조 색상)
     secondary: {
@@ -135,9 +135,9 @@ export const vars = createGlobalTheme(':root', {
     // Destructive (파괴적 액션 색상)
     destructive: {
       /** 파괴적 액션 기본 색상 */
-      base: palette.red[500],
+      base: 'oklch(57.7% 0.245 27.325)',
       /** 파괴적 액션 강조 색상 */
-      strong: palette.red[600],
+      strong: 'oklch(50% 0.213 27.325)',
       /** 파괴적 액션 전경색 */
       foreground: palette.neutral[50],
     },
@@ -148,34 +148,40 @@ export const vars = createGlobalTheme(':root', {
     /** 반투명 보더 */
     borderSubtle: palette.neutral['200/80'],
     /** 포커스 링 */
-    ring: palette.neutral['300/50'],
+    ring: palette.neutral[400],
   },
 });
 
+const darkVars = {
+  [vars.color.background]: palette.neutral[950],
+  [vars.color.foreground]: palette.neutral[50],
+  [vars.color.muted]: palette.neutral[800],
+  [vars.color.mutedForeground]: palette.neutral[400],
+  [vars.color.border]: 'oklch(100% 0 0 / 0.1)',
+  [vars.color.input]: 'oklch(100% 0 0 / 0.15)',
+  [vars.color.accent]: palette.neutral[800],
+  [vars.color.accentForeground]: palette.neutral[50],
+  [vars.color.primary.base]: palette.neutral[200],
+  [vars.color.primary.strong]: palette.neutral[300],
+  [vars.color.primary.muted]: palette.neutral[600],
+  [vars.color.primary.foreground]: palette.neutral[900],
+  [vars.color.popover]: palette.neutral[900],
+  [vars.color.popoverForeground]: palette.neutral[50],
+  [vars.color.card]: palette.neutral[900],
+  [vars.color.cardForeground]: palette.neutral[50],
+  [vars.color.secondary.base]: palette.neutral[800],
+  [vars.color.secondary.foreground]: palette.neutral[50],
+  [vars.color.destructive.base]: 'oklch(70.4% 0.191 22.216)',
+  [vars.color.surfaceSubtle]: palette.neutral['800/80'],
+  [vars.color.borderSubtle]: palette.neutral['700/80'],
+  [vars.color.ring]: palette.neutral[500],
+};
+
 /**
  * 다크모드 오버라이드 (Class/Attribute 기반)
- * Layout 색상만 오버라이드, action/status는 동일 유지
  */
 globalStyle('.dark, :root.dark, [data-theme="dark"]', {
-  vars: {
-    [vars.color.background]: palette.neutral[900],
-    [vars.color.foreground]: palette.neutral[50],
-    [vars.color.muted]: palette.neutral[800],
-    [vars.color.mutedForeground]: palette.neutral[400],
-    [vars.color.border]: palette.neutral[700],
-    [vars.color.input]: palette.neutral[700],
-    [vars.color.accent]: palette.neutral[800],
-    [vars.color.accentForeground]: palette.neutral[50],
-    [vars.color.popover]: palette.neutral[800],
-    [vars.color.popoverForeground]: palette.neutral[50],
-    [vars.color.card]: palette.neutral[900],
-    [vars.color.cardForeground]: palette.neutral[50],
-    [vars.color.secondary.base]: palette.neutral[800],
-    [vars.color.secondary.foreground]: palette.neutral[50],
-    [vars.color.surfaceSubtle]: palette.neutral['800/80'],
-    [vars.color.borderSubtle]: palette.neutral['700/80'],
-    [vars.color.ring]: palette.neutral['600/50'],
-  },
+  vars: darkVars,
 });
 
 /**
@@ -184,25 +190,7 @@ globalStyle('.dark, :root.dark, [data-theme="dark"]', {
 globalStyle(':root:not(.light):not([data-theme="light"])', {
   '@media': {
     '(prefers-color-scheme: dark)': {
-      vars: {
-        [vars.color.background]: palette.neutral[900],
-        [vars.color.foreground]: palette.neutral[50],
-        [vars.color.muted]: palette.neutral[800],
-        [vars.color.mutedForeground]: palette.neutral[400],
-        [vars.color.border]: palette.neutral[700],
-        [vars.color.input]: palette.neutral[700],
-        [vars.color.accent]: palette.neutral[800],
-        [vars.color.accentForeground]: palette.neutral[50],
-        [vars.color.popover]: palette.neutral[800],
-        [vars.color.popoverForeground]: palette.neutral[50],
-        [vars.color.card]: palette.neutral[900],
-        [vars.color.cardForeground]: palette.neutral[50],
-        [vars.color.secondary.base]: palette.neutral[800],
-        [vars.color.secondary.foreground]: palette.neutral[50],
-        [vars.color.surfaceSubtle]: palette.neutral['800/80'],
-        [vars.color.borderSubtle]: palette.neutral['700/80'],
-        [vars.color.ring]: palette.neutral['600/50'],
-      },
+      vars: darkVars,
     },
   },
 });
