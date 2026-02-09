@@ -26,8 +26,8 @@ export default defineConfig({
         tokens: resolve(__dirname, 'lib/core/tokens.ts'),
       },
       name: 'NineBeautyActress',
-      formats: ['es', 'cjs'],
-      fileName: (format, entryName) => `${entryName}.${format}.js`,
+      formats: ['es'],
+      fileName: (_format, entryName) => `${entryName}.es.js`,
       cssFileName: 'style',
     },
     rollupOptions: {
