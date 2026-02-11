@@ -22,11 +22,10 @@ import { Slot } from '@radix-ui/react-slot';
 import { cn } from 'lib/core/utils';
 
 import {
-  buttonBase,
-  buttonVariant,
-  buttonSize,
+  button as buttonRecipe,
   rippleContainer,
   ripple as rippleStyle,
+  type ButtonVariants,
 } from './style.css';
 
 type RippleItem = {
@@ -36,8 +35,8 @@ type RippleItem = {
   size: number;
 };
 
-export type ButtonVariant = keyof typeof buttonVariant;
-export type ButtonSize = keyof typeof buttonSize;
+export type ButtonVariant = NonNullable<ButtonVariants>['variant'];
+export type ButtonSize = NonNullable<ButtonVariants>['size'];
 
 export type ButtonProps = (
   | (HTMLMotionProps<'button'> & { asChild?: false })
@@ -228,12 +227,7 @@ const ButtonWithRipple = forwardRef<HTMLButtonElement, ButtonWithRippleProps>(
         <m.button
           ref={setRefs}
           type="button"
-          className={cn(
-            buttonBase,
-            buttonVariant[variant],
-            buttonSize[size],
-            className,
-          )}
+          className={cn(buttonRecipe({ variant, size }), className)}
           disabled={disabled}
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
@@ -320,12 +314,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       return (
         <Slot
           ref={ref}
-          className={cn(
-            buttonBase,
-            buttonVariant[variant],
-            buttonSize[size],
-            className,
-          )}
+          className={cn(buttonRecipe({ variant, size }), className)}
           data-slot="button"
           data-variant={variant}
           data-size={size}

@@ -56,6 +56,7 @@ component-name/
 ### Styling System
 
 - **Vanilla Extract**: Type-safe CSS-in-TS with zero runtime
+- **@vanilla-extract/recipes**: Used for component variant management (CVA equivalent)
 - **OKLCH color space**: Perceptually uniform colors
 - **Dark mode**: Media queries + `.dark` class + `[data-theme="dark"]` attribute
 - **Data attributes**: `data-slot`, `data-variant`, `data-size` for styling hooks
@@ -133,10 +134,10 @@ background: `oklch(from ${palette.green[500]} l c h / 0.5)`; // Wrong!
 
 ### Build Outputs
 
-Vite builds to `dist/` with dual ES/CJS exports:
+Vite builds to `dist/` with ESM-only output:
 
-- `main.es.js` / `main.cjs.js` - Components and hooks
-- `styles.es.js` / `styles.cjs.js` - Style exports only
+- `main.es.js` - Components and hooks
+- `styles.es.js` - Style exports only
 - `style.css` - All CSS bundled
 
 ### Peer Dependencies
@@ -149,6 +150,12 @@ React ≥18, React-DOM ≥18, Motion ≥12 (not bundled)
 2. **Stories**: Add to `src/stories/*.stories.tsx` with Meta + argTypes
 3. **Tests**: Add to `src/tests/*.test.tsx` using React Testing Library role queries
 4. **Export**: Add to `lib/main.ts`
+
+### Storybook Conventions
+
+- Use **Tailwind classes** for story layout (not inline styles) — Storybook has TailwindCSS configured
+- List components **vertically** (`flex flex-col`) by default; use **horizontal** (`flex flex-wrap`) only for size comparisons
+- Group variants together in a single story (e.g., all button variants in one `Variants` story)
 
 ## Code Quality
 
