@@ -42,7 +42,7 @@ export const vars = createGlobalTheme(':root', {
   color: {
     // Layout (flat - 단일값)
     /** 메인 배경색 */
-    background: palette.neutral[50],
+    background: palette.white,
     /** 메인 텍스트색 */
     foreground: palette.neutral[950],
     /** 약한 배경색 - hover, disabled 등에 사용 */
@@ -114,13 +114,13 @@ export const vars = createGlobalTheme(':root', {
 
     // Popover (팝오버/드롭다운)
     /** 팝오버 배경색 */
-    popover: palette.neutral[50],
+    popover: palette.white,
     /** 팝오버 텍스트색 */
     popoverForeground: palette.neutral[950],
 
     // Card (카드 컨테이너)
     /** 카드 배경색 */
-    card: palette.neutral[50],
+    card: palette.white,
     /** 카드 텍스트색 */
     cardForeground: palette.neutral[950],
 

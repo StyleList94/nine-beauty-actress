@@ -16,6 +16,7 @@
  * ```
  */
 export const palette = {
+  white: 'oklch(100% 0 0)',
   /**
    * Zinc (Tailwind zinc 기반, hue: ~286, 미세한 blue tint)
    */

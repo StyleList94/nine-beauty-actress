@@ -22,7 +22,7 @@ pnpm build-storybook  # Build static Storybook
 
 ### Library Structure (`lib/`)
 
-```
+```text
 lib/
 ├── main.ts                    # Main entry - exports all components/hooks
 ├── core/
@@ -39,7 +39,7 @@ lib/
 │           ├── radius.css.ts  # radius (border-radius)
 │           ├── shadows.css.ts # shadows (box-shadow)
 │           └── motion.css.ts  # motion (duration, easing)
-├── components/                # 7 components (Button, Switch, ToggleGroup, FileUploader, Header, Footer, MainContainer)
+├── components/                # UI components (Button, Card, Input, Label, Switch, Dialog, Tooltip, etc.)
 └── hooks/                     # useDebounce, useMounted, useVirtualScroll
 ```
 
@@ -47,7 +47,7 @@ lib/
 
 Each component follows:
 
-```
+```text
 component-name/
 ├── index.tsx        # Component + types (uses forwardRef)
 └── style.css.ts     # Vanilla Extract styles
@@ -156,6 +156,16 @@ React ≥18, React-DOM ≥18, Motion ≥12 (not bundled)
 - Use **Tailwind classes** for story layout (not inline styles) — Storybook has TailwindCSS configured
 - List components **vertically** (`flex flex-col`) by default; use **horizontal** (`flex flex-wrap`) only for size comparisons
 - Group variants together in a single story (e.g., all button variants in one `Variants` story)
+- Use `noControls` helper function for showcase stories: `const noControls = (story: string) => ({ parameters: { controls: { disable: true }, docs: { description: { story } } } })`
+- Use `parameters.docs.description.component` on meta for component-level description (matches TSDoc summary)
+- For composition components (Card), use custom `StoryObj<CustomArgs>` type with `_prefixed` internal arg keys, `name` for display, and `table.category` for sub-component grouping
+- Use library's own components in stories (Label, Input, Switch, etc.) instead of raw HTML elements
+
+### TSDoc Convention
+
+- Main component: one-line summary + `@remarks` (bullet points) + `@example` (tsx code block)
+- Sub-components: single-line `/** description */`
+- Storybook `docs.description.component` should match the TSDoc summary line
 
 ## Code Quality
 

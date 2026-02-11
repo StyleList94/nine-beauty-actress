@@ -13,6 +13,12 @@ export const cardBase = style({
   background: vars.color.card,
   color: vars.color.cardForeground,
   boxShadow: shadows.sm,
+  selectors: {
+    '&[data-size="sm"]': {
+      gap: spacing[16],
+      paddingBlock: spacing[16],
+    },
+  },
 });
 
 export const cardHeader = style({
@@ -26,12 +32,20 @@ export const cardHeader = style({
     '&:has([data-slot="card-action"])': {
       gridTemplateColumns: '1fr auto',
     },
+    '[data-size="sm"] &': {
+      paddingInline: spacing[16],
+    },
   },
 });
 
 export const cardTitle = style({
   lineHeight: font.lineHeight.none,
   fontWeight: font.weight.semibold,
+  selectors: {
+    '[data-size="sm"] &': {
+      fontSize: font.size.sm,
+    },
+  },
 });
 
 export const cardDescription = style({
@@ -49,10 +63,20 @@ export const cardAction = style({
 
 export const cardContent = style({
   paddingInline: spacing[24],
+  selectors: {
+    '[data-size="sm"] &': {
+      paddingInline: spacing[16],
+    },
+  },
 });
 
 export const cardFooter = style({
   display: 'flex',
   alignItems: 'center',
   paddingInline: spacing[24],
+  selectors: {
+    '[data-size="sm"] &': {
+      paddingInline: spacing[16],
+    },
+  },
 });
