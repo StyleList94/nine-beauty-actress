@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, globalStyle } from '@vanilla-extract/css';
 
 import { vars } from 'lib/core/styles/theme.css';
 import { spacing, radius, font, shadows, motion } from 'lib/core/styles/tokens';
@@ -32,13 +32,14 @@ export const dialogContent = style({
   display: 'grid',
   width: '100%',
   maxWidth: 'calc(100% - 2rem)',
-  transform: 'translate(-50%, -50%)',
+  translate: '-50% -50%',
   gap: spacing[16],
   borderRadius: radius.lg,
   border: `1px solid ${vars.color.border}`,
   padding: spacing[24],
   background: vars.color.background,
   boxShadow: shadows.lg,
+  outline: 'none',
   '@media': {
     '(min-width: 640px)': {
       maxWidth: '32rem',
@@ -76,10 +77,21 @@ export const dialogCloseButton = style({
     '&:focus-visible': {
       boxShadow: `0 0 0 2px ${vars.color.ring}`,
     },
+    '&[data-state="open"]': {
+      background: vars.color.accent,
+      color: vars.color.mutedForeground,
+    },
     '&:disabled': {
       pointerEvents: 'none',
     },
   },
+});
+
+globalStyle(`${dialogCloseButton} svg`, {
+  pointerEvents: 'none',
+  flexShrink: 0,
+  width: '1rem',
+  height: '1rem',
 });
 
 export const dialogHeader = style({
