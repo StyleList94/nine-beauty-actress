@@ -28,7 +28,6 @@ const meta: Meta<typeof Popover> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Popover>;
 
 const noControls = (story: string) => ({
   parameters: {
@@ -37,16 +36,119 @@ const noControls = (story: string) => ({
   },
 });
 
-export const Default: Story = {
-  ...noControls(
-    '제목, 설명, 폼을 포함한 기본 팝오버입니다.',
-  ),
-  render: () => (
+type DefaultArgs = {
+  side: 'top' | 'right' | 'bottom' | 'left';
+  align: 'start' | 'center' | 'end';
+  sideOffset: number;
+  _contentChildren: string;
+  _contentClassName: string;
+  _triggerAsChild: boolean;
+  _headerChildren: string;
+  _titleChildren: string;
+  _descChildren: string;
+};
+
+export const Default: StoryObj<DefaultArgs> = {
+  argTypes: {
+    side: {
+      control: 'select',
+      options: ['top', 'right', 'bottom', 'left'],
+      description: '표시 방향을 지정합니다',
+      table: {
+        category: 'PopoverContent',
+        type: { summary: "'top' | 'right' | 'bottom' | 'left'" },
+        defaultValue: { summary: 'bottom' },
+      },
+    },
+    align: {
+      control: 'select',
+      options: ['start', 'center', 'end'],
+      description: '정렬을 지정합니다',
+      table: {
+        category: 'PopoverContent',
+        type: { summary: "'start' | 'center' | 'end'" },
+        defaultValue: { summary: 'center' },
+      },
+    },
+    sideOffset: {
+      control: 'number',
+      description: '트리거와의 간격(px)을 지정합니다',
+      table: {
+        category: 'PopoverContent',
+        type: { summary: 'number' },
+        defaultValue: { summary: '4' },
+      },
+    },
+    _contentChildren: {
+      name: 'children',
+      control: false,
+      description: '팝오버 콘텐츠를 지정합니다',
+      table: {
+        category: 'PopoverContent',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _contentClassName: {
+      name: 'className',
+      control: false,
+      description: '추가 CSS 클래스를 지정합니다',
+      table: {
+        category: 'PopoverContent',
+        type: { summary: 'string' },
+      },
+    },
+    _triggerAsChild: {
+      name: 'asChild',
+      control: false,
+      description: '자식 요소를 트리거로 사용합니다',
+      table: {
+        category: 'PopoverTrigger',
+        type: { summary: 'boolean' },
+      },
+    },
+    _headerChildren: {
+      name: 'children',
+      control: false,
+      description: '헤더 콘텐츠를 지정합니다',
+      table: {
+        category: 'PopoverHeader',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _titleChildren: {
+      name: 'children',
+      control: false,
+      description: '팝오버 제목을 지정합니다',
+      table: {
+        category: 'PopoverTitle',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _descChildren: {
+      name: 'children',
+      control: false,
+      description: '팝오버 설명을 지정합니다',
+      table: {
+        category: 'PopoverDescription',
+        type: { summary: 'ReactNode' },
+      },
+    },
+  },
+  args: {
+    side: 'bottom',
+    align: 'center',
+    sideOffset: 4,
+  },
+  render: (args) => (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline">팝오버 열기</Button>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent
+        side={args.side}
+        align={args.align}
+        sideOffset={args.sideOffset}
+      >
         <PopoverHeader>
           <PopoverTitle>여백 설정</PopoverTitle>
           <PopoverDescription>
@@ -68,7 +170,7 @@ export const Default: Story = {
   ),
 };
 
-export const CustomPosition: Story = {
+export const CustomPosition: StoryObj = {
   ...noControls(
     'side와 align 속성으로 팝오버 위치를 조정합니다.',
   ),

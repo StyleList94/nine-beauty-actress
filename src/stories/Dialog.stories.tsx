@@ -29,7 +29,6 @@ const meta: Meta<typeof Dialog> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Dialog>;
 
 const noControls = (story: string) => ({
   parameters: {
@@ -38,16 +37,84 @@ const noControls = (story: string) => ({
   },
 });
 
-export const Default: Story = {
-  ...noControls(
-    '기본 다이얼로그 구성입니다. Trigger, Header, Content, Footer를 조합합니다.',
-  ),
-  render: () => (
+type DefaultArgs = {
+  _contentShowCloseButton: boolean;
+  _contentClassName: string;
+  _footerShowCloseButton: boolean;
+  _titleChildren: string;
+  _descChildren: string;
+  _triggerAsChild: boolean;
+};
+
+export const Default: StoryObj<DefaultArgs> = {
+  argTypes: {
+    _contentShowCloseButton: {
+      name: 'showCloseButton',
+      control: 'boolean',
+      description: '우측 상단 닫기 버튼 표시 여부를 지정합니다',
+      table: {
+        category: 'DialogContent',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+    _contentClassName: {
+      name: 'className',
+      control: false,
+      description: '추가 CSS 클래스를 지정합니다',
+      table: {
+        category: 'DialogContent',
+        type: { summary: 'string' },
+      },
+    },
+    _footerShowCloseButton: {
+      name: 'showCloseButton',
+      control: 'boolean',
+      description: '푸터에 닫기 버튼을 자동 추가합니다',
+      table: {
+        category: 'DialogFooter',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    _titleChildren: {
+      name: 'children',
+      control: false,
+      description: '다이얼로그 제목을 지정합니다',
+      table: {
+        category: 'DialogTitle',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _descChildren: {
+      name: 'children',
+      control: false,
+      description: '다이얼로그 설명을 지정합니다',
+      table: {
+        category: 'DialogDescription',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _triggerAsChild: {
+      name: 'asChild',
+      control: false,
+      description: '자식 요소를 트리거로 사용합니다',
+      table: {
+        category: 'DialogTrigger',
+        type: { summary: 'boolean' },
+      },
+    },
+  },
+  args: {
+    _contentShowCloseButton: true,
+    _footerShowCloseButton: false,
+  },
+  render: (args) => (
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline">프로필 수정</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent showCloseButton={args._contentShowCloseButton}>
         <DialogHeader>
           <DialogTitle>프로필 수정</DialogTitle>
           <DialogDescription>
@@ -64,7 +131,7 @@ export const Default: Story = {
             <Input id="username" defaultValue="@stylelist94" />
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter showCloseButton={args._footerShowCloseButton}>
           <Button>저장</Button>
         </DialogFooter>
       </DialogContent>
@@ -72,7 +139,7 @@ export const Default: Story = {
   ),
 };
 
-export const WithFooterClose: Story = {
+export const WithFooterClose: StoryObj = {
   ...noControls(
     'DialogFooter의 showCloseButton으로 닫기 버튼을 자동 추가합니다.',
   ),
@@ -84,9 +151,7 @@ export const WithFooterClose: Story = {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>알림</DialogTitle>
-          <DialogDescription>
-            업데이트가 완료되었습니다.
-          </DialogDescription>
+          <DialogDescription>업데이트가 완료되었습니다.</DialogDescription>
         </DialogHeader>
         <DialogFooter showCloseButton>
           <Button>확인</Button>
@@ -96,7 +161,7 @@ export const WithFooterClose: Story = {
   ),
 };
 
-export const NoCloseButton: Story = {
+export const NoCloseButton: StoryObj = {
   ...noControls(
     'showCloseButton={false}로 우측 상단 닫기 버튼을 숨깁니다.',
   ),

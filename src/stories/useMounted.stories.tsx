@@ -2,20 +2,29 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import useMounted from 'lib/hooks/use-mounted';
 
-const GuessWhat = () => {
+const MountedDemo = () => {
   const isMounted = useMounted();
 
-  return <p>is component mounted?: {isMounted ? 'yes!' : 'no!'}</p>;
+  return <p className="text-sm">is component mounted?: {isMounted ? 'yes!' : 'no!'}</p>;
 };
 
-const meta: Meta<typeof GuessWhat> = {
-  component: GuessWhat,
+const meta: Meta<typeof MountedDemo> = {
+  component: MountedDemo,
   title: 'Hooks/useMounted',
-  argTypes: {},
+
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          '컴포넌트 마운트 여부를 반환하는 훅입니다.',
+      },
+    },
+  },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof GuessWhat>;
+type Story = StoryObj<typeof MountedDemo>;
 
-export const Example: Story = {};
+export const Default: Story = {};

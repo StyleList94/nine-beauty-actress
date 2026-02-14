@@ -10,6 +10,13 @@ const items = new Array(1000).fill(0).map((_, i) => i);
 const ITEMS_COUNT = items.length;
 const ITEM_HEIGHT = 32;
 
+const noControls = (story: string) => ({
+  parameters: {
+    controls: { disable: true },
+    docs: { description: { story } },
+  },
+});
+
 const ScrollListView = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { getVirtualItems } = useVirtualScroll({
@@ -64,15 +71,26 @@ const ScrollListView = () => {
 const meta: Meta<typeof ScrollListView> = {
   component: ScrollListView,
   title: 'Hooks/useVirtualScroll',
+
+  parameters: {
+    docs: {
+      description: {
+        component: '대량의 목록을 가상 스크롤로 렌더링하는 훅입니다.',
+      },
+    },
+  },
 };
 
 export default meta;
 
 type Story = StoryObj<typeof ScrollListView>;
 
-export const Container: Story = {};
+export const Default: Story = {
+  ...noControls('컨테이너 요소 내에서 가상 스크롤을 사용하는 예시입니다.'),
+};
 
 export const Body: Story = {
+  ...noControls('body 요소를 스크롤 대상으로 사용하는 예시입니다.'),
   render: function Render() {
     const { getVirtualItems } = useVirtualScroll({
       itemCount: ITEMS_COUNT,

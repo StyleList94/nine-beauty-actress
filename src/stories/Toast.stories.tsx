@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import type { ToastVariant } from 'lib/components/toast';
+
 import { Toaster, toast, ToastAction } from 'lib/components/toast';
 import { Button } from 'lib/components/button';
 
@@ -31,7 +33,6 @@ const meta: Meta<typeof Toaster> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Toaster>;
 
 const noControls = (story: string) => ({
   parameters: {
@@ -40,15 +41,74 @@ const noControls = (story: string) => ({
   },
 });
 
-export const Default: Story = {
-  ...noControls('toast() 함수로 기본 토스트를 표시합니다.'),
-  render: () => (
+type DefaultArgs = {
+  variant: ToastVariant;
+  title: string;
+  description: string;
+  _action: string;
+  _duration: number;
+};
+
+export const Default: StoryObj<DefaultArgs> = {
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['default', 'destructive'],
+      description: '토스트 스타일을 지정합니다',
+      table: {
+        category: 'Toast',
+        type: { summary: "'default' | 'destructive'" },
+        defaultValue: { summary: 'default' },
+      },
+    },
+    title: {
+      control: 'text',
+      description: '토스트 제목을 지정합니다',
+      table: {
+        category: 'toast()',
+        type: { summary: 'string' },
+      },
+    },
+    description: {
+      control: 'text',
+      description: '토스트 설명 텍스트를 지정합니다',
+      table: {
+        category: 'toast()',
+        type: { summary: 'string' },
+      },
+    },
+    _action: {
+      name: 'action',
+      control: false,
+      description: '액션 버튼 요소를 지정합니다',
+      table: {
+        category: 'toast()',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _duration: {
+      name: 'duration',
+      control: false,
+      description: '자동 닫힘 시간(ms)을 지정합니다',
+      table: {
+        category: 'toast()',
+        type: { summary: 'number' },
+      },
+    },
+  },
+  args: {
+    variant: 'default',
+    title: '저장 완료',
+    description: '변경사항이 저장되었습니다.',
+  },
+  render: (args) => (
     <Button
       variant="outline"
       onClick={() =>
         toast({
-          title: '저장 완료',
-          description: '변경사항이 저장되었습니다.',
+          variant: args.variant,
+          title: args.title,
+          description: args.description,
         })
       }
     >
@@ -57,7 +117,7 @@ export const Default: Story = {
   ),
 };
 
-export const Destructive: Story = {
+export const Destructive: StoryObj = {
   ...noControls(
     'variant="destructive"로 오류 알림을 표시합니다.',
   ),
@@ -77,7 +137,7 @@ export const Destructive: Story = {
   ),
 };
 
-export const WithAction: Story = {
+export const WithAction: StoryObj = {
   ...noControls(
     'ToastAction으로 액션 버튼을 포함한 토스트입니다.',
   ),

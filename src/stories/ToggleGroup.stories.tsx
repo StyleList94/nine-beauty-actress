@@ -4,9 +4,25 @@ import { useState } from 'react';
 
 import { ToggleGroup, ToggleGroupItem } from 'lib/components/toggle-group';
 
+const noControls = (story: string) => ({
+  parameters: {
+    controls: { disable: true },
+    docs: { description: { story } },
+  },
+});
+
 const meta: Meta<typeof ToggleGroup> = {
   component: ToggleGroup,
   title: 'UI/ToggleGroup',
+  tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: '여러 옵션 중 하나 또는 여러 개를 선택하는 토글 그룹입니다.',
+      },
+    },
+  },
   args: {
     type: 'single',
     variant: 'default',
@@ -19,7 +35,7 @@ const meta: Meta<typeof ToggleGroup> = {
   },
   argTypes: {
     type: {
-      control: 'radio',
+      control: 'select',
       options: ['single', 'multiple'],
       description: '선택 모드를 지정합니다.',
       table: {
@@ -103,7 +119,7 @@ const meta: Meta<typeof ToggleGroup> = {
       },
     },
     orientation: {
-      control: 'radio',
+      control: 'select',
       options: ['horizontal', 'vertical'],
       description: '토글 그룹의 방향을 지정합니다.',
       table: {
@@ -118,7 +134,7 @@ export default meta;
 
 type Story = StoryObj<typeof ToggleGroup>;
 
-export const ControlMe: Story = {
+export const Default: Story = {
   render: function Render(args) {
     const [singleValue, setSingleValue] = useState('center');
     const [multiValue, setMultiValue] = useState<string[]>(['center']);
@@ -170,6 +186,7 @@ export const ControlMe: Story = {
 };
 
 export const SingleSelection: Story = {
+  ...noControls('단일 선택 모드 예시입니다.'),
   render: function Render() {
     const [value, setValue] = useState('bold');
 
@@ -198,6 +215,7 @@ export const SingleSelection: Story = {
 };
 
 export const MultipleSelection: Story = {
+  ...noControls('다중 선택 모드 예시입니다.'),
   render: function Render() {
     const [value, setValue] = useState<string[]>(['center']);
 
@@ -226,16 +244,15 @@ export const MultipleSelection: Story = {
 };
 
 export const Variants: Story = {
+  ...noControls('토글 그룹의 스타일 변형을 보여줍니다.'),
   render: function Render() {
     const [value1, setValue1] = useState('bold');
     const [value2, setValue2] = useState('italic');
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div className="flex flex-col gap-4">
         <div>
-          <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-            Default variant
-          </p>
+          <p className="mb-2 text-sm">Default variant</p>
           <ToggleGroup
             type="single"
             variant="default"
@@ -250,9 +267,7 @@ export const Variants: Story = {
         </div>
 
         <div>
-          <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-            Outline variant
-          </p>
+          <p className="mb-2 text-sm">Outline variant</p>
           <ToggleGroup
             type="single"
             variant="outline"
@@ -271,17 +286,16 @@ export const Variants: Story = {
 };
 
 export const Sizes: Story = {
+  ...noControls('토글 그룹의 크기 변형을 보여줍니다.'),
   render: function Render() {
     const [value1, setValue1] = useState('medium');
     const [value2, setValue2] = useState('medium');
     const [value3, setValue3] = useState('medium');
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div className="flex flex-col gap-4">
         <div>
-          <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-            Small size
-          </p>
+          <p className="mb-2 text-sm">Small size</p>
           <ToggleGroup
             type="single"
             size="sm"
@@ -296,9 +310,7 @@ export const Sizes: Story = {
         </div>
 
         <div>
-          <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-            Default size
-          </p>
+          <p className="mb-2 text-sm">Default size</p>
           <ToggleGroup
             type="single"
             size="default"
@@ -313,9 +325,7 @@ export const Sizes: Story = {
         </div>
 
         <div>
-          <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-            Large size
-          </p>
+          <p className="mb-2 text-sm">Large size</p>
           <ToggleGroup
             type="single"
             size="lg"
@@ -334,17 +344,16 @@ export const Sizes: Story = {
 };
 
 export const Spacing: Story = {
+  ...noControls('토글 아이템 간격 옵션을 보여줍니다.'),
   render: function Render() {
     const [value1, setValue1] = useState('left');
     const [value2, setValue2] = useState('left');
     const [value3, setValue3] = useState('left');
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div className="flex flex-col gap-4">
         <div>
-          <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-            No spacing (none)
-          </p>
+          <p className="mb-2 text-sm">No spacing (none)</p>
           <ToggleGroup
             type="single"
             spacing="none"
@@ -359,9 +368,7 @@ export const Spacing: Story = {
         </div>
 
         <div>
-          <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-            Small spacing (sm)
-          </p>
+          <p className="mb-2 text-sm">Small spacing (sm)</p>
           <ToggleGroup
             type="single"
             variant="outline"
@@ -377,9 +384,7 @@ export const Spacing: Story = {
         </div>
 
         <div>
-          <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-            Large spacing (lg)
-          </p>
+          <p className="mb-2 text-sm">Large spacing (lg)</p>
           <ToggleGroup
             type="single"
             variant="outline"

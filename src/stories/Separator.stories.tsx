@@ -6,12 +6,41 @@ const meta: Meta<typeof Separator> = {
   component: Separator,
   title: 'UI/Separator',
   tags: ['autodocs'],
+  argTypes: {
+    orientation: {
+      control: 'select',
+      options: ['horizontal', 'vertical'],
+      description: '구분선 방향을 지정합니다',
+      table: {
+        type: { summary: "'horizontal' | 'vertical'" },
+        defaultValue: { summary: 'horizontal' },
+      },
+    },
+    decorative: {
+      control: 'boolean',
+      description: '접근성 트리 포함 여부를 제어합니다',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+    className: {
+      control: false,
+      description: '추가 CSS 클래스를 지정합니다',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+  },
+  args: {
+    orientation: 'horizontal',
+    decorative: true,
+  },
   parameters: {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          '콘텐츠를 시각적으로 구분하는 구분선입니다.',
+        component: '콘텐츠를 시각적으로 구분하는 구분선입니다.',
       },
     },
   },
@@ -28,13 +57,28 @@ const noControls = (story: string) => ({
 });
 
 export const Default: Story = {
+  render: (args) =>
+    args.orientation === 'vertical' ? (
+      <div className="flex h-5 items-center gap-3 text-sm">
+        <span>왼쪽 콘텐츠</span>
+        <Separator {...args} />
+        <span>오른쪽 콘텐츠</span>
+      </div>
+    ) : (
+      <div className="flex w-64 flex-col gap-2">
+        <p className="text-sm">위쪽 콘텐츠</p>
+        <Separator {...args} />
+        <p className="text-sm">아래쪽 콘텐츠</p>
+      </div>
+    ),
+};
+
+export const Overview: Story = {
   ...noControls('가로 방향의 기본 구분선입니다.'),
   render: () => (
     <div className="flex w-96 flex-col gap-2">
       <div className="flex flex-col gap-2">
-        <h4 className="text-sm font-medium">
-          Nine Beauty Actress
-        </h4>
+        <h4 className="text-sm font-medium">Nine Beauty Actress</h4>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
           React UI 컴포넌트 라이브러리
         </p>
@@ -60,13 +104,9 @@ export const Vertical: Story = {
       <div className="flex h-5 items-center gap-3 text-sm">
         <span className="font-medium">Nine Beauty Actress</span>
         <Separator orientation="vertical" />
-        <span className="text-zinc-500 dark:text-zinc-400">
-          v1.3.0
-        </span>
+        <span className="text-zinc-500 dark:text-zinc-400">v1.3.0</span>
         <Separator orientation="vertical" />
-        <span className="text-zinc-500 dark:text-zinc-400">
-          MIT License
-        </span>
+        <span className="text-zinc-500 dark:text-zinc-400">MIT License</span>
       </div>
       <div className="flex h-5 items-center gap-3 text-sm">
         <span>문서</span>

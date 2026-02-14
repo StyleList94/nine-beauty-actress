@@ -23,7 +23,6 @@ const meta: Meta<typeof Tooltip> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Tooltip>;
 
 const noControls = (story: string) => ({
   parameters: {
@@ -32,21 +31,80 @@ const noControls = (story: string) => ({
   },
 });
 
-export const Default: Story = {
-  ...noControls(
-    '버튼에 마우스를 올리면 기본 툴팁이 표시됩니다.',
-  ),
-  render: () => (
+type DefaultArgs = {
+  side: 'top' | 'right' | 'bottom' | 'left';
+  sideOffset: number;
+  _contentChildren: string;
+  _contentClassName: string;
+  _triggerAsChild: boolean;
+};
+
+export const Default: StoryObj<DefaultArgs> = {
+  argTypes: {
+    side: {
+      control: 'select',
+      options: ['top', 'right', 'bottom', 'left'],
+      description: '표시 방향을 지정합니다',
+      table: {
+        category: 'TooltipContent',
+        type: { summary: "'top' | 'right' | 'bottom' | 'left'" },
+        defaultValue: { summary: 'top' },
+      },
+    },
+    sideOffset: {
+      control: 'number',
+      description: '트리거와의 간격(px)을 지정합니다',
+      table: {
+        category: 'TooltipContent',
+        type: { summary: 'number' },
+        defaultValue: { summary: '0' },
+      },
+    },
+    _contentChildren: {
+      name: 'children',
+      control: false,
+      description: '툴팁 콘텐츠를 지정합니다',
+      table: {
+        category: 'TooltipContent',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _contentClassName: {
+      name: 'className',
+      control: false,
+      description: '추가 CSS 클래스를 지정합니다',
+      table: {
+        category: 'TooltipContent',
+        type: { summary: 'string' },
+      },
+    },
+    _triggerAsChild: {
+      name: 'asChild',
+      control: false,
+      description: '자식 요소를 트리거로 사용합니다',
+      table: {
+        category: 'TooltipTrigger',
+        type: { summary: 'boolean' },
+      },
+    },
+  },
+  args: {
+    side: 'top',
+    sideOffset: 0,
+  },
+  render: (args) => (
     <Tooltip>
       <TooltipTrigger asChild>
         <Button variant="outline">마우스를 올려보세요</Button>
       </TooltipTrigger>
-      <TooltipContent>보조 설명 텍스트</TooltipContent>
+      <TooltipContent side={args.side} sideOffset={args.sideOffset}>
+        보조 설명 텍스트
+      </TooltipContent>
     </Tooltip>
   ),
 };
 
-export const Positions: Story = {
+export const Positions: StoryObj = {
   ...noControls(
     'side 속성으로 top, right, bottom, left 4방향을 지원합니다.',
   ),

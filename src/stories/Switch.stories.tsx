@@ -9,9 +9,57 @@ const meta: Meta<typeof Switch> = {
   title: 'UI/Switch',
   tags: ['autodocs'],
   argTypes: {
+    isChecked: {
+      control: 'boolean',
+      description: '스위치 활성화 여부를 결정합니다',
+      table: {
+        type: { summary: 'boolean' },
+      },
+    },
+    onCheckedChange: {
+      control: false,
+      description: '스위치 클릭 시 호출되는 핸들러입니다',
+      table: {
+        type: { summary: '(checked: boolean) => void' },
+      },
+    },
     children: {
+      control: false,
+      description: '비활성/활성 순서로 아이콘을 지정합니다',
       table: {
         type: { summary: '[ReactNode, ReactNode]' },
+      },
+    },
+    trackClassName: {
+      control: false,
+      description: '트랙 커스텀 클래스를 지정합니다',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    thumbClassName: {
+      control: false,
+      description: '버튼 커스텀 클래스를 지정합니다',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    iconClassName: {
+      control: false,
+      description: '아이콘 커스텀 클래스를 지정합니다',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+  },
+  args: {
+    isChecked: false,
+  },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: '스위치 모양을 내맘대로!',
       },
     },
   },
@@ -21,7 +69,25 @@ export default meta;
 
 type Story = StoryObj<typeof Switch>;
 
+const noControls = (story: string) => ({
+  parameters: {
+    controls: { disable: true },
+    docs: { description: { story } },
+  },
+});
+
+export const Default: Story = {
+  render: function Render(args) {
+    const [checked, setChecked] = useState(args.isChecked ?? false);
+
+    return <Switch isChecked={checked} onCheckedChange={setChecked} />;
+  },
+};
+
 export const LightDarkTheme: Story = {
+  ...noControls(
+    '아이콘을 활용한 라이트/다크 테마 전환 스위치입니다.',
+  ),
   render: function Render() {
     const [isDarkTheme, setIsDarkTheme] = useState(false);
 

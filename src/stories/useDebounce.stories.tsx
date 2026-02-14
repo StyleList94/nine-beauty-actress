@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
 import useDebounce from 'lib/hooks/use-debounce';
+import { Input } from 'lib/components/input';
 
 const InputSomething = ({ delay }: { delay: number }) => {
   const [inputValue, setInputValue] = useState('');
@@ -10,13 +11,13 @@ const InputSomething = ({ delay }: { delay: number }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <input
+      <Input
         type="text"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        className="border-2 border-zinc-200 dark:border-zinc-800 outline-0 rounded-sm w-48"
+        className="w-48"
       />
-      <p>Result: {debouncedValue}</p>
+      <p className="text-sm">Result: {debouncedValue}</p>
     </div>
   );
 };
@@ -24,18 +25,35 @@ const InputSomething = ({ delay }: { delay: number }) => {
 const meta: Meta<typeof InputSomething> = {
   component: InputSomething,
   title: 'Hooks/useDebounce',
-  argTypes: {},
+
+  argTypes: {
+    delay: {
+      control: 'number',
+      description: '디바운스 지연 시간(ms)을 지정합니다',
+      table: {
+        type: { summary: 'number' },
+        defaultValue: { summary: '500' },
+      },
+    },
+  },
+  args: {
+    delay: 500,
+  },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          '값 변경 후 지정된 시간이 지나야 반영되는 디바운스 훅입니다.',
+      },
+    },
+  },
 };
 
 export default meta;
 
 type Story = StoryObj<typeof InputSomething>;
 
-export const Example: Story = {
-  args: {
-    delay: 500,
-  },
-  render: function Render({ ...args }) {
-    return <InputSomething {...args} />;
-  },
+export const Default: Story = {
+  render: (args) => <InputSomething {...args} />,
 };

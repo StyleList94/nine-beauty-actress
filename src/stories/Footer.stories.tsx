@@ -4,13 +4,38 @@ import { cn } from 'lib/core/utils';
 
 import { Footer } from 'lib/components/footer';
 
+const noControls = (story: string) => ({
+  parameters: {
+    controls: { disable: true },
+    docs: { description: { story } },
+  },
+});
+
 const meta: Meta<typeof Footer> = {
   title: 'UI/Layout/Footer',
   component: Footer,
   tags: ['autodocs'],
   argTypes: {
+    children: {
+      control: false,
+      description: '푸터 컨텐츠를 렌더링합니다',
+      table: {
+        type: { summary: 'ReactNode' },
+      },
+    },
     className: {
-      control: { type: 'text' },
+      control: 'text',
+      description: 'footer 요소 추가 클래스를 지정합니다',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: '페이지 레이아웃의 Footer 영역 컨테이너입니다.',
+      },
     },
   },
 };
@@ -20,6 +45,7 @@ export default meta;
 type Story = StoryObj<typeof Footer>;
 
 export const StyleList94: Story = {
+  ...noControls('StyleList94 푸터 예시입니다.'),
   name: 'StyleList94',
   render: function Render() {
     return (
@@ -60,6 +86,7 @@ export const StyleList94: Story = {
 };
 
 export const StylishLog: Story = {
+  ...noControls('Stylish.LOG 푸터 예시입니다.'),
   name: 'Stylish.LOG',
   args: {
     className: 'max-w-[64rem]',

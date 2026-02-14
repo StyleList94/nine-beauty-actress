@@ -25,7 +25,6 @@ const meta: Meta<typeof Collapsible> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Collapsible>;
 
 const noControls = (story: string) => ({
   parameters: {
@@ -34,10 +33,81 @@ const noControls = (story: string) => ({
   },
 });
 
-export const Default: Story = {
-  ...noControls('기본 Collapsible 사용 예시입니다.'),
-  render: () => (
-    <Collapsible className="w-80 flex flex-col gap-2">
+type DefaultArgs = {
+  defaultOpen: boolean;
+  open: boolean;
+  disabled: boolean;
+  _onOpenChange: string;
+  _triggerAsChild: boolean;
+  _contentChildren: string;
+};
+
+export const Default: StoryObj<DefaultArgs> = {
+  argTypes: {
+    defaultOpen: {
+      control: 'boolean',
+      description: '초기 열림 상태를 지정합니다',
+      table: {
+        category: 'Collapsible',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    open: {
+      control: false,
+      description: '제어 모드에서 열림 상태를 지정합니다',
+      table: {
+        category: 'Collapsible',
+        type: { summary: 'boolean' },
+      },
+    },
+    disabled: {
+      control: 'boolean',
+      description: '비활성화 상태를 지정합니다',
+      table: {
+        category: 'Collapsible',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    _onOpenChange: {
+      name: 'onOpenChange',
+      control: false,
+      description: '열림 상태 변경 시 호출되는 핸들러입니다',
+      table: {
+        category: 'Collapsible',
+        type: { summary: '(open: boolean) => void' },
+      },
+    },
+    _triggerAsChild: {
+      name: 'asChild',
+      control: false,
+      description: '자식 요소를 트리거로 사용합니다',
+      table: {
+        category: 'CollapsibleTrigger',
+        type: { summary: 'boolean' },
+      },
+    },
+    _contentChildren: {
+      name: 'children',
+      control: false,
+      description: '펼쳐지는 콘텐츠를 지정합니다',
+      table: {
+        category: 'CollapsibleContent',
+        type: { summary: 'ReactNode' },
+      },
+    },
+  },
+  args: {
+    defaultOpen: false,
+    disabled: false,
+  },
+  render: (args) => (
+    <Collapsible
+      defaultOpen={args.defaultOpen}
+      disabled={args.disabled}
+      className="w-80 flex flex-col gap-2"
+    >
       <div className="flex items-center justify-between gap-4">
         <h4 className="text-sm font-semibold">@radix-ui/react-collapsible</h4>
         <CollapsibleTrigger asChild>
@@ -46,16 +116,22 @@ export const Default: Story = {
           </Button>
         </CollapsibleTrigger>
       </div>
-      <div className="rounded border border-zinc-200 px-4 py-3 text-sm dark:border-zinc-800">@radix-ui/primitives</div>
+      <div className="rounded border border-zinc-200 px-4 py-3 text-sm dark:border-zinc-800">
+        @radix-ui/primitives
+      </div>
       <CollapsibleContent className="flex flex-col gap-2">
-        <div className="rounded border border-zinc-200 px-4 py-3 text-sm dark:border-zinc-800">@radix-ui/react-compose-refs</div>
-        <div className="rounded border border-zinc-200 px-4 py-3 text-sm dark:border-zinc-800">@radix-ui/react-id</div>
+        <div className="rounded border border-zinc-200 px-4 py-3 text-sm dark:border-zinc-800">
+          @radix-ui/react-compose-refs
+        </div>
+        <div className="rounded border border-zinc-200 px-4 py-3 text-sm dark:border-zinc-800">
+          @radix-ui/react-id
+        </div>
       </CollapsibleContent>
     </Collapsible>
   ),
 };
 
-export const Controlled: Story = {
+export const Controlled: StoryObj = {
   ...noControls('open/onOpenChange로 외부에서 상태를 제어합니다.'),
   render: function Render() {
     const [open, setOpen] = useState(false);
@@ -85,7 +161,7 @@ export const Controlled: Story = {
   },
 };
 
-export const WithList: Story = {
+export const WithList: StoryObj = {
   ...noControls('리스트 아이템을 펼치는 실용적 예시입니다.'),
   render: () => (
     <div className="flex flex-col gap-2 w-80">
