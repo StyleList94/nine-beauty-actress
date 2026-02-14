@@ -11,7 +11,7 @@ import {
   CardFooter,
 } from 'lib/components/card';
 import { Button } from 'lib/components/button';
-import { Input } from 'lib/components/input';
+import { TextInput } from 'lib/components/text-input';
 import { FormControl } from 'lib/components/form-control';
 import { Switch } from 'lib/components/switch';
 
@@ -155,11 +155,11 @@ export const UnitConverter: Story = {
       <CardContent className="flex flex-col gap-3">
         <FormControl>
           <FormControl.Label>px</FormControl.Label>
-          <Input type="number" placeholder="16" />
+          <TextInput type="number" placeholder="16" />
         </FormControl>
         <FormControl>
           <FormControl.Label>rem</FormControl.Label>
-          <Input type="number" placeholder="1" />
+          <TextInput type="number" placeholder="1" />
         </FormControl>
       </CardContent>
       <CardFooter>

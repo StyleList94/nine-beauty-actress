@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
 import { FormControl } from 'lib/components/form-control';
-import { Input } from 'lib/components/input';
+import { TextInput } from 'lib/components/text-input';
 import { Checkbox } from 'lib/components/checkbox';
 import { Switch } from 'lib/components/switch';
 import { Slider } from 'lib/components/slider';
@@ -145,7 +145,7 @@ export const Default: StoryObj<DefaultArgs> = {
         layout={args._layout}
       >
         <FormControl.Label>이메일</FormControl.Label>
-        <Input type="email" placeholder="you@example.com" />
+        <TextInput type="email" placeholder="you@example.com" />
         <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
         {args._validation !== 'none' && (
           <FormControl.Validation>
@@ -184,7 +184,7 @@ export const WithValidation: StoryObj = {
       <div className="w-80">
         <FormControl required validation={validation}>
           <FormControl.Label>이메일</FormControl.Label>
-          <Input
+          <TextInput
             type="email"
             placeholder="you@example.com"
             value={email}
@@ -269,7 +269,7 @@ export const Disabled: StoryObj = {
     <div className="flex flex-col gap-6 w-80">
       <FormControl disabled>
         <FormControl.Label>이메일</FormControl.Label>
-        <Input type="email" placeholder="you@example.com" />
+        <TextInput type="email" placeholder="you@example.com" />
         <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
       </FormControl>
       <FormControl layout="horizontal" disabled>
@@ -291,7 +291,7 @@ export const Composition: StoryObj = {
       <div className="flex flex-col gap-6 w-80">
         <FormControl required>
           <FormControl.Label>이름</FormControl.Label>
-          <Input
+          <TextInput
             placeholder="홍길동"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -299,7 +299,7 @@ export const Composition: StoryObj = {
         </FormControl>
         <FormControl required>
           <FormControl.Label>이메일</FormControl.Label>
-          <Input
+          <TextInput
             type="email"
             placeholder="you@example.com"
             value={email}

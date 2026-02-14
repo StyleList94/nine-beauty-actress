@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest';
 import { render, screen } from '@testing-library/react';
 
 import { FormControl } from 'lib/components/form-control';
-import { Input } from 'lib/components/input';
+import { TextInput } from 'lib/components/text-input';
 import { Checkbox } from 'lib/components/checkbox';
 
 describe('FormControl', () => {
@@ -11,7 +11,7 @@ describe('FormControl', () => {
     render(
       <FormControl>
         <FormControl.Label>이메일</FormControl.Label>
-        <Input placeholder="you@example.com" />
+        <TextInput placeholder="you@example.com" />
       </FormControl>,
     );
 
@@ -23,7 +23,7 @@ describe('FormControl', () => {
     render(
       <FormControl>
         <FormControl.Label>이름</FormControl.Label>
-        <Input />
+        <TextInput />
       </FormControl>,
     );
 
@@ -38,7 +38,7 @@ describe('FormControl', () => {
     render(
       <FormControl>
         <FormControl.Label>이메일</FormControl.Label>
-        <Input />
+        <TextInput />
         <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
       </FormControl>,
     );
@@ -56,7 +56,7 @@ describe('FormControl', () => {
     render(
       <FormControl validation="error">
         <FormControl.Label>이메일</FormControl.Label>
-        <Input />
+        <TextInput />
         <FormControl.Validation>
           올바른 이메일을 입력하세요.
         </FormControl.Validation>
@@ -75,7 +75,7 @@ describe('FormControl', () => {
   it('should set aria-invalid on error validation', () => {
     render(
       <FormControl validation="error">
-        <Input />
+        <TextInput />
       </FormControl>,
     );
 
@@ -86,7 +86,7 @@ describe('FormControl', () => {
   it('should not set aria-invalid on success validation', () => {
     render(
       <FormControl validation="success">
-        <Input />
+        <TextInput />
       </FormControl>,
     );
 
@@ -98,7 +98,7 @@ describe('FormControl', () => {
     render(
       <FormControl disabled>
         <FormControl.Label>이메일</FormControl.Label>
-        <Input />
+        <TextInput />
       </FormControl>,
     );
 
@@ -110,7 +110,7 @@ describe('FormControl', () => {
     render(
       <FormControl required>
         <FormControl.Label>이메일</FormControl.Label>
-        <Input />
+        <TextInput />
       </FormControl>,
     );
 
@@ -122,7 +122,7 @@ describe('FormControl', () => {
     render(
       <FormControl required>
         <FormControl.Label>이메일</FormControl.Label>
-        <Input />
+        <TextInput />
       </FormControl>,
     );
 
@@ -138,7 +138,7 @@ describe('FormControl', () => {
     render(
       <FormControl required>
         <FormControl.Label htmlFor="custom-id">이메일</FormControl.Label>
-        <Input id="custom-id" disabled={false} required={false} />
+        <TextInput id="custom-id" disabled={false} required={false} />
       </FormControl>,
     );
 
@@ -152,7 +152,7 @@ describe('FormControl', () => {
   });
 
   it('should work standalone without FormControl', () => {
-    render(<Input id="standalone" placeholder="standalone" />);
+    render(<TextInput id="standalone" placeholder="standalone" />);
 
     const input = screen.getByRole('textbox');
     expect(input).toHaveAttribute('id', 'standalone');
@@ -182,7 +182,7 @@ describe('FormControl', () => {
         layout="horizontal"
         data-testid="fc"
       >
-        <Input />
+        <TextInput />
       </FormControl>,
     );
 

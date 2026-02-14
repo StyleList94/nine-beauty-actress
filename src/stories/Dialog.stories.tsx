@@ -10,7 +10,7 @@ import {
   DialogFooter,
 } from 'lib/components/dialog';
 import { Button } from 'lib/components/button';
-import { Input } from 'lib/components/input';
+import { TextInput } from 'lib/components/text-input';
 import { FormControl } from 'lib/components/form-control';
 
 const meta: Meta<typeof Dialog> = {
@@ -124,11 +124,11 @@ export const Default: StoryObj<DefaultArgs> = {
         <div className="flex flex-col gap-3 py-4">
           <FormControl>
             <FormControl.Label>이름</FormControl.Label>
-            <Input defaultValue="StyleList94" />
+            <TextInput defaultValue="StyleList94" />
           </FormControl>
           <FormControl>
             <FormControl.Label>사용자명</FormControl.Label>
-            <Input defaultValue="@stylelist94" />
+            <TextInput defaultValue="@stylelist94" />
           </FormControl>
         </div>
         <DialogFooter showCloseButton={args._footerShowCloseButton}>

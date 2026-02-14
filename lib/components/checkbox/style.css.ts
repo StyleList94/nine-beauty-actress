@@ -34,8 +34,8 @@ export const checkboxBase = style({
 });
 
 export const checkboxIndicator = style({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  display: 'grid',
+  placeContent: 'center',
   color: 'currentColor',
+  transition: 'none',
 });

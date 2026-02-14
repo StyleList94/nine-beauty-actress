@@ -14,7 +14,7 @@ import {
   type ToggleGroupSpacing,
 } from './components/toggle-group';
 import { Separator, type SeparatorProps } from './components/separator';
-import { Input, type InputProps } from './components/input';
+import { TextInput, type TextInputProps } from './components/text-input';
 import { Code, type CodeProps } from './components/code';
 import {
   Card,
@@ -178,7 +178,7 @@ export {
   ToggleGroup,
   ToggleGroupItem,
   Separator,
-  Input,
+  TextInput,
   Code,
   Card,
   CardHeader,
@@ -267,7 +267,7 @@ export type {
   ToggleGroupSize,
   ToggleGroupSpacing,
   SeparatorProps,
-  InputProps,
+  TextInputProps,
   CodeProps,
   CardProps,
   TableProps,

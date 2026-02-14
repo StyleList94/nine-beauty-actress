@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
 import useDebounce from 'lib/hooks/use-debounce';
-import { Input } from 'lib/components/input';
+import { TextInput } from 'lib/components/text-input';
 
 const InputSomething = ({ delay }: { delay: number }) => {
   const [inputValue, setInputValue] = useState('');
@@ -11,7 +11,7 @@ const InputSomething = ({ delay }: { delay: number }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <Input
+      <TextInput
         type="text"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
