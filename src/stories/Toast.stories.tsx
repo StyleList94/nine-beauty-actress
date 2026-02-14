@@ -14,6 +14,10 @@ const meta: Meta<typeof Toaster> = {
         component:
           '토스트 알림을 화면에 렌더링하는 프로바이더 컴포넌트입니다.',
       },
+      story: {
+        inline: false,
+        iframeHeight: 200,
+      },
     },
   },
   decorators: [

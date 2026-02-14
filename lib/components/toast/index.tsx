@@ -77,9 +77,7 @@ export const ToastClose = forwardRef<
 ));
 ToastClose.displayName = 'ToastClose';
 
-export type ToastActionProps = ComponentProps<
-  typeof ToastPrimitive.Action
->;
+export type ToastActionProps = ComponentProps<typeof ToastPrimitive.Action>;
 
 /** 토스트 액션 버튼 */
 export const ToastAction = forwardRef<
@@ -127,7 +125,7 @@ export function Toaster(): ReactElement {
             if (!open) dismiss(t.id);
           }}
         >
-          <div>
+          <div className={styles.toastContent}>
             {t.title && <ToastTitle>{t.title}</ToastTitle>}
             {t.description && (
               <ToastDescription>{t.description}</ToastDescription>

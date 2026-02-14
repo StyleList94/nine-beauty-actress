@@ -1,7 +1,7 @@
 import { style, styleVariants, globalStyle, keyframes } from '@vanilla-extract/css';
 
 import { vars } from 'lib/core/styles/theme.css';
-import { spacing, radius, font, shadows, motion } from 'lib/core/styles/tokens';
+import { palette, spacing, radius, font, shadows, motion } from 'lib/core/styles/tokens';
 
 const slideIn = keyframes({
   from: { transform: 'translateX(100%)' },
@@ -102,18 +102,44 @@ export const toastCloseButton = style({
   right: spacing[8],
   borderRadius: radius.sm,
   padding: spacing[4],
-  opacity: 0.5,
+  opacity: 0,
   outline: 'none',
   border: 'none',
   background: 'transparent',
-  color: 'currentColor',
+  color: `color-mix(in oklch, ${vars.color.foreground} 50%, transparent)`,
   cursor: 'pointer',
   transition: `opacity ${motion.duration.fast} ${motion.easing.ease}`,
-  selectors: {
-    '&:hover': {
+  '@media': {
+    '(hover: none)': {
       opacity: 1,
     },
   },
+  selectors: {
+    '&:hover': {
+      color: vars.color.foreground,
+      opacity: 1,
+    },
+    '&:focus': {
+      opacity: 1,
+      boxShadow: `0 0 0 2px ${vars.color.ring}`,
+    },
+  },
+});
+
+globalStyle(`${toastBase}:hover ${toastCloseButton}`, {
+  opacity: 1,
+});
+
+globalStyle(`${toastVariant.destructive} ${toastCloseButton}`, {
+  color: palette.red[300],
+});
+
+globalStyle(`${toastVariant.destructive} ${toastCloseButton}:hover`, {
+  color: palette.red[50],
+});
+
+globalStyle(`${toastVariant.destructive} ${toastCloseButton}:focus`, {
+  boxShadow: `0 0 0 2px ${palette.red[400]}`,
 });
 
 export const toastAction = style({
@@ -143,4 +169,23 @@ export const toastAction = style({
       opacity: 0.5,
     },
   },
+});
+
+globalStyle(`${toastVariant.destructive} ${toastAction}`, {
+  borderColor: `color-mix(in oklch, ${vars.color.muted} 40%, transparent)`,
+});
+
+globalStyle(`${toastVariant.destructive} ${toastAction}:hover`, {
+  borderColor: `color-mix(in oklch, ${vars.color.destructive.base} 30%, transparent)`,
+  background: vars.color.destructive.base,
+  color: vars.color.destructive.foreground,
+});
+
+globalStyle(`${toastVariant.destructive} ${toastAction}:focus-visible`, {
+  boxShadow: `0 0 0 2px ${vars.color.destructive.base}`,
+});
+
+export const toastContent = style({
+  display: 'grid',
+  gap: spacing[4],
 });
