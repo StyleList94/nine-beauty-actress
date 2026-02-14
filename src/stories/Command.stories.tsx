@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Calculator,
   Calendar,
@@ -37,6 +37,16 @@ const meta: Meta<typeof Command> = {
       },
     },
   },
+  decorators: [
+    (Story) => {
+      useEffect(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo(0, 0);
+        });
+      }, []);
+      return <Story />;
+    },
+  ],
 };
 
 export default meta;
