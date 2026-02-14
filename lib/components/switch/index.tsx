@@ -10,6 +10,7 @@ import {
   switchIconBase,
   switchIconChecked,
   switchIconUnchecked,
+  type SwitchVariants,
 } from './style.css';
 
 export type SwitchProps = {
@@ -25,6 +26,8 @@ export type SwitchProps = {
   isChecked?: boolean;
   /** 스위치를 클릭 했을 때 발생되는 이벤트 핸들러를 정의합니다. */
   onCheckedChange?: (checked: boolean) => void;
+  /** 스위치 크기를 지정합니다. */
+  size?: NonNullable<SwitchVariants>['size'];
 };
 
 /** 스위치 모양을 내맘대로! */
@@ -35,16 +38,18 @@ export const Switch = ({
   iconClassName,
   isChecked,
   onCheckedChange,
+  size,
 }: SwitchProps) => (
   <SwitchPrimitive.Root
     data-slot="switch"
-    className={cn(switchTrack, trackClassName)}
+    data-size={size}
+    className={cn(switchTrack({ size }), trackClassName)}
     checked={isChecked}
     onCheckedChange={onCheckedChange}
   >
     <SwitchPrimitive.Thumb
       data-slot="switch-thumb"
-      className={cn(switchThumb, thumbClassName)}
+      className={cn(switchThumb({ size }), thumbClassName)}
     />
     {children && (
       <span
