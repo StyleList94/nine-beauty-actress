@@ -1,20 +1,31 @@
 import { forwardRef, useMemo, type ComponentProps } from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 
-import { cn } from 'lib/core/utils';
 import { useFormControlInputProps } from 'lib/components/form-control/context';
 
 import * as styles from './style.css';
 
 export type SliderProps = ComponentProps<typeof SliderPrimitive.Root>;
 
+/**
+ * 값을 슬라이드로 선택할게
+ *
+ * @remarks
+ * - Radix UI Slider 기반 단일/다중 값 슬라이더
+ * - 수평·수직 방향 지원
+ * - FormControl 연동 (id, disabled, aria-describedby 자동 전파)
+ *
+ * @example
+ * ```tsx
+ * <Slider defaultValue={[50]} max={100} step={1} />
+ * ```
+ */
 export const Slider = forwardRef<
   React.ComponentRef<typeof SliderPrimitive.Root>,
   SliderProps
 >(
   (
     {
-      className,
       defaultValue,
       value,
       min = 0,
@@ -46,7 +57,7 @@ export const Slider = forwardRef<
         value={value}
         min={min}
         max={max}
-        className={cn(styles.sliderBase, className)}
+        className={styles.sliderBase}
         {...fcProps}
         {...props}
       >

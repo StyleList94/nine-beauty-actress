@@ -60,7 +60,7 @@ export const sliderThumb = style({
   height: '1rem',
   flexShrink: 0,
   borderRadius: radius.full,
-  border: `2px solid ${vars.color.primary.base}`,
+  border: `1px solid ${vars.color.primary.base}`,
   background: vars.color.background,
   boxShadow: shadows.sm,
   transition: `color ${motion.duration.normal} ${motion.easing.ease}, box-shadow ${motion.duration.normal} ${motion.easing.ease}`,
