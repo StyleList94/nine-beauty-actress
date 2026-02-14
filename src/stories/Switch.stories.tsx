@@ -9,7 +9,7 @@ const meta: Meta<typeof Switch> = {
   title: 'UI/Switch',
   tags: ['autodocs'],
   argTypes: {
-    isChecked: {
+    checked: {
       control: 'boolean',
       description: '스위치 활성화 여부를 결정합니다',
       table: {
@@ -23,6 +23,22 @@ const meta: Meta<typeof Switch> = {
         type: { summary: '(checked: boolean) => void' },
       },
     },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: '스위치 크기를 지정합니다',
+      table: {
+        type: { summary: "'sm' | 'md' | 'lg'" },
+        defaultValue: { summary: 'md' },
+      },
+    },
+    disabled: {
+      control: 'boolean',
+      description: '스위치를 비활성화합니다',
+      table: {
+        type: { summary: 'boolean' },
+      },
+    },
     children: {
       control: false,
       description: '비활성/활성 순서로 아이콘을 지정합니다',
@@ -30,7 +46,7 @@ const meta: Meta<typeof Switch> = {
         type: { summary: '[ReactNode, ReactNode]' },
       },
     },
-    trackClassName: {
+    className: {
       control: false,
       description: '트랙 커스텀 클래스를 지정합니다',
       table: {
@@ -39,7 +55,7 @@ const meta: Meta<typeof Switch> = {
     },
     thumbClassName: {
       control: false,
-      description: '버튼 커스텀 클래스를 지정합니다',
+      description: '썸 커스텀 클래스를 지정합니다',
       table: {
         type: { summary: 'string' },
       },
@@ -53,7 +69,9 @@ const meta: Meta<typeof Switch> = {
     },
   },
   args: {
-    isChecked: false,
+    checked: false,
+    size: 'md',
+    disabled: false,
   },
   parameters: {
     layout: 'centered',
@@ -78,10 +96,48 @@ const noControls = (story: string) => ({
 
 export const Default: Story = {
   render: function Render(args) {
-    const [checked, setChecked] = useState(args.isChecked ?? false);
+    const [checked, setChecked] = useState(args.checked ?? false);
 
-    return <Switch isChecked={checked} onCheckedChange={setChecked} />;
+    return (
+      <Switch {...args} checked={checked} onCheckedChange={setChecked} />
+    );
   },
+};
+
+export const Sizes: Story = {
+  ...noControls('sm, md, lg 크기를 비교합니다.'),
+  render: function Render() {
+    const [checkedMap, setCheckedMap] = useState({
+      sm: false,
+      md: true,
+      lg: false,
+    });
+
+    return (
+      <div className="flex flex-wrap items-center gap-4">
+        {(['sm', 'md', 'lg'] as const).map((size) => (
+          <Switch
+            key={size}
+            size={size}
+            checked={checkedMap[size]}
+            onCheckedChange={(c) =>
+              setCheckedMap((prev) => ({ ...prev, [size]: c }))
+            }
+          />
+        ))}
+      </div>
+    );
+  },
+};
+
+export const Disabled: Story = {
+  ...noControls('비활성화 상태의 스위치입니다.'),
+  render: () => (
+    <div className="flex flex-wrap items-center gap-4">
+      <Switch disabled />
+      <Switch disabled checked />
+    </div>
+  ),
 };
 
 export const LightDarkTheme: Story = {
@@ -98,7 +154,7 @@ export const LightDarkTheme: Story = {
         : 'light';
     };
     return (
-      <Switch onCheckedChange={handleClick} isChecked={isDarkTheme}>
+      <Switch onCheckedChange={handleClick} checked={isDarkTheme}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="1em"

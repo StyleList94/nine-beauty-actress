@@ -70,7 +70,7 @@ const ThemeControlSwitch = ({
 
   return (
     <Switch
-      isChecked={isDarkTheme}
+      checked={isDarkTheme}
       onCheckedChange={toggleTheme}
       iconClassName="text-zinc-500/80 dark:text-zinc-400"
     >
