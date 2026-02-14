@@ -1,7 +1,7 @@
 import { style, globalStyle } from '@vanilla-extract/css';
 
 import { vars } from 'lib/core/styles/theme.css';
-import { spacing, radius, font, motion } from 'lib/core/styles/tokens';
+import { spacing, radius, font } from 'lib/core/styles/tokens';
 
 export const commandBase = style({
   display: 'flex',
@@ -15,12 +15,19 @@ export const commandBase = style({
 });
 
 export const commandInputWrapper = style({
+  padding: spacing[4],
+  paddingBottom: 0,
+});
+
+export const commandInputGroup = style({
   display: 'flex',
   height: spacing[36],
   alignItems: 'center',
   gap: spacing[8],
-  borderBottom: `1px solid ${vars.color.border}`,
-  paddingInline: spacing[12],
+  background: `color-mix(in oklch, ${vars.color.input} 30%, transparent)`,
+  border: `1px solid color-mix(in oklch, ${vars.color.input} 30%, transparent)`,
+  borderRadius: radius.lg,
+  paddingInline: spacing[8],
 });
 
 export const commandInputIcon = style({
@@ -32,11 +39,8 @@ export const commandInputIcon = style({
 
 export const commandInput = style({
   display: 'flex',
-  height: spacing[40],
   width: '100%',
-  borderRadius: radius.md,
   background: 'transparent',
-  paddingBlock: spacing[12],
   fontSize: font.size.sm,
   outline: 'none',
   border: 'none',
@@ -53,6 +57,7 @@ export const commandInput = style({
 
 export const commandList = style({
   maxHeight: '300px',
+  scrollPaddingBlock: spacing[4],
   overflowX: 'hidden',
   overflowY: 'auto',
 });
@@ -95,7 +100,6 @@ export const commandItem = style({
   fontSize: font.size.sm,
   outline: 'none',
   userSelect: 'none',
-  transition: `background ${motion.duration.fast} ${motion.easing.ease}`,
   selectors: {
     '&[data-selected="true"]': {
       background: vars.color.accent,
@@ -108,6 +112,14 @@ export const commandItem = style({
   },
 });
 
+globalStyle(`${commandItem} svg`, {
+  pointerEvents: 'none',
+  flexShrink: 0,
+  width: '1rem',
+  height: '1rem',
+  color: vars.color.mutedForeground,
+});
+
 export const commandShortcut = style({
   color: vars.color.mutedForeground,
   marginLeft: 'auto',
@@ -118,4 +130,17 @@ export const commandShortcut = style({
 export const commandDialogContent = style({
   overflow: 'hidden',
   padding: 0,
+});
+
+
+export const srOnly = style({
+  position: 'absolute',
+  width: '1px',
+  height: '1px',
+  padding: 0,
+  margin: '-1px',
+  overflow: 'hidden',
+  clip: 'rect(0, 0, 0, 0)',
+  whiteSpace: 'nowrap',
+  borderWidth: 0,
 });
