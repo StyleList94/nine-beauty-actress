@@ -124,6 +124,23 @@ import {
 } from './components/command';
 import { Combobox, type ComboboxProps, type ComboboxOption } from './components/combobox';
 import {
+  FormControl,
+  FormControlLabel,
+  FormControlCaption,
+  FormControlValidation,
+  type FormControlProps,
+  type FormControlLabelProps,
+  type FormControlCaptionProps,
+  type FormControlValidationProps,
+  type FormControlValidationVariant,
+} from './components/form-control';
+import {
+  useFormControlContext,
+  useFormControlInputProps,
+  type FormControlLayout,
+  type FormControlValidationState,
+} from './components/form-control/context';
+import {
   Toast,
   ToastTitle,
   ToastDescription,
@@ -213,6 +230,12 @@ export {
   CommandShortcut,
   CommandSeparator,
   Combobox,
+  FormControl,
+  FormControlLabel,
+  FormControlCaption,
+  FormControlValidation,
+  useFormControlContext,
+  useFormControlInputProps,
   Toast,
   ToastTitle,
   ToastDescription,
@@ -287,6 +310,13 @@ export type {
   CommandSeparatorProps,
   ComboboxProps,
   ComboboxOption,
+  FormControlProps,
+  FormControlLabelProps,
+  FormControlCaptionProps,
+  FormControlValidationProps,
+  FormControlValidationVariant,
+  FormControlLayout,
+  FormControlValidationState,
   ToastProps,
   ToastTitleProps,
   ToastDescriptionProps,
