@@ -4,7 +4,15 @@ import { XIcon } from 'lucide-react';
 
 import { cn } from 'lib/core/utils';
 
-import * as styles from './style.css';
+import {
+  toastRecipe,
+  toastViewport,
+  toastTitle as toastTitleStyle,
+  toastDescription as toastDescriptionStyle,
+  toastCloseButton,
+  toastAction as toastActionStyle,
+  toastContent,
+} from './style.css';
 import { useToastStore, dismiss, type ToastVariant } from './toast-store';
 
 export type ToastProps = ComponentProps<typeof ToastPrimitive.Root> & {
@@ -19,7 +27,8 @@ export const Toast = forwardRef<
   <ToastPrimitive.Root
     ref={ref}
     data-slot="toast"
-    className={cn(styles.toastBase, styles.toastVariant[variant], className)}
+    data-variant={variant}
+    className={cn(toastRecipe({ variant }), className)}
     {...props}
   />
 ));
@@ -35,7 +44,7 @@ export const ToastTitle = forwardRef<
   <ToastPrimitive.Title
     ref={ref}
     data-slot="toast-title"
-    className={cn(styles.toastTitle, className)}
+    className={cn(toastTitleStyle, className)}
     {...props}
   />
 ));
@@ -53,7 +62,7 @@ export const ToastDescription = forwardRef<
   <ToastPrimitive.Description
     ref={ref}
     data-slot="toast-description"
-    className={cn(styles.toastDescription, className)}
+    className={cn(toastDescriptionStyle, className)}
     {...props}
   />
 ));
@@ -69,7 +78,7 @@ export const ToastClose = forwardRef<
   <ToastPrimitive.Close
     ref={ref}
     data-slot="toast-close"
-    className={cn(styles.toastCloseButton, className)}
+    className={cn(toastCloseButton, className)}
     {...props}
   >
     <XIcon size={14} />
@@ -87,7 +96,7 @@ export const ToastAction = forwardRef<
   <ToastPrimitive.Action
     ref={ref}
     data-slot="toast-action"
-    className={cn(styles.toastAction, className)}
+    className={cn(toastActionStyle, className)}
     {...props}
   />
 ));
@@ -125,7 +134,7 @@ export function Toaster(): ReactElement {
             if (!open) dismiss(t.id);
           }}
         >
-          <div className={styles.toastContent}>
+          <div className={toastContent}>
             {t.title && <ToastTitle>{t.title}</ToastTitle>}
             {t.description && (
               <ToastDescription>{t.description}</ToastDescription>
@@ -137,7 +146,7 @@ export function Toaster(): ReactElement {
       ))}
       <ToastPrimitive.Viewport
         data-slot="toast-viewport"
-        className={styles.toastViewport}
+        className={toastViewport}
       />
     </ToastPrimitive.Provider>
   );

@@ -15,10 +15,6 @@ import { cn, isFileAccepted } from 'lib/core/utils';
 import {
   fileUploaderContainer,
   fileUploaderBox,
-  fileUploaderBoxNeutral,
-  fileUploaderBoxDragging,
-  fileUploaderBoxError,
-  fileUploaderBoxSelected,
   fileUploaderInput,
 } from './style.css';
 
@@ -44,23 +40,6 @@ export type FileUploaderProps = {
 };
 
 type BorderState = 'neutral' | 'dragging' | 'error' | 'selected';
-
-const getBorderClass = (state: BorderState) => {
-  switch (state) {
-    case 'neutral':
-      return fileUploaderBoxNeutral;
-    case 'dragging':
-      return fileUploaderBoxDragging;
-    case 'error':
-      return fileUploaderBoxError;
-    case 'selected':
-      return fileUploaderBoxSelected;
-    default: {
-      const exhaustiveCheck: never = state;
-      return exhaustiveCheck;
-    }
-  }
-};
 
 /** 클릭해서 파일을 선택하거나, 파일을 끌어놓아 Form Data에 포함하고 싶을 때, 사용합니다. */
 export const FileUploader = ({
@@ -124,8 +103,7 @@ export const FileUploader = ({
           }}
           onClick={handleClickBox}
           className={cn(
-            fileUploaderBox,
-            getBorderClass(borderState),
+            fileUploaderBox({ state: borderState }),
             className,
           )}
           aria-label="nine-file-uploader"

@@ -1,4 +1,5 @@
-import { style, styleVariants } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
+import { recipe, type RecipeVariants } from '@vanilla-extract/recipes';
 
 import { vars } from 'lib/core/styles/theme.css';
 import { font, spacing, radius, motion } from 'lib/core/styles/tokens';
@@ -15,7 +16,7 @@ export const toggleGroupRoot = style({
   },
 });
 
-export const toggleGroupItemBase = style({
+const base = style({
   position: 'relative',
   display: 'inline-flex',
   alignItems: 'center',
@@ -42,70 +43,83 @@ export const toggleGroupItemBase = style({
   },
 });
 
-export const toggleGroupItemSize = styleVariants({
-  sm: {
-    height: spacing[32],
-    paddingLeft: spacing[8],
-    paddingRight: spacing[8],
-    paddingTop: spacing[4],
-    paddingBottom: spacing[4],
-    fontSize: font.size.xs,
+export const toggleGroupItem = recipe({
+  base: [base],
+
+  variants: {
+    size: {
+      sm: {
+        height: spacing[32],
+        paddingLeft: spacing[8],
+        paddingRight: spacing[8],
+        paddingTop: spacing[4],
+        paddingBottom: spacing[4],
+        fontSize: font.size.xs,
+      },
+      default: {
+        height: spacing[36],
+        paddingLeft: spacing[12],
+        paddingRight: spacing[12],
+        paddingTop: spacing[6],
+        paddingBottom: spacing[6],
+        fontSize: font.size.sm,
+      },
+      lg: {
+        height: spacing[40],
+        paddingLeft: spacing[16],
+        paddingRight: spacing[16],
+        paddingTop: spacing[8],
+        paddingBottom: spacing[8],
+        fontSize: font.size.sm,
+      },
+    },
+
+    variant: {
+      default: {
+        backgroundColor: 'transparent',
+        color: vars.color.foreground,
+        boxShadow: 'none',
+        selectors: {
+          '&:hover': {
+            boxShadow: `inset 0 0 0 1px ${vars.color.border}`,
+          },
+          '&[data-state="on"]': {
+            backgroundColor: vars.color.accent,
+            color: vars.color.accentForeground,
+          },
+          '&[data-state="on"]:hover': {
+            boxShadow: `inset 0 0 0 1px ${vars.color.input}`,
+          },
+        },
+      },
+      outline: {
+        backgroundColor: 'transparent',
+        color: vars.color.foreground,
+        borderColor: vars.color.border,
+        boxShadow: 'none',
+        selectors: {
+          '&:hover': {
+            boxShadow: `inset 0 0 0 1px ${vars.color.input}`,
+          },
+          '&[data-state="on"]': {
+            backgroundColor: vars.color.accent,
+            color: vars.color.accentForeground,
+          },
+          '&[data-state="on"]:hover': {
+            boxShadow: `inset 0 0 0 2px ${vars.color.input}`,
+          },
+        },
+      },
+    },
   },
-  default: {
-    height: spacing[36],
-    paddingLeft: spacing[12],
-    paddingRight: spacing[12],
-    paddingTop: spacing[6],
-    paddingBottom: spacing[6],
-    fontSize: font.size.sm,
-  },
-  lg: {
-    height: spacing[40],
-    paddingLeft: spacing[16],
-    paddingRight: spacing[16],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[8],
-    fontSize: font.size.sm, // 근사값 (0.9rem → 0.875rem)
+
+  defaultVariants: {
+    size: 'default',
+    variant: 'default',
   },
 });
 
-export const toggleGroupItemVariant = styleVariants({
-  default: {
-    backgroundColor: 'transparent',
-    color: vars.color.foreground,
-    boxShadow: 'none',
-    selectors: {
-      '&:hover': {
-        boxShadow: `inset 0 0 0 1px ${vars.color.border}`,
-      },
-      '&[data-state="on"]': {
-        backgroundColor: vars.color.accent,
-        color: vars.color.accentForeground,
-      },
-      '&[data-state="on"]:hover': {
-        boxShadow: `inset 0 0 0 1px ${vars.color.input}`,
-      },
-    },
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    color: vars.color.foreground,
-    borderColor: vars.color.border,
-    boxShadow: 'none',
-    selectors: {
-      '&:hover': {
-        boxShadow: `inset 0 0 0 1px ${vars.color.input}`,
-      },
-      '&[data-state="on"]': {
-        backgroundColor: vars.color.accent,
-        color: vars.color.accentForeground,
-      },
-      '&[data-state="on"]:hover': {
-        boxShadow: `inset 0 0 0 2px ${vars.color.input}`,
-      },
-    },
-  },
-});
+export type ToggleGroupItemVariants = RecipeVariants<typeof toggleGroupItem>;
 
 export const toggleGroupItemTightSpacing = style({
   borderRadius: 0,

@@ -5,9 +5,8 @@ import { cn } from 'lib/core/utils';
 
 import {
   toggleGroupRoot,
-  toggleGroupItemBase,
-  toggleGroupItemSize,
-  toggleGroupItemVariant,
+  toggleGroupItem,
+  type ToggleGroupItemVariants,
   toggleGroupItemTightSpacing,
   toggleGroupItemLooseSpacing,
 } from './style.css';
@@ -20,8 +19,8 @@ const spacingPresets = {
   lg: '0.75rem',
 } as const;
 
-type ToggleGroupVariant = keyof typeof toggleGroupItemVariant;
-type ToggleGroupSize = keyof typeof toggleGroupItemSize;
+type ToggleGroupVariant = NonNullable<ToggleGroupItemVariants>['variant'];
+type ToggleGroupSize = NonNullable<ToggleGroupItemVariants>['size'];
 type ToggleGroupSpacingPreset = keyof typeof spacingPresets;
 type ToggleGroupSpacing = ToggleGroupSpacingPreset | number;
 
@@ -172,9 +171,7 @@ const ToggleGroupItem = React.forwardRef<
     <ToggleGroupPrimitive.Item
       ref={ref}
       className={cn(
-        toggleGroupItemBase,
-        toggleGroupItemVariant[resolvedVariant],
-        toggleGroupItemSize[resolvedSize],
+        toggleGroupItem({ size: resolvedSize, variant: resolvedVariant }),
         tight ? toggleGroupItemTightSpacing : toggleGroupItemLooseSpacing,
         className,
       )}

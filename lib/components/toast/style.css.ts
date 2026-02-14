@@ -1,4 +1,5 @@
-import { style, styleVariants, globalStyle, keyframes } from '@vanilla-extract/css';
+import { style, globalStyle, keyframes } from '@vanilla-extract/css';
+import { recipe, type RecipeVariants } from '@vanilla-extract/recipes';
 
 import { vars } from 'lib/core/styles/theme.css';
 import { palette, spacing, radius, font, shadows, motion } from 'lib/core/styles/tokens';
@@ -35,7 +36,7 @@ export const toastViewport = style({
   outline: 'none',
 });
 
-export const toastBase = style({
+const toastBaseStyle = style({
   pointerEvents: 'auto',
   position: 'relative',
   display: 'flex',
@@ -70,17 +71,25 @@ export const toastBase = style({
   },
 });
 
-export const toastVariant = styleVariants({
-  default: {
-    background: vars.color.background,
-    color: vars.color.foreground,
+export const toastRecipe = recipe({
+  base: [toastBaseStyle],
+  variants: {
+    variant: {
+      default: {
+        background: vars.color.background,
+        color: vars.color.foreground,
+      },
+      destructive: {
+        background: vars.color.destructive.base,
+        color: vars.color.destructive.foreground,
+        borderColor: vars.color.destructive.base,
+      },
+    },
   },
-  destructive: {
-    background: vars.color.destructive.base,
-    color: vars.color.destructive.foreground,
-    borderColor: vars.color.destructive.base,
-  },
+  defaultVariants: { variant: 'default' },
 });
+
+export type ToastVariants = RecipeVariants<typeof toastRecipe>;
 
 export const toastTitle = style({
   fontSize: font.size.sm,
@@ -123,23 +132,20 @@ export const toastCloseButton = style({
       opacity: 1,
       boxShadow: `0 0 0 2px ${vars.color.ring}`,
     },
+    '[data-variant="destructive"] &': {
+      color: palette.red[300],
+    },
+    '[data-variant="destructive"] &:hover': {
+      color: palette.red[50],
+    },
+    '[data-variant="destructive"] &:focus': {
+      boxShadow: `0 0 0 2px ${palette.red[400]}`,
+    },
   },
 });
 
-globalStyle(`${toastBase}:hover ${toastCloseButton}`, {
+globalStyle(`${toastBaseStyle}:hover ${toastCloseButton}`, {
   opacity: 1,
-});
-
-globalStyle(`${toastVariant.destructive} ${toastCloseButton}`, {
-  color: palette.red[300],
-});
-
-globalStyle(`${toastVariant.destructive} ${toastCloseButton}:hover`, {
-  color: palette.red[50],
-});
-
-globalStyle(`${toastVariant.destructive} ${toastCloseButton}:focus`, {
-  boxShadow: `0 0 0 2px ${palette.red[400]}`,
 });
 
 export const toastAction = style({
@@ -168,21 +174,18 @@ export const toastAction = style({
       pointerEvents: 'none',
       opacity: 0.5,
     },
+    '[data-variant="destructive"] &': {
+      borderColor: `color-mix(in oklch, ${vars.color.muted} 40%, transparent)`,
+    },
+    '[data-variant="destructive"] &:hover': {
+      borderColor: `color-mix(in oklch, ${vars.color.destructive.base} 30%, transparent)`,
+      background: vars.color.destructive.base,
+      color: vars.color.destructive.foreground,
+    },
+    '[data-variant="destructive"] &:focus-visible': {
+      boxShadow: `0 0 0 2px ${vars.color.destructive.base}`,
+    },
   },
-});
-
-globalStyle(`${toastVariant.destructive} ${toastAction}`, {
-  borderColor: `color-mix(in oklch, ${vars.color.muted} 40%, transparent)`,
-});
-
-globalStyle(`${toastVariant.destructive} ${toastAction}:hover`, {
-  borderColor: `color-mix(in oklch, ${vars.color.destructive.base} 30%, transparent)`,
-  background: vars.color.destructive.base,
-  color: vars.color.destructive.foreground,
-});
-
-globalStyle(`${toastVariant.destructive} ${toastAction}:focus-visible`, {
-  boxShadow: `0 0 0 2px ${vars.color.destructive.base}`,
 });
 
 export const toastContent = style({
