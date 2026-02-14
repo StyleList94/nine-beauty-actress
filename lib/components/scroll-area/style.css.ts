@@ -15,6 +15,7 @@ export const scrollAreaViewport = style({
   transition: `color ${motion.duration.normal} ${motion.easing.ease}, box-shadow ${motion.duration.normal} ${motion.easing.ease}`,
   selectors: {
     '&:focus-visible': {
+      outline: '1px solid transparent',
       boxShadow: `0 0 0 3px ${vars.color.ring}`,
     },
   },
