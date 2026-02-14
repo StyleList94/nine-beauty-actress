@@ -13,14 +13,24 @@ type DefaultArgs = {
   _required: boolean;
   _validation: 'none' | 'error' | 'success';
   _layout: 'vertical' | 'horizontal';
-  _showCaption: boolean;
-  _showValidation: boolean;
+  _labelChildren: string;
+  _captionChildren: string;
+  _validationChildren: string;
+  _validationVariant: string;
 };
 
 const meta: Meta<typeof FormControl> = {
   component: FormControl,
   title: 'UI/FormControl',
   tags: ['autodocs'],
+  argTypes: {
+    disabled: { table: { disable: true } },
+    required: { table: { disable: true } },
+    validation: { table: { disable: true } },
+    layout: { table: { disable: true } },
+    children: { table: { disable: true } },
+    className: { table: { disable: true } },
+  },
   parameters: {
     layout: 'centered',
     docs: {
@@ -83,17 +93,41 @@ export const Default: StoryObj<DefaultArgs> = {
         defaultValue: { summary: 'vertical' },
       },
     },
-    _showCaption: {
-      name: 'showCaption',
-      control: 'boolean',
-      description: '힌트 텍스트 표시',
-      table: { category: 'Options' },
+    _labelChildren: {
+      name: 'children',
+      control: false,
+      description: '레이블 텍스트를 지정합니다',
+      table: {
+        category: 'FormControl.Label',
+        type: { summary: 'ReactNode' },
+      },
     },
-    _showValidation: {
-      name: 'showValidation',
-      control: 'boolean',
-      description: '유효성 메시지 표시',
-      table: { category: 'Options' },
+    _captionChildren: {
+      name: 'children',
+      control: false,
+      description: '힌트 텍스트를 지정합니다',
+      table: {
+        category: 'FormControl.Caption',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _validationChildren: {
+      name: 'children',
+      control: false,
+      description: '유효성 메시지를 지정합니다',
+      table: {
+        category: 'FormControl.Validation',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _validationVariant: {
+      name: 'variant',
+      control: false,
+      description: '유효성 검사 시각적 변형 (기본: context의 validation 값)',
+      table: {
+        category: 'FormControl.Validation',
+        type: { summary: "'error' | 'success'" },
+      },
     },
   },
   args: {
@@ -101,8 +135,6 @@ export const Default: StoryObj<DefaultArgs> = {
     _required: false,
     _validation: 'none',
     _layout: 'vertical',
-    _showCaption: true,
-    _showValidation: false,
   },
   render: (args) => (
     <div className="w-80">
@@ -114,12 +146,12 @@ export const Default: StoryObj<DefaultArgs> = {
       >
         <FormControl.Label>이메일</FormControl.Label>
         <Input type="email" placeholder="you@example.com" />
-        {args._showCaption && (
-          <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
-        )}
-        {args._showValidation && (
+        <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
+        {args._validation !== 'none' && (
           <FormControl.Validation>
-            올바른 이메일을 입력하세요.
+            {args._validation === 'error'
+              ? '올바른 이메일을 입력하세요.'
+              : '올바른 이메일입니다.'}
           </FormControl.Validation>
         )}
       </FormControl>

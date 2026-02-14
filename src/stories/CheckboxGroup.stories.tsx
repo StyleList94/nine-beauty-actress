@@ -10,12 +10,23 @@ type DefaultArgs = {
   _disabled: boolean;
   _required: boolean;
   _validation: 'none' | 'error' | 'success';
+  _labelChildren: string;
+  _captionChildren: string;
+  _validationChildren: string;
+  _validationVariant: string;
 };
 
 const meta: Meta<typeof CheckboxGroup> = {
   component: CheckboxGroup,
   title: 'UI/CheckboxGroup',
   tags: ['autodocs'],
+  argTypes: {
+    disabled: { table: { disable: true } },
+    required: { table: { disable: true } },
+    validation: { table: { disable: true } },
+    children: { table: { disable: true } },
+    className: { table: { disable: true } },
+  },
   parameters: {
     layout: 'centered',
     docs: {
@@ -64,6 +75,42 @@ export const Default: StoryObj<DefaultArgs> = {
       description: '그룹 유효성 검사 상태',
       table: {
         category: 'CheckboxGroup',
+        type: { summary: "'error' | 'success'" },
+      },
+    },
+    _labelChildren: {
+      name: 'children',
+      control: false,
+      description: '그룹 레이블을 지정합니다',
+      table: {
+        category: 'CheckboxGroup.Label',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _captionChildren: {
+      name: 'children',
+      control: false,
+      description: '그룹 힌트 텍스트를 지정합니다',
+      table: {
+        category: 'CheckboxGroup.Caption',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _validationChildren: {
+      name: 'children',
+      control: false,
+      description: '유효성 메시지를 지정합니다',
+      table: {
+        category: 'CheckboxGroup.Validation',
+        type: { summary: 'ReactNode' },
+      },
+    },
+    _validationVariant: {
+      name: 'variant',
+      control: false,
+      description: '유효성 검사 시각적 변형 (기본: context의 validation 값)',
+      table: {
+        category: 'CheckboxGroup.Validation',
         type: { summary: "'error' | 'success'" },
       },
     },
