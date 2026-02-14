@@ -28,9 +28,13 @@ globalStyle(`${tableBody} tr:last-child`, {
 });
 
 export const tableFooter = style({
-  background: vars.color.muted,
+  background: `color-mix(in oklch, ${vars.color.muted} 50%, transparent)`,
   borderTop: `1px solid ${vars.color.border}`,
   fontWeight: font.weight.medium,
+});
+
+globalStyle(`${tableFooter} > tr:last-child`, {
+  borderBottom: 'none',
 });
 
 export const tableRow = style({
@@ -38,7 +42,7 @@ export const tableRow = style({
   transition: `background ${motion.duration.normal} ${motion.easing.ease}`,
   selectors: {
     '&:hover': {
-      background: vars.color.muted,
+      background: `color-mix(in oklch, ${vars.color.muted} 50%, transparent)`,
     },
     '&[data-state="selected"]': {
       background: vars.color.muted,
@@ -54,12 +58,30 @@ export const tableHead = style({
   verticalAlign: 'middle',
   fontWeight: font.weight.medium,
   whiteSpace: 'nowrap',
+  selectors: {
+    '&:has([role="checkbox"])': {
+      paddingRight: 0,
+    },
+  },
+});
+
+globalStyle(`${tableHead} > [role="checkbox"]`, {
+  transform: 'translateY(2px)',
 });
 
 export const tableCell = style({
   padding: spacing[8],
   verticalAlign: 'middle',
   whiteSpace: 'nowrap',
+  selectors: {
+    '&:has([role="checkbox"])': {
+      paddingRight: 0,
+    },
+  },
+});
+
+globalStyle(`${tableCell} > [role="checkbox"]`, {
+  transform: 'translateY(2px)',
 });
 
 export const tableCaption = style({
