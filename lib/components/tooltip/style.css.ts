@@ -16,6 +16,7 @@ import {
 export const tooltipContent = style({
   zIndex: 50,
   width: 'fit-content',
+  transformOrigin: 'var(--radix-tooltip-content-transform-origin)',
   borderRadius: radius.md,
   paddingInline: spacing[12],
   paddingBlock: spacing[6],
@@ -47,4 +48,7 @@ export const tooltipArrow = style({
   width: '10px',
   height: '10px',
   fill: vars.color.primary.base,
+  background: vars.color.primary.base,
+  transform: 'translateY(calc(-50% - 2px)) rotate(45deg)',
+  borderRadius: '2px',
 });
