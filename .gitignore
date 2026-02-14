@@ -24,4 +24,11 @@ storybook-static
 *.sln
 *.sw?
 
+# Playwright
+test-results/
+playwright-report/
+
+# Coverage
+coverage/
+
 .claude

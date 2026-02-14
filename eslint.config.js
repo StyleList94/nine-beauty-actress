@@ -44,7 +44,7 @@ export default defineConfig(
     },
   },
   {
-    files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+    files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(test).[jt]s?(x)'],
     ...testingLibrary.configs['flat/react'],
   },
   {
