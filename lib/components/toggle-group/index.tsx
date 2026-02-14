@@ -1,4 +1,10 @@
-import * as React from 'react';
+import {
+  createContext,
+  use,
+  useMemo,
+  type ComponentProps,
+  type CSSProperties,
+} from 'react';
 import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 
 import { cn } from 'lib/core/utils';
@@ -30,13 +36,9 @@ type ToggleGroupContextValue = {
   tight: boolean;
 };
 
-const ToggleGroupContext = React.createContext<ToggleGroupContextValue | null>(
-  null,
-);
+const ToggleGroupContext = createContext<ToggleGroupContextValue | null>(null);
 
-type ToggleGroupProps = React.ComponentPropsWithoutRef<
-  typeof ToggleGroupPrimitive.Root
-> & {
+type ToggleGroupProps = ComponentProps<typeof ToggleGroupPrimitive.Root> & {
   /**
    * 토글 그룹의 스타일을 지정합니다.
    * @defaultValue 'default'
@@ -79,66 +81,55 @@ type ToggleGroupProps = React.ComponentPropsWithoutRef<
  *
  * @see {@link ToggleGroupItem} - 개별 토글 버튼 컴포넌트
  */
-const ToggleGroup = React.forwardRef<
-  React.ElementRef<typeof ToggleGroupPrimitive.Root>,
-  ToggleGroupProps
->(
-  (
-    {
-      className,
-      style,
-      children,
-      variant = 'default',
-      size = 'default',
-      spacing = 'none',
-      ...props
-    },
-    ref,
-  ) => {
-    const isPreset = typeof spacing !== 'number';
-    const gapValue = isPreset ? spacingPresets[spacing] : `${spacing}px`;
-    const tight = isPreset ? spacing === 'none' : spacing === 0;
-    const mergedStyle = React.useMemo<React.CSSProperties>(
-      () => ({
-        gap: gapValue,
-        ...style,
-      }),
-      [gapValue, style],
-    );
+function ToggleGroup({
+  className,
+  style,
+  children,
+  variant = 'default',
+  size = 'default',
+  spacing = 'none',
+  ref,
+  ...props
+}: ToggleGroupProps) {
+  const isPreset = typeof spacing !== 'number';
+  const gapValue = isPreset ? spacingPresets[spacing] : `${spacing}px`;
+  const tight = isPreset ? spacing === 'none' : spacing === 0;
+  const mergedStyle = useMemo<CSSProperties>(
+    () => ({
+      gap: gapValue,
+      ...style,
+    }),
+    [gapValue, style],
+  );
 
-    const contextValue = React.useMemo<ToggleGroupContextValue>(
-      () => ({
-        variant,
-        size,
-        tight,
-      }),
-      [variant, size, tight],
-    );
+  const contextValue = useMemo<ToggleGroupContextValue>(
+    () => ({
+      variant,
+      size,
+      tight,
+    }),
+    [variant, size, tight],
+  );
 
-    return (
-      <ToggleGroupPrimitive.Root
-        ref={ref}
-        className={cn(toggleGroupRoot, className)}
-        data-slot="toggle-group"
-        data-variant={variant}
-        data-size={size}
-        data-spacing={tight ? 'tight' : 'spaced'}
-        style={mergedStyle}
-        {...props}
-      >
-        <ToggleGroupContext.Provider value={contextValue}>
-          {children}
-        </ToggleGroupContext.Provider>
-      </ToggleGroupPrimitive.Root>
-    );
-  },
-);
+  return (
+    <ToggleGroupPrimitive.Root
+      ref={ref}
+      className={cn(toggleGroupRoot, className)}
+      data-slot="toggle-group"
+      data-variant={variant}
+      data-size={size}
+      data-spacing={tight ? 'tight' : 'spaced'}
+      style={mergedStyle}
+      {...props}
+    >
+      <ToggleGroupContext value={contextValue}>
+        {children}
+      </ToggleGroupContext>
+    </ToggleGroupPrimitive.Root>
+  );
+}
 
-ToggleGroup.displayName = 'ToggleGroup';
-
-type ToggleGroupItemProps = React.ComponentPropsWithoutRef<
-  typeof ToggleGroupPrimitive.Item
->;
+type ToggleGroupItemProps = ComponentProps<typeof ToggleGroupPrimitive.Item>;
 
 /**
  * 토글 그룹 내부에서 토글 버튼을 구성할 때 사용합니다.
@@ -157,11 +148,12 @@ type ToggleGroupItemProps = React.ComponentPropsWithoutRef<
  *
  * @see {@link ToggleGroup} - 부모 그룹 컴포넌트
  */
-const ToggleGroupItem = React.forwardRef<
-  React.ElementRef<typeof ToggleGroupPrimitive.Item>,
-  ToggleGroupItemProps
->(({ className, ...props }, ref) => {
-  const context = React.useContext(ToggleGroupContext);
+function ToggleGroupItem({
+  className,
+  ref,
+  ...props
+}: ToggleGroupItemProps) {
+  const context = use(ToggleGroupContext);
 
   const resolvedVariant = context?.variant ?? 'default';
   const resolvedSize = context?.size ?? 'default';
@@ -181,9 +173,7 @@ const ToggleGroupItem = React.forwardRef<
       {...props}
     />
   );
-});
-
-ToggleGroupItem.displayName = 'ToggleGroupItem';
+}
 
 export {
   ToggleGroup,

@@ -1,4 +1,4 @@
-import { forwardRef, type ComponentProps } from 'react';
+import { type ComponentProps } from 'react';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 
 import { cn } from 'lib/core/utils';
@@ -10,24 +10,27 @@ export type ScrollBarProps = ComponentProps<
 >;
 
 /** 스크롤 영역의 스크롤바 */
-export const ScrollBar = forwardRef<
-  React.ComponentRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
-  ScrollBarProps
->(({ className, orientation = 'vertical', ...props }, ref) => (
-  <ScrollAreaPrimitive.ScrollAreaScrollbar
-    ref={ref}
-    data-slot="scroll-area-scrollbar"
-    orientation={orientation}
-    className={cn(styles.scrollBarBase, className)}
-    {...props}
-  >
-    <ScrollAreaPrimitive.ScrollAreaThumb
-      data-slot="scroll-area-thumb"
-      className={styles.scrollBarThumb}
-    />
-  </ScrollAreaPrimitive.ScrollAreaScrollbar>
-));
-ScrollBar.displayName = 'ScrollBar';
+export function ScrollBar({
+  className,
+  orientation = 'vertical',
+  ref,
+  ...props
+}: ScrollBarProps) {
+  return (
+    <ScrollAreaPrimitive.ScrollAreaScrollbar
+      ref={ref}
+      data-slot="scroll-area-scrollbar"
+      orientation={orientation}
+      className={cn(styles.scrollBarBase, className)}
+      {...props}
+    >
+      <ScrollAreaPrimitive.ScrollAreaThumb
+        data-slot="scroll-area-thumb"
+        className={styles.scrollBarThumb}
+      />
+    </ScrollAreaPrimitive.ScrollAreaScrollbar>
+  );
+}
 
 export type ScrollAreaProps = ComponentProps<
   typeof ScrollAreaPrimitive.Root
@@ -48,24 +51,27 @@ export type ScrollAreaProps = ComponentProps<
  * </ScrollArea>
  * ```
  */
-export const ScrollArea = forwardRef<
-  React.ComponentRef<typeof ScrollAreaPrimitive.Root>,
-  ScrollAreaProps
->(({ className, children, ...props }, ref) => (
-  <ScrollAreaPrimitive.Root
-    ref={ref}
-    data-slot="scroll-area"
-    className={cn(styles.scrollAreaBase, className)}
-    {...props}
-  >
-    <ScrollAreaPrimitive.Viewport
-      data-slot="scroll-area-viewport"
-      className={styles.scrollAreaViewport}
+export function ScrollArea({
+  className,
+  children,
+  ref,
+  ...props
+}: ScrollAreaProps) {
+  return (
+    <ScrollAreaPrimitive.Root
+      ref={ref}
+      data-slot="scroll-area"
+      className={cn(styles.scrollAreaBase, className)}
+      {...props}
     >
-      {children}
-    </ScrollAreaPrimitive.Viewport>
-    <ScrollBar />
-    <ScrollAreaPrimitive.Corner />
-  </ScrollAreaPrimitive.Root>
-));
-ScrollArea.displayName = 'ScrollArea';
+      <ScrollAreaPrimitive.Viewport
+        data-slot="scroll-area-viewport"
+        className={styles.scrollAreaViewport}
+      >
+        {children}
+      </ScrollAreaPrimitive.Viewport>
+      <ScrollBar />
+      <ScrollAreaPrimitive.Corner />
+    </ScrollAreaPrimitive.Root>
+  );
+}

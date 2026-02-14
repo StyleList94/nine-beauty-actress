@@ -1,6 +1,6 @@
 import type { FormControlValidationState } from 'lib/components/form-control/context';
 
-import { createContext, useContext } from 'react';
+import { createContext, use } from 'react';
 
 export type CheckboxGroupContextValue = {
   id: string;
@@ -17,5 +17,5 @@ export const CheckboxGroupContext =
   createContext<CheckboxGroupContextValue | null>(null);
 
 export function useCheckboxGroupContext() {
-  return useContext(CheckboxGroupContext);
+  return use(CheckboxGroupContext);
 }

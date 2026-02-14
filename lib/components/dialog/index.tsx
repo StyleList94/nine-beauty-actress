@@ -1,4 +1,4 @@
-import { forwardRef, type ComponentProps } from 'react';
+import { type ComponentProps } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
 
@@ -35,7 +35,6 @@ export type DialogProps = ComponentProps<typeof DialogPrimitive.Root>;
 export function Dialog(props: DialogProps) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
-Dialog.displayName = 'Dialog';
 
 export type DialogTriggerProps = ComponentProps<
   typeof DialogPrimitive.Trigger
@@ -45,7 +44,6 @@ export type DialogTriggerProps = ComponentProps<
 export function DialogTrigger(props: DialogTriggerProps) {
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
 }
-DialogTrigger.displayName = 'DialogTrigger';
 
 export type DialogPortalProps = ComponentProps<
   typeof DialogPrimitive.Portal
@@ -55,7 +53,6 @@ export type DialogPortalProps = ComponentProps<
 export function DialogPortal(props: DialogPortalProps) {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
 }
-DialogPortal.displayName = 'DialogPortal';
 
 export type DialogCloseProps = ComponentProps<typeof DialogPrimitive.Close>;
 
@@ -63,25 +60,26 @@ export type DialogCloseProps = ComponentProps<typeof DialogPrimitive.Close>;
 export function DialogClose(props: DialogCloseProps) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
-DialogClose.displayName = 'DialogClose';
 
 export type DialogOverlayProps = ComponentProps<
   typeof DialogPrimitive.Overlay
 >;
 
 /** 반투명 배경 오버레이 */
-export const DialogOverlay = forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Overlay>,
-  DialogOverlayProps
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Overlay
-    ref={ref}
-    data-slot="dialog-overlay"
-    className={cn(styles.dialogOverlay, className)}
-    {...props}
-  />
-));
-DialogOverlay.displayName = 'DialogOverlay';
+export function DialogOverlay({
+  className,
+  ref,
+  ...props
+}: DialogOverlayProps) {
+  return (
+    <DialogPrimitive.Overlay
+      ref={ref}
+      data-slot="dialog-overlay"
+      className={cn(styles.dialogOverlay, className)}
+      {...props}
+    />
+  );
+}
 
 export type DialogContentProps = ComponentProps<
   typeof DialogPrimitive.Content
@@ -90,32 +88,36 @@ export type DialogContentProps = ComponentProps<
 };
 
 /** 오버레이 위에 표시되는 다이얼로그 본문 */
-export const DialogContent = forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Content>,
-  DialogContentProps
->(({ className, children, showCloseButton = true, ...props }, ref) => (
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      data-slot="dialog-content"
-      className={cn(styles.dialogContent, className)}
-      {...props}
-    >
-      {children}
-      {showCloseButton && (
-        <DialogPrimitive.Close
-          data-slot="dialog-close"
-          className={styles.dialogCloseButton}
-        >
-          <XIcon />
-          <span className={styles.srOnly}>Close</span>
-        </DialogPrimitive.Close>
-      )}
-    </DialogPrimitive.Content>
-  </DialogPortal>
-));
-DialogContent.displayName = 'DialogContent';
+export function DialogContent({
+  className,
+  children,
+  showCloseButton = true,
+  ref,
+  ...props
+}: DialogContentProps) {
+  return (
+    <DialogPortal>
+      <DialogOverlay />
+      <DialogPrimitive.Content
+        ref={ref}
+        data-slot="dialog-content"
+        className={cn(styles.dialogContent, className)}
+        {...props}
+      >
+        {children}
+        {showCloseButton && (
+          <DialogPrimitive.Close
+            data-slot="dialog-close"
+            className={styles.dialogCloseButton}
+          >
+            <XIcon />
+            <span className={styles.srOnly}>Close</span>
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  );
+}
 
 export type DialogHeaderProps = ComponentProps<'div'>;
 
@@ -129,7 +131,6 @@ export function DialogHeader({ className, ...props }: DialogHeaderProps) {
     />
   );
 }
-DialogHeader.displayName = 'DialogHeader';
 
 export type DialogFooterProps = ComponentProps<'div'> & {
   showCloseButton?: boolean;
@@ -157,40 +158,43 @@ export function DialogFooter({
     </div>
   );
 }
-DialogFooter.displayName = 'DialogFooter';
 
 export type DialogTitleProps = ComponentProps<
   typeof DialogPrimitive.Title
 >;
 
 /** 다이얼로그 제목 */
-export const DialogTitle = forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Title>,
-  DialogTitleProps
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Title
-    ref={ref}
-    data-slot="dialog-title"
-    className={cn(styles.dialogTitle, className)}
-    {...props}
-  />
-));
-DialogTitle.displayName = 'DialogTitle';
+export function DialogTitle({
+  className,
+  ref,
+  ...props
+}: DialogTitleProps) {
+  return (
+    <DialogPrimitive.Title
+      ref={ref}
+      data-slot="dialog-title"
+      className={cn(styles.dialogTitle, className)}
+      {...props}
+    />
+  );
+}
 
 export type DialogDescriptionProps = ComponentProps<
   typeof DialogPrimitive.Description
 >;
 
 /** 다이얼로그 부가 설명 */
-export const DialogDescription = forwardRef<
-  React.ComponentRef<typeof DialogPrimitive.Description>,
-  DialogDescriptionProps
->(({ className, ...props }, ref) => (
-  <DialogPrimitive.Description
-    ref={ref}
-    data-slot="dialog-description"
-    className={cn(styles.dialogDescription, className)}
-    {...props}
-  />
-));
-DialogDescription.displayName = 'DialogDescription';
+export function DialogDescription({
+  className,
+  ref,
+  ...props
+}: DialogDescriptionProps) {
+  return (
+    <DialogPrimitive.Description
+      ref={ref}
+      data-slot="dialog-description"
+      className={cn(styles.dialogDescription, className)}
+      {...props}
+    />
+  );
+}

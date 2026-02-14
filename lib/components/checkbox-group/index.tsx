@@ -2,7 +2,6 @@ import type { FormControlValidationState } from 'lib/components/form-control/con
 
 import {
   Children,
-  forwardRef,
   isValidElement,
   useEffect,
   useId,
@@ -26,55 +25,47 @@ import {
 /** 그룹의 이름표를 달아줄게 */
 export type CheckboxGroupLabelProps = ComponentProps<'legend'>;
 
-const Label = forwardRef<HTMLLegendElement, CheckboxGroupLabelProps>(
-  ({ className, children, ...props }, ref) => {
-    const ctx = useCheckboxGroupContext();
+function Label({ className, children, ref, ...props }: CheckboxGroupLabelProps) {
+  const ctx = useCheckboxGroupContext();
 
-    return (
-      <legend
-        ref={ref}
-        data-slot="checkbox-group-label"
-        className={cn(checkboxGroupLabel, className)}
-        {...props}
-      >
-        {children}
-        {ctx?.required && (
-          <span data-slot="checkbox-group-required" className={requiredIndicator}>
-            *
-          </span>
-        )}
-      </legend>
-    );
-  },
-);
-
-Label.displayName = 'CheckboxGroup.Label';
+  return (
+    <legend
+      ref={ref}
+      data-slot="checkbox-group-label"
+      className={cn(checkboxGroupLabel, className)}
+      {...props}
+    >
+      {children}
+      {ctx?.required && (
+        <span data-slot="checkbox-group-required" className={requiredIndicator}>
+          *
+        </span>
+      )}
+    </legend>
+  );
+}
 
 /** 그룹에 대해 살짝 귀띔해줄게 */
 export type CheckboxGroupCaptionProps = ComponentProps<'p'>;
 
-const Caption = forwardRef<HTMLParagraphElement, CheckboxGroupCaptionProps>(
-  ({ className, ...props }, ref) => {
-    const ctx = useCheckboxGroupContext();
+function Caption({ className, ref, ...props }: CheckboxGroupCaptionProps) {
+  const ctx = useCheckboxGroupContext();
 
-    useEffect(() => {
-      ctx?.setCaptionMounted(true);
-      return () => ctx?.setCaptionMounted(false);
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    ctx?.setCaptionMounted(true);
+    return () => ctx?.setCaptionMounted(false);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return (
-      <p
-        ref={ref}
-        id={ctx ? `${ctx.id}-caption` : undefined}
-        data-slot="checkbox-group-caption"
-        className={cn(checkboxGroupCaptionBase, className)}
-        {...props}
-      />
-    );
-  },
-);
-
-Caption.displayName = 'CheckboxGroup.Caption';
+  return (
+    <p
+      ref={ref}
+      id={ctx ? `${ctx.id}-caption` : undefined}
+      data-slot="checkbox-group-caption"
+      className={cn(checkboxGroupCaptionBase, className)}
+      {...props}
+    />
+  );
+}
 
 /** 그룹이 맞는지 확인해볼게 */
 export type CheckboxGroupValidationVariant = 'error' | 'success';
@@ -84,10 +75,12 @@ export type CheckboxGroupValidationProps = ComponentProps<'p'> & {
   variant?: CheckboxGroupValidationVariant;
 };
 
-const Validation = forwardRef<
-  HTMLParagraphElement,
-  CheckboxGroupValidationProps
->(({ variant: externalVariant, className, ...props }, ref) => {
+function Validation({
+  variant: externalVariant,
+  className,
+  ref,
+  ...props
+}: CheckboxGroupValidationProps) {
   const ctx = useCheckboxGroupContext();
   const variant = externalVariant ?? ctx?.validation ?? 'error';
 
@@ -108,9 +101,7 @@ const Validation = forwardRef<
       {...props}
     />
   );
-});
-
-Validation.displayName = 'CheckboxGroup.Validation';
+}
 
 export type CheckboxGroupProps = ComponentProps<'fieldset'> & {
   /** 비활성화 상태 (하위 체크박스에 자동 전파) */
@@ -121,82 +112,76 @@ export type CheckboxGroupProps = ComponentProps<'fieldset'> & {
   validation?: FormControlValidationState;
 };
 
-const CheckboxGroupRoot = forwardRef<HTMLFieldSetElement, CheckboxGroupProps>(
-  (
-    {
-      disabled = false,
-      required = false,
+function CheckboxGroupRoot({
+  disabled = false,
+  required = false,
+  validation,
+  className,
+  children,
+  ref,
+  ...props
+}: CheckboxGroupProps) {
+  const autoId = useId();
+
+  const [hasCaption, setCaptionMounted] = useState(false);
+  const [hasValidation, setValidationMounted] = useState(false);
+
+  const describedByParts: string[] = [];
+  if (hasCaption) describedByParts.push(`${autoId}-caption`);
+  if (hasValidation) describedByParts.push(`${autoId}-validation`);
+
+  const contextValue = useMemo(
+    () => ({
+      id: autoId,
+      disabled,
+      required,
       validation,
-      className,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    const autoId = useId();
+      hasCaption,
+      hasValidation,
+      setCaptionMounted,
+      setValidationMounted,
+    }),
+    [autoId, disabled, required, validation, hasCaption, hasValidation],
+  );
 
-    const [hasCaption, setCaptionMounted] = useState(false);
-    const [hasValidation, setValidationMounted] = useState(false);
+  const childArray = Children.toArray(children);
+  const labelChild = childArray.find(
+    (child) => isValidElement(child) && child.type === Label,
+  );
+  const captionChild = childArray.find(
+    (child) => isValidElement(child) && child.type === Caption,
+  );
+  const bodyChildren = childArray.filter(
+    (child) =>
+      !(
+        isValidElement(child) &&
+        (child.type === Label || child.type === Caption)
+      ),
+  );
 
-    const describedByParts: string[] = [];
-    if (hasCaption) describedByParts.push(`${autoId}-caption`);
-    if (hasValidation) describedByParts.push(`${autoId}-validation`);
-
-    const contextValue = useMemo(
-      () => ({
-        id: autoId,
-        disabled,
-        required,
-        validation,
-        hasCaption,
-        hasValidation,
-        setCaptionMounted,
-        setValidationMounted,
-      }),
-      [autoId, disabled, required, validation, hasCaption, hasValidation],
-    );
-
-    const childArray = Children.toArray(children);
-    const labelChild = childArray.find(
-      (child) => isValidElement(child) && child.type === Label,
-    );
-    const captionChild = childArray.find(
-      (child) => isValidElement(child) && child.type === Caption,
-    );
-    const bodyChildren = childArray.filter(
-      (child) =>
-        !(
-          isValidElement(child) &&
-          (child.type === Label || child.type === Caption)
-        ),
-    );
-
-    return (
-      <CheckboxGroupContext.Provider value={contextValue}>
-        <fieldset
-          ref={ref}
-          data-slot="checkbox-group"
-          data-disabled={disabled || undefined}
-          data-required={required || undefined}
-          data-validation={validation}
-          disabled={disabled || undefined}
-          aria-required={required || undefined}
-          aria-describedby={
-            describedByParts.length > 0 ? describedByParts.join(' ') : undefined
-          }
-          className={cn(checkboxGroupBase, className)}
-          {...props}
-        >
-          {labelChild}
-          {captionChild}
-          <div className={checkboxGroupContent}>{bodyChildren}</div>
-        </fieldset>
-      </CheckboxGroupContext.Provider>
-    );
-  },
-);
-
-CheckboxGroupRoot.displayName = 'CheckboxGroup';
+  return (
+    <CheckboxGroupContext value={contextValue}>
+      <fieldset
+        ref={ref}
+        data-slot="checkbox-group"
+        data-disabled={disabled || undefined}
+        data-required={required || undefined}
+        data-validation={validation}
+        disabled={disabled || undefined}
+        aria-required={required || undefined}
+        aria-describedby={
+          describedByParts.length > 0 ? describedByParts.join(' ') : undefined
+        }
+        className={cn(checkboxGroupBase, className)}
+        {...props}
+      >
+        {labelChild}
+        {captionChild}
+        <div className={checkboxGroupContent}>{bodyChildren}</div>
+      </fieldset>
+    </CheckboxGroupContext>
+  );
+}
 
 /**
  * 체크박스들을 하나로 묶어줄게

@@ -1,4 +1,4 @@
-import { createContext, useContext, type AriaAttributes } from 'react';
+import { createContext, use, type AriaAttributes } from 'react';
 
 export type FormControlValidationState = 'error' | 'success';
 export type FormControlLayout = 'vertical' | 'horizontal';
@@ -19,7 +19,7 @@ export const FormControlContext =
   createContext<FormControlContextValue | null>(null);
 
 export function useFormControlContext() {
-  return useContext(FormControlContext);
+  return use(FormControlContext);
 }
 
 type FormControlInputExternalProps = {

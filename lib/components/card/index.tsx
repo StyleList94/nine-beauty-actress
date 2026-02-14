@@ -1,4 +1,4 @@
-import { forwardRef, type ComponentProps } from 'react';
+import { type ComponentProps } from 'react';
 
 import { cn } from 'lib/core/utils';
 
@@ -40,8 +40,8 @@ export type CardProps = ComponentProps<'div'> & {
  * </Card>
  * ```
  */
-export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ className, size = 'default', ...props }, ref) => (
+export function Card({ className, size = 'default', ref, ...props }: CardProps) {
+  return (
     <div
       ref={ref}
       data-slot="card"
@@ -49,85 +49,101 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       className={cn(styles.cardBase, className)}
       {...props}
     />
-  ),
-);
-Card.displayName = 'Card';
+  );
+}
 
 /** grid 레이아웃 헤더 — CardAction이 있으면 자동으로 2열 배치 */
-export const CardHeader = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
-  ({ className, ...props }, ref) => (
+export function CardHeader({
+  className,
+  ref,
+  ...props
+}: ComponentProps<'div'>) {
+  return (
     <div
       ref={ref}
       data-slot="card-header"
       className={cn(styles.cardHeader, className)}
       {...props}
     />
-  ),
-);
-CardHeader.displayName = 'CardHeader';
+  );
+}
 
 /** 카드 제목 */
-export const CardTitle = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
-  ({ className, ...props }, ref) => (
+export function CardTitle({
+  className,
+  ref,
+  ...props
+}: ComponentProps<'div'>) {
+  return (
     <div
       ref={ref}
       data-slot="card-title"
       className={cn(styles.cardTitle, className)}
       {...props}
     />
-  ),
-);
-CardTitle.displayName = 'CardTitle';
+  );
+}
 
 /** 카드 설명 */
-export const CardDescription = forwardRef<
-  HTMLDivElement,
-  ComponentProps<'div'>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    data-slot="card-description"
-    className={cn(styles.cardDescription, className)}
-    {...props}
-  />
-));
-CardDescription.displayName = 'CardDescription';
+export function CardDescription({
+  className,
+  ref,
+  ...props
+}: ComponentProps<'div'>) {
+  return (
+    <div
+      ref={ref}
+      data-slot="card-description"
+      className={cn(styles.cardDescription, className)}
+      {...props}
+    />
+  );
+}
 
 /** 헤더 우측 액션 영역 — CardHeader 내부에 배치 */
-export const CardAction = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
-  ({ className, ...props }, ref) => (
+export function CardAction({
+  className,
+  ref,
+  ...props
+}: ComponentProps<'div'>) {
+  return (
     <div
       ref={ref}
       data-slot="card-action"
       className={cn(styles.cardAction, className)}
       {...props}
     />
-  ),
-);
-CardAction.displayName = 'CardAction';
+  );
+}
 
 /** 카드 본문 영역 */
-export const CardContent = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
-  ({ className, ...props }, ref) => (
+export function CardContent({
+  className,
+  ref,
+  ...props
+}: ComponentProps<'div'>) {
+  return (
     <div
       ref={ref}
       data-slot="card-content"
       className={cn(styles.cardContent, className)}
       {...props}
     />
-  ),
-);
-CardContent.displayName = 'CardContent';
+  );
+}
 
 /** 카드 하단 액션 영역 */
-export const CardFooter = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
-  ({ className, ...props }, ref) => (
+export function CardFooter({
+  className,
+  ref,
+  ...props
+}: ComponentProps<'div'>) {
+  return (
     <div
       ref={ref}
       data-slot="card-footer"
       className={cn(styles.cardFooter, className)}
       {...props}
     />
-  ),
-);
-CardFooter.displayName = 'CardFooter';
+  );
+}

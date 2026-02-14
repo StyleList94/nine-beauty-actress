@@ -1,4 +1,4 @@
-import { forwardRef, type ComponentProps } from 'react';
+import { type ComponentProps } from 'react';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 
 import { cn } from 'lib/core/utils';
@@ -31,7 +31,6 @@ export type PopoverProps = ComponentProps<typeof PopoverPrimitive.Root>;
 export function Popover(props: PopoverProps) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />;
 }
-Popover.displayName = 'Popover';
 
 export type PopoverTriggerProps = ComponentProps<
   typeof PopoverPrimitive.Trigger
@@ -41,29 +40,32 @@ export type PopoverTriggerProps = ComponentProps<
 export function PopoverTrigger(props: PopoverTriggerProps) {
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />;
 }
-PopoverTrigger.displayName = 'PopoverTrigger';
 
 export type PopoverContentProps = ComponentProps<
   typeof PopoverPrimitive.Content
 >;
 
 /** 팝오버 콘텐츠 영역 (Portal 포함) */
-export const PopoverContent = forwardRef<
-  React.ComponentRef<typeof PopoverPrimitive.Content>,
-  PopoverContentProps
->(({ className, align = 'center', sideOffset = 4, ...props }, ref) => (
-  <PopoverPrimitive.Portal>
-    <PopoverPrimitive.Content
-      ref={ref}
-      data-slot="popover-content"
-      align={align}
-      sideOffset={sideOffset}
-      className={cn(styles.popoverContent, className)}
-      {...props}
-    />
-  </PopoverPrimitive.Portal>
-));
-PopoverContent.displayName = 'PopoverContent';
+export function PopoverContent({
+  className,
+  align = 'center',
+  sideOffset = 4,
+  ref,
+  ...props
+}: PopoverContentProps) {
+  return (
+    <PopoverPrimitive.Portal>
+      <PopoverPrimitive.Content
+        ref={ref}
+        data-slot="popover-content"
+        align={align}
+        sideOffset={sideOffset}
+        className={cn(styles.popoverContent, className)}
+        {...props}
+      />
+    </PopoverPrimitive.Portal>
+  );
+}
 
 export type PopoverAnchorProps = ComponentProps<typeof PopoverPrimitive.Anchor>;
 
@@ -71,7 +73,6 @@ export type PopoverAnchorProps = ComponentProps<typeof PopoverPrimitive.Anchor>;
 export function PopoverAnchor(props: PopoverAnchorProps) {
   return <PopoverPrimitive.Anchor data-slot="popover-anchor" {...props} />;
 }
-PopoverAnchor.displayName = 'PopoverAnchor';
 
 export type PopoverHeaderProps = ComponentProps<'div'>;
 
@@ -85,7 +86,6 @@ export function PopoverHeader({ className, ...props }: PopoverHeaderProps) {
     />
   );
 }
-PopoverHeader.displayName = 'PopoverHeader';
 
 export type PopoverTitleProps = ComponentProps<'div'>;
 
@@ -99,7 +99,6 @@ export function PopoverTitle({ className, ...props }: PopoverTitleProps) {
     />
   );
 }
-PopoverTitle.displayName = 'PopoverTitle';
 
 export type PopoverDescriptionProps = ComponentProps<'p'>;
 
@@ -116,4 +115,3 @@ export function PopoverDescription({
     />
   );
 }
-PopoverDescription.displayName = 'PopoverDescription';

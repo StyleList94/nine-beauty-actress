@@ -1,4 +1,4 @@
-import { forwardRef, type ComponentProps } from 'react';
+import { type ComponentProps } from 'react';
 
 import { cn } from 'lib/core/utils';
 import { useFormControlInputProps } from 'lib/components/form-control/context';
@@ -20,39 +20,33 @@ export type TextInputProps = ComponentProps<'input'>;
  * <TextInput placeholder="이메일을 입력하세요" />
  * ```
  */
-export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
-  (
-    {
-      className,
-      type,
-      id,
-      disabled,
-      required,
-      'aria-invalid': ariaInvalid,
-      'aria-describedby': ariaDescribedby,
-      ...props
-    },
-    ref,
-  ) => {
-    const fcProps = useFormControlInputProps({
-      id,
-      disabled,
-      required,
-      'aria-invalid': ariaInvalid,
-      'aria-describedby': ariaDescribedby,
-    });
+export function TextInput({
+  className,
+  type,
+  id,
+  disabled,
+  required,
+  'aria-invalid': ariaInvalid,
+  'aria-describedby': ariaDescribedby,
+  ref,
+  ...props
+}: TextInputProps) {
+  const fcProps = useFormControlInputProps({
+    id,
+    disabled,
+    required,
+    'aria-invalid': ariaInvalid,
+    'aria-describedby': ariaDescribedby,
+  });
 
-    return (
-      <input
-        ref={ref}
-        type={type}
-        data-slot="input"
-        className={cn(inputBase, className)}
-        {...fcProps}
-        {...props}
-      />
-    );
-  },
-);
-
-TextInput.displayName = 'TextInput';
+  return (
+    <input
+      ref={ref}
+      type={type}
+      data-slot="input"
+      className={cn(inputBase, className)}
+      {...fcProps}
+      {...props}
+    />
+  );
+}

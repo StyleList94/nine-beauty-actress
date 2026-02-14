@@ -1,5 +1,4 @@
 import {
-  forwardRef,
   useCallback,
   useRef,
   useState,
@@ -73,211 +72,205 @@ type ButtonWithRippleProps = HTMLMotionProps<'button'> & {
   children?: ReactNode;
 };
 
-const ButtonWithRipple = forwardRef<HTMLButtonElement, ButtonWithRippleProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      disableRipple,
-      disabled,
-      children,
-      onPointerDown,
-      onPointerUp,
-      onPointerCancel,
-      onPointerLeave,
-      onBlur,
-      onKeyDown,
-      onKeyUp,
-      ...props
+function ButtonWithRipple({
+  className,
+  variant,
+  size,
+  disableRipple,
+  disabled,
+  children,
+  onPointerDown,
+  onPointerUp,
+  onPointerCancel,
+  onPointerLeave,
+  onBlur,
+  onKeyDown,
+  onKeyUp,
+  ref,
+  ...props
+}: ButtonWithRippleProps) {
+  const [ripples, setRipples] = useState<RippleItem[]>([]);
+  const idRef = useRef(0);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  const createRipple = useCallback(
+    (originX: number, originY: number): void => {
+      const button = buttonRef.current;
+      if (!button) return;
+
+      const rect = button.getBoundingClientRect();
+      const localX = originX - rect.left;
+      const localY = originY - rect.top;
+      const dx = Math.max(localX, rect.width - localX);
+      const dy = Math.max(localY, rect.height - localY);
+      const radius = Math.sqrt(dx * dx + dy * dy);
+      const rippleSize = radius * 2;
+
+      idRef.current += 1;
+      const id = idRef.current;
+      setRipples((prev) => [
+        ...prev,
+        { id, x: localX, y: localY, size: rippleSize },
+      ]);
     },
-    ref,
-  ) => {
-    const [ripples, setRipples] = useState<RippleItem[]>([]);
-    const idRef = useRef(0);
-    const buttonRef = useRef<HTMLButtonElement | null>(null);
+    [],
+  );
 
-    const createRipple = useCallback(
-      (originX: number, originY: number): void => {
-        const button = buttonRef.current;
-        if (!button) return;
-
-        const rect = button.getBoundingClientRect();
-        const localX = originX - rect.left;
-        const localY = originY - rect.top;
-        const dx = Math.max(localX, rect.width - localX);
-        const dy = Math.max(localY, rect.height - localY);
-        const radius = Math.sqrt(dx * dx + dy * dy);
-        const rippleSize = radius * 2;
-
-        idRef.current += 1;
-        const id = idRef.current;
-        setRipples((prev) => [
-          ...prev,
-          { id, x: localX, y: localY, size: rippleSize },
-        ]);
-      },
-      [],
+  const removeLastRipple = useCallback(() => {
+    setRipples((prev) =>
+      prev.length ? prev.slice(0, prev.length - 1) : prev,
     );
+  }, []);
 
-    const removeLastRipple = useCallback(() => {
-      setRipples((prev) =>
-        prev.length ? prev.slice(0, prev.length - 1) : prev,
-      );
-    }, []);
+  const handlePointerDown = useCallback(
+    (event: PointerEvent<HTMLButtonElement>) => {
+      if (
+        !disableRipple &&
+        !disabled &&
+        (event as { isPrimary?: boolean }).isPrimary
+      ) {
+        createRipple(event.clientX, event.clientY);
+      }
+      onPointerDown?.(event);
+    },
+    [disableRipple, disabled, createRipple, onPointerDown],
+  );
 
-    const handlePointerDown = useCallback(
-      (event: PointerEvent<HTMLButtonElement>) => {
-        if (
-          !disableRipple &&
-          !disabled &&
-          (event as { isPrimary?: boolean }).isPrimary
-        ) {
-          createRipple(event.clientX, event.clientY);
-        }
-        onPointerDown?.(event);
-      },
-      [disableRipple, disabled, createRipple, onPointerDown],
-    );
+  const handlePointerUp = useCallback(
+    (event: PointerEvent<HTMLButtonElement>) => {
+      if (!disableRipple) {
+        removeLastRipple();
+      }
+      onPointerUp?.(event);
+    },
+    [disableRipple, removeLastRipple, onPointerUp],
+  );
 
-    const handlePointerUp = useCallback(
-      (event: PointerEvent<HTMLButtonElement>) => {
-        if (!disableRipple) {
-          removeLastRipple();
-        }
-        onPointerUp?.(event);
-      },
-      [disableRipple, removeLastRipple, onPointerUp],
-    );
+  const handlePointerCancel = useCallback(
+    (event: PointerEvent<HTMLButtonElement>) => {
+      if (!disableRipple) {
+        removeLastRipple();
+      }
+      onPointerCancel?.(event);
+    },
+    [disableRipple, removeLastRipple, onPointerCancel],
+  );
 
-    const handlePointerCancel = useCallback(
-      (event: PointerEvent<HTMLButtonElement>) => {
-        if (!disableRipple) {
-          removeLastRipple();
-        }
-        onPointerCancel?.(event);
-      },
-      [disableRipple, removeLastRipple, onPointerCancel],
-    );
+  const handlePointerLeave = useCallback(
+    (event: PointerEvent<HTMLButtonElement>) => {
+      if (!disableRipple) {
+        removeLastRipple();
+      }
+      onPointerLeave?.(event);
+    },
+    [disableRipple, removeLastRipple, onPointerLeave],
+  );
 
-    const handlePointerLeave = useCallback(
-      (event: PointerEvent<HTMLButtonElement>) => {
-        if (!disableRipple) {
-          removeLastRipple();
-        }
-        onPointerLeave?.(event);
-      },
-      [disableRipple, removeLastRipple, onPointerLeave],
-    );
+  const handleBlur = useCallback(
+    (event: FocusEvent<HTMLButtonElement>) => {
+      if (!disableRipple) {
+        removeLastRipple();
+      }
+      onBlur?.(event);
+    },
+    [disableRipple, removeLastRipple, onBlur],
+  );
 
-    const handleBlur = useCallback(
-      (event: FocusEvent<HTMLButtonElement>) => {
-        if (!disableRipple) {
-          removeLastRipple();
-        }
-        onBlur?.(event);
-      },
-      [disableRipple, removeLastRipple, onBlur],
-    );
-
-    const handleKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLButtonElement>) => {
-        if (!disableRipple && !disabled && !event.repeat) {
-          if (event.key === ' ' || event.key === 'Enter') {
-            const button = buttonRef.current;
-            if (button) {
-              const rect = button.getBoundingClientRect();
-              createRipple(
-                rect.left + rect.width / 2,
-                rect.top + rect.height / 2,
-              );
-            }
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLButtonElement>) => {
+      if (!disableRipple && !disabled && !event.repeat) {
+        if (event.key === ' ' || event.key === 'Enter') {
+          const button = buttonRef.current;
+          if (button) {
+            const rect = button.getBoundingClientRect();
+            createRipple(
+              rect.left + rect.width / 2,
+              rect.top + rect.height / 2,
+            );
           }
         }
-        onKeyDown?.(event);
-      },
-      [disableRipple, disabled, createRipple, onKeyDown],
-    );
+      }
+      onKeyDown?.(event);
+    },
+    [disableRipple, disabled, createRipple, onKeyDown],
+  );
 
-    const handleKeyUp = useCallback(
-      (event: KeyboardEvent<HTMLButtonElement>) => {
-        if (!disableRipple && (event.key === ' ' || event.key === 'Enter')) {
-          removeLastRipple();
-        }
-        onKeyUp?.(event);
-      },
-      [disableRipple, removeLastRipple, onKeyUp],
-    );
+  const handleKeyUp = useCallback(
+    (event: KeyboardEvent<HTMLButtonElement>) => {
+      if (!disableRipple && (event.key === ' ' || event.key === 'Enter')) {
+        removeLastRipple();
+      }
+      onKeyUp?.(event);
+    },
+    [disableRipple, removeLastRipple, onKeyUp],
+  );
 
-    const setRefs = useCallback(
-      (node: HTMLButtonElement | null) => {
-        buttonRef.current = node;
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          const mutableRef = ref;
-          mutableRef.current = node;
-        }
-      },
-      [ref],
-    );
+  const setRefs = useCallback(
+    (node: HTMLButtonElement | null) => {
+      buttonRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref != null) {
+        // eslint-disable-next-line no-param-reassign
+        (ref as { current: HTMLButtonElement | null }).current = node;
+      }
+    },
+    [ref],
+  );
 
-    return (
-      <LazyMotion features={domAnimation}>
-        <m.button
-          ref={setRefs}
-          type="button"
-          className={cn(buttonRecipe({ variant, size }), className)}
-          disabled={disabled}
-          onPointerDown={handlePointerDown}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerCancel}
-          onPointerLeave={handlePointerLeave}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          onKeyUp={handleKeyUp}
-          data-slot="button"
-          data-variant={variant}
-          data-size={size}
-          {...props}
-        >
-          {children}
-          {!disableRipple && (
-            <span className={rippleContainer} aria-hidden>
-              <AnimatePresence>
-                {ripples.map((r) => (
-                  <m.span
-                    key={r.id}
-                    className={rippleStyle}
-                    style={{
-                      width: r.size,
-                      height: r.size,
-                      left: r.x - r.size / 2,
-                      top: r.y - r.size / 2,
-                    }}
-                    initial={{ opacity: 0, transform: 'scale(0)' }}
-                    animate={{
-                      opacity: 0.4,
-                      transform: 'scale(1)',
-                      transition: { duration: 0.3 },
-                    }}
-                    exit={{ opacity: 0 }}
-                    transition={{
-                      duration: 0.55,
-                      ease: 'easeOut',
-                    }}
-                  />
-                ))}
-              </AnimatePresence>
-            </span>
-          )}
-        </m.button>
-      </LazyMotion>
-    );
-  },
-);
-
-ButtonWithRipple.displayName = 'ButtonWithRipple';
+  return (
+    <LazyMotion features={domAnimation}>
+      <m.button
+        ref={setRefs}
+        type="button"
+        className={cn(buttonRecipe({ variant, size }), className)}
+        disabled={disabled}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
+        onPointerLeave={handlePointerLeave}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
+        data-slot="button"
+        data-variant={variant}
+        data-size={size}
+        {...props}
+      >
+        {children}
+        {!disableRipple && (
+          <span className={rippleContainer} aria-hidden>
+            <AnimatePresence>
+              {ripples.map((r) => (
+                <m.span
+                  key={r.id}
+                  className={rippleStyle}
+                  style={{
+                    width: r.size,
+                    height: r.size,
+                    left: r.x - r.size / 2,
+                    top: r.y - r.size / 2,
+                  }}
+                  initial={{ opacity: 0, transform: 'scale(0)' }}
+                  animate={{
+                    opacity: 0.4,
+                    transform: 'scale(1)',
+                    transition: { duration: 0.3 },
+                  }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: 0.55,
+                    ease: 'easeOut',
+                  }}
+                />
+              ))}
+            </AnimatePresence>
+          </span>
+        )}
+      </m.button>
+    </LazyMotion>
+  );
+}
 
 /**
  * 모든 UI가 결국 여기서 시작된다
@@ -296,51 +289,45 @@ ButtonWithRipple.displayName = 'ButtonWithRipple';
  * </Button>
  * ```
  */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant = 'default',
-      size = 'md',
-      disableRipple = false,
-      asChild = false,
-      disabled,
-      children,
-      ...props
-    },
-    ref,
-  ): ReactElement => {
-    if (asChild) {
-      return (
-        <Slot
-          ref={ref}
-          className={cn(buttonRecipe({ variant, size }), className)}
-          data-slot="button"
-          data-variant={variant}
-          data-size={size}
-          {...(props as ComponentProps<'button'>)}
-        >
-          {children}
-        </Slot>
-      );
-    }
-
+export function Button({
+  className,
+  variant = 'default',
+  size = 'md',
+  disableRipple = false,
+  asChild = false,
+  disabled,
+  children,
+  ref,
+  ...props
+}: ButtonProps): ReactElement {
+  if (asChild) {
     return (
-      <ButtonWithRipple
+      <Slot
         ref={ref}
-        className={className}
-        variant={variant}
-        size={size}
-        disableRipple={disableRipple}
-        disabled={disabled}
-        {...(props as HTMLMotionProps<'button'>)}
+        className={cn(buttonRecipe({ variant, size }), className)}
+        data-slot="button"
+        data-variant={variant}
+        data-size={size}
+        {...(props as ComponentProps<'button'>)}
       >
         {children}
-      </ButtonWithRipple>
+      </Slot>
     );
-  },
-);
+  }
 
-Button.displayName = 'Button';
+  return (
+    <ButtonWithRipple
+      ref={ref}
+      className={className}
+      variant={variant}
+      size={size}
+      disableRipple={disableRipple}
+      disabled={disabled}
+      {...(props as HTMLMotionProps<'button'>)}
+    >
+      {children}
+    </ButtonWithRipple>
+  );
+}
 
 export default Button;

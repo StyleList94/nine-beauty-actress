@@ -1,4 +1,4 @@
-import { forwardRef, type ComponentProps } from 'react';
+import { type ComponentProps } from 'react';
 
 import { cn } from 'lib/core/utils';
 
@@ -32,8 +32,8 @@ export type TableProps = ComponentProps<'table'>;
  * </Table>
  * ```
  */
-export const Table = forwardRef<HTMLTableElement, TableProps>(
-  ({ className, ...props }, ref) => (
+export function Table({ className, ref, ...props }: TableProps) {
+  return (
     <div data-slot="table-container" className={styles.tableContainer}>
       <table
         ref={ref}
@@ -42,103 +42,105 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(
         {...props}
       />
     </div>
-  ),
-);
-Table.displayName = 'Table';
+  );
+}
 
 /** 테이블 헤더 영역 */
-export const TableHeader = forwardRef<
-  HTMLTableSectionElement,
-  ComponentProps<'thead'>
->(({ className, ...props }, ref) => (
-  <thead
-    ref={ref}
-    data-slot="table-header"
-    className={cn(styles.tableHeader, className)}
-    {...props}
-  />
-));
-TableHeader.displayName = 'TableHeader';
+export function TableHeader({
+  className,
+  ref,
+  ...props
+}: ComponentProps<'thead'>) {
+  return (
+    <thead
+      ref={ref}
+      data-slot="table-header"
+      className={cn(styles.tableHeader, className)}
+      {...props}
+    />
+  );
+}
 
 /** 테이블 본문 영역 */
-export const TableBody = forwardRef<
-  HTMLTableSectionElement,
-  ComponentProps<'tbody'>
->(({ className, ...props }, ref) => (
-  <tbody
-    ref={ref}
-    data-slot="table-body"
-    className={cn(styles.tableBody, className)}
-    {...props}
-  />
-));
-TableBody.displayName = 'TableBody';
+export function TableBody({
+  className,
+  ref,
+  ...props
+}: ComponentProps<'tbody'>) {
+  return (
+    <tbody
+      ref={ref}
+      data-slot="table-body"
+      className={cn(styles.tableBody, className)}
+      {...props}
+    />
+  );
+}
 
 /** 테이블 푸터 영역 (합계 등) */
-export const TableFooter = forwardRef<
-  HTMLTableSectionElement,
-  ComponentProps<'tfoot'>
->(({ className, ...props }, ref) => (
-  <tfoot
-    ref={ref}
-    data-slot="table-footer"
-    className={cn(styles.tableFooter, className)}
-    {...props}
-  />
-));
-TableFooter.displayName = 'TableFooter';
+export function TableFooter({
+  className,
+  ref,
+  ...props
+}: ComponentProps<'tfoot'>) {
+  return (
+    <tfoot
+      ref={ref}
+      data-slot="table-footer"
+      className={cn(styles.tableFooter, className)}
+      {...props}
+    />
+  );
+}
 
 /** 테이블 행 */
-export const TableRow = forwardRef<HTMLTableRowElement, ComponentProps<'tr'>>(
-  ({ className, ...props }, ref) => (
+export function TableRow({ className, ref, ...props }: ComponentProps<'tr'>) {
+  return (
     <tr
       ref={ref}
       data-slot="table-row"
       className={cn(styles.tableRow, className)}
       {...props}
     />
-  ),
-);
-TableRow.displayName = 'TableRow';
+  );
+}
 
 /** 테이블 헤더 셀 */
-export const TableHead = forwardRef<
-  HTMLTableCellElement,
-  ComponentProps<'th'>
->(({ className, ...props }, ref) => (
-  <th
-    ref={ref}
-    data-slot="table-head"
-    className={cn(styles.tableHead, className)}
-    {...props}
-  />
-));
-TableHead.displayName = 'TableHead';
+export function TableHead({ className, ref, ...props }: ComponentProps<'th'>) {
+  return (
+    <th
+      ref={ref}
+      data-slot="table-head"
+      className={cn(styles.tableHead, className)}
+      {...props}
+    />
+  );
+}
 
 /** 테이블 데이터 셀 */
-export const TableCell = forwardRef<
-  HTMLTableCellElement,
-  ComponentProps<'td'>
->(({ className, ...props }, ref) => (
-  <td
-    ref={ref}
-    data-slot="table-cell"
-    className={cn(styles.tableCell, className)}
-    {...props}
-  />
-));
-TableCell.displayName = 'TableCell';
+export function TableCell({ className, ref, ...props }: ComponentProps<'td'>) {
+  return (
+    <td
+      ref={ref}
+      data-slot="table-cell"
+      className={cn(styles.tableCell, className)}
+      {...props}
+    />
+  );
+}
 
 /** 테이블 캡션 (하단 설명) */
-export const TableCaption = forwardRef<
-  HTMLTableCaptionElement,
-  ComponentProps<'caption'>
->(({ className, ...props }, ref) => (
-  <caption
-    ref={ref}
-    data-slot="table-caption"
-    className={cn(styles.tableCaption, className)}
-    {...props}
-  />
-));
-TableCaption.displayName = 'TableCaption';
+export function TableCaption({
+  className,
+  ref,
+  ...props
+}: ComponentProps<'caption'>) {
+  return (
+    <caption
+      ref={ref}
+      data-slot="table-caption"
+      className={cn(styles.tableCaption, className)}
+      {...props}
+    />
+  );
+}

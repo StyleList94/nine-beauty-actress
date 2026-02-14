@@ -1,5 +1,4 @@
 import {
-  forwardRef,
   useEffect,
   useId,
   useMemo,
@@ -36,69 +35,66 @@ export type FormControlProps = ComponentProps<'div'> & {
   layout?: FormControlLayout;
 };
 
-const FormControlRoot = forwardRef<HTMLDivElement, FormControlProps>(
-  (
-    {
-      id: externalId,
-      disabled = false,
-      required = false,
+function FormControlRoot({
+  id: externalId,
+  disabled = false,
+  required = false,
+  validation,
+  layout = 'vertical',
+  className,
+  children,
+  ref,
+  ...props
+}: FormControlProps) {
+  const autoId = useId();
+  const id = externalId ?? autoId;
+
+  const [hasCaption, setCaptionMounted] = useState(false);
+  const [hasValidation, setValidationMounted] = useState(false);
+
+  const contextValue = useMemo(
+    () => ({
+      id,
+      disabled,
+      required,
       validation,
-      layout = 'vertical',
-      className,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    const autoId = useId();
-    const id = externalId ?? autoId;
+      layout,
+      hasCaption,
+      hasValidation,
+      setCaptionMounted,
+      setValidationMounted,
+    }),
+    [id, disabled, required, validation, layout, hasCaption, hasValidation],
+  );
 
-    const [hasCaption, setCaptionMounted] = useState(false);
-    const [hasValidation, setValidationMounted] = useState(false);
-
-    const contextValue = useMemo(
-      () => ({
-        id,
-        disabled,
-        required,
-        validation,
-        layout,
-        hasCaption,
-        hasValidation,
-        setCaptionMounted,
-        setValidationMounted,
-      }),
-      [id, disabled, required, validation, layout, hasCaption, hasValidation],
-    );
-
-    return (
-      <FormControlContext.Provider value={contextValue}>
-        <div
-          ref={ref}
-          data-slot="form-control"
-          data-disabled={disabled || undefined}
-          data-required={required || undefined}
-          data-validation={validation}
-          data-layout={layout}
-          className={cn(formControlBase({ layout }), className)}
-          {...props}
-        >
-          {children}
-        </div>
-      </FormControlContext.Provider>
-    );
-  },
-);
-
-FormControlRoot.displayName = 'FormControl';
+  return (
+    <FormControlContext value={contextValue}>
+      <div
+        ref={ref}
+        data-slot="form-control"
+        data-disabled={disabled || undefined}
+        data-required={required || undefined}
+        data-validation={validation}
+        data-layout={layout}
+        className={cn(formControlBase({ layout }), className)}
+        {...props}
+      >
+        {children}
+      </div>
+    </FormControlContext>
+  );
+}
 
 /** 네 이름을 불러줄게 */
 export type FormControlLabelProps = ComponentProps<typeof LabelPrimitive.Root>;
 
-const Label = forwardRef<
-  React.ComponentRef<typeof LabelPrimitive.Root>,
-  FormControlLabelProps
->(({ htmlFor: externalHtmlFor, className, children, ...props }, ref) => {
+function Label({
+  htmlFor: externalHtmlFor,
+  className,
+  children,
+  ref,
+  ...props
+}: FormControlLabelProps) {
   const ctx = useFormControlContext();
 
   return (
@@ -117,35 +113,29 @@ const Label = forwardRef<
       )}
     </LabelPrimitive.Root>
   );
-});
-
-Label.displayName = 'FormControl.Label';
+}
 
 /** 살짝 귀띔해줄게 */
 export type FormControlCaptionProps = ComponentProps<'p'>;
 
-const Caption = forwardRef<HTMLParagraphElement, FormControlCaptionProps>(
-  ({ className, ...props }, ref) => {
-    const ctx = useFormControlContext();
+function Caption({ className, ref, ...props }: FormControlCaptionProps) {
+  const ctx = useFormControlContext();
 
-    useEffect(() => {
-      ctx?.setCaptionMounted(true);
-      return () => ctx?.setCaptionMounted(false);
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    ctx?.setCaptionMounted(true);
+    return () => ctx?.setCaptionMounted(false);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return (
-      <p
-        ref={ref}
-        id={ctx ? `${ctx.id}-caption` : undefined}
-        data-slot="form-control-caption"
-        className={cn(formControlCaptionBase, className)}
-        {...props}
-      />
-    );
-  },
-);
-
-Caption.displayName = 'FormControl.Caption';
+  return (
+    <p
+      ref={ref}
+      id={ctx ? `${ctx.id}-caption` : undefined}
+      data-slot="form-control-caption"
+      className={cn(formControlCaptionBase, className)}
+      {...props}
+    />
+  );
+}
 
 /** 네가 맞는지 확인해볼게 */
 export type FormControlValidationVariant = 'error' | 'success';
@@ -155,10 +145,12 @@ export type FormControlValidationProps = ComponentProps<'p'> & {
   variant?: FormControlValidationVariant;
 };
 
-const Validation = forwardRef<
-  HTMLParagraphElement,
-  FormControlValidationProps
->(({ variant: externalVariant, className, ...props }, ref) => {
+function Validation({
+  variant: externalVariant,
+  className,
+  ref,
+  ...props
+}: FormControlValidationProps) {
   const ctx = useFormControlContext();
   const variant = externalVariant ?? ctx?.validation ?? 'error';
 
@@ -179,9 +171,7 @@ const Validation = forwardRef<
       {...props}
     />
   );
-});
-
-Validation.displayName = 'FormControl.Validation';
+}
 
 /**
  * 너를 제어하고 싶어

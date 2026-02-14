@@ -14,7 +14,7 @@ type UseVirtualScrollParams = {
   /** 스크롤 대상(body, container) */
   scrollTarget?: 'body' | 'container';
   /** 대상이 컨테이너일 경우, 컨테이너 요소에 대한 ref */
-  containerRef?: RefObject<HTMLElement>;
+  containerRef?: RefObject<HTMLElement | null>;
   /** 스크롤 컨테이너 높이에 대한 오프셋 */
   heightOffset?: number;
   /** 상하 보이지 않는 영역에 추가할 요소 개수 */
