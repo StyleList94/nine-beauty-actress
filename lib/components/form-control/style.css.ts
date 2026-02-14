@@ -43,7 +43,21 @@ globalStyle(`${horizontalSelector} [data-slot="form-control-validation"]`, {
   marginTop: `calc(-1 * ${spacing[4]})`,
 });
 
-export const formControlLabelBase = style({});
+export const formControlLabelBase = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: spacing[8],
+  fontSize: font.size.sm,
+  lineHeight: font.lineHeight.none,
+  fontWeight: font.weight.medium,
+  userSelect: 'none',
+  selectors: {
+    ':is([data-disabled="true"]) &': {
+      pointerEvents: 'none',
+      opacity: 0.5,
+    },
+  },
+});
 
 export const requiredIndicator = style({
   color: vars.color.error.base,

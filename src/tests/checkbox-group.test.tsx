@@ -2,23 +2,15 @@ import '@testing-library/jest-dom/vitest';
 
 import { render, screen } from '@testing-library/react';
 
-import {
-  CheckboxGroup,
-  CheckboxGroupLabel,
-  CheckboxGroupCaption,
-  CheckboxGroupValidation,
-} from 'lib/components/checkbox-group';
-import {
-  FormControl,
-  FormControlLabel,
-} from 'lib/components/form-control';
+import { CheckboxGroup } from 'lib/components/checkbox-group';
+import { FormControl } from 'lib/components/form-control';
 import { Checkbox } from 'lib/components/checkbox';
 
 describe('CheckboxGroup', () => {
   it('should render as fieldset', () => {
     render(
       <CheckboxGroup data-testid="group">
-        <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
+        <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
       </CheckboxGroup>,
     );
 
@@ -29,7 +21,7 @@ describe('CheckboxGroup', () => {
   it('should render label as legend', () => {
     render(
       <CheckboxGroup>
-        <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
+        <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
       </CheckboxGroup>,
     );
 
@@ -40,7 +32,7 @@ describe('CheckboxGroup', () => {
   it('should show required indicator on label', () => {
     render(
       <CheckboxGroup required>
-        <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
+        <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
       </CheckboxGroup>,
     );
 
@@ -55,7 +47,7 @@ describe('CheckboxGroup', () => {
   it('should set aria-required', () => {
     render(
       <CheckboxGroup required data-testid="group">
-        <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
+        <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
       </CheckboxGroup>,
     );
 
@@ -66,10 +58,10 @@ describe('CheckboxGroup', () => {
   it('should link caption via aria-describedby', () => {
     render(
       <CheckboxGroup data-testid="group">
-        <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
-        <CheckboxGroupCaption>
+        <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
+        <CheckboxGroup.Caption>
           받고 싶은 알림을 선택하세요.
-        </CheckboxGroupCaption>
+        </CheckboxGroup.Caption>
       </CheckboxGroup>,
     );
 
@@ -85,10 +77,10 @@ describe('CheckboxGroup', () => {
   it('should link validation via aria-describedby', () => {
     render(
       <CheckboxGroup validation="error" data-testid="group">
-        <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
-        <CheckboxGroupValidation>
+        <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
+        <CheckboxGroup.Validation>
           하나 이상 선택해주세요.
-        </CheckboxGroupValidation>
+        </CheckboxGroup.Validation>
       </CheckboxGroup>,
     );
 
@@ -104,10 +96,10 @@ describe('CheckboxGroup', () => {
   it('should disable child checkboxes via fieldset disabled', () => {
     render(
       <CheckboxGroup disabled>
-        <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
+        <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
         <FormControl layout="horizontal">
           <Checkbox />
-          <FormControlLabel>이메일</FormControlLabel>
+          <FormControl.Label>이메일</FormControl.Label>
         </FormControl>
       </CheckboxGroup>,
     );
@@ -119,14 +111,14 @@ describe('CheckboxGroup', () => {
   it('should compose with FormControl for individual labels', () => {
     render(
       <CheckboxGroup>
-        <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
+        <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
         <FormControl layout="horizontal">
           <Checkbox />
-          <FormControlLabel>이메일 알림</FormControlLabel>
+          <FormControl.Label>이메일 알림</FormControl.Label>
         </FormControl>
         <FormControl layout="horizontal">
           <Checkbox />
-          <FormControlLabel>SMS 알림</FormControlLabel>
+          <FormControl.Label>SMS 알림</FormControl.Label>
         </FormControl>
       </CheckboxGroup>,
     );
@@ -149,7 +141,7 @@ describe('CheckboxGroup', () => {
         validation="error"
         data-testid="group"
       >
-        <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
+        <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
       </CheckboxGroup>,
     );
 
@@ -162,7 +154,7 @@ describe('CheckboxGroup', () => {
   it('should set role and aria-live on validation', () => {
     render(
       <CheckboxGroup validation="error">
-        <CheckboxGroupValidation>에러 메시지</CheckboxGroupValidation>
+        <CheckboxGroup.Validation>에러 메시지</CheckboxGroup.Validation>
       </CheckboxGroup>,
     );
 

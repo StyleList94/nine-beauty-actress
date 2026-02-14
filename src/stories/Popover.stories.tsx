@@ -10,7 +10,7 @@ import {
 } from 'lib/components/popover';
 import { Button } from 'lib/components/button';
 import { Input } from 'lib/components/input';
-import { Label } from 'lib/components/label';
+import { FormControl } from 'lib/components/form-control';
 
 const meta: Meta<typeof Popover> = {
   component: Popover,
@@ -156,14 +156,14 @@ export const Default: StoryObj<DefaultArgs> = {
           </PopoverDescription>
         </PopoverHeader>
         <div className="flex flex-col gap-3 pt-2">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="width">너비</Label>
-            <Input id="width" defaultValue="100%" />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="height">높이</Label>
-            <Input id="height" defaultValue="auto" />
-          </div>
+          <FormControl>
+            <FormControl.Label>너비</FormControl.Label>
+            <Input defaultValue="100%" />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>높이</FormControl.Label>
+            <Input defaultValue="auto" />
+          </FormControl>
         </div>
       </PopoverContent>
     </Popover>

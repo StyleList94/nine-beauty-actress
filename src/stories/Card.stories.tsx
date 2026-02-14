@@ -12,7 +12,7 @@ import {
 } from 'lib/components/card';
 import { Button } from 'lib/components/button';
 import { Input } from 'lib/components/input';
-import { Label } from 'lib/components/label';
+import { FormControl } from 'lib/components/form-control';
 import { Switch } from 'lib/components/switch';
 
 const meta: Meta<typeof Card> = {
@@ -145,7 +145,7 @@ export const Small: Story = {
 };
 
 export const UnitConverter: Story = {
-  ...noControls('Label, Input을 활용한 폼 카드 예시'),
+  ...noControls('FormControl, Input을 활용한 폼 카드 예시'),
   render: () => (
     <Card className="w-80">
       <CardHeader>
@@ -153,14 +153,14 @@ export const UnitConverter: Story = {
         <CardDescription>4배수가 진리</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="px-input">px</Label>
-          <Input id="px-input" type="number" placeholder="16" />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="rem-input">rem</Label>
-          <Input id="rem-input" type="number" placeholder="1" />
-        </div>
+        <FormControl>
+          <FormControl.Label>px</FormControl.Label>
+          <Input type="number" placeholder="16" />
+        </FormControl>
+        <FormControl>
+          <FormControl.Label>rem</FormControl.Label>
+          <Input type="number" placeholder="1" />
+        </FormControl>
       </CardContent>
       <CardFooter>
         <Button variant="outline" className="w-full">
@@ -187,10 +187,10 @@ export const WithAction: Story = {
       <CardContent>
         <div className="flex flex-col gap-3">
           {['이메일 알림', '푸시 알림', '마케팅 수신'].map((label) => (
-            <div key={label} className="flex items-center justify-between">
-              <Label>{label}</Label>
+            <FormControl key={label} layout="horizontal">
               <Switch />
-            </div>
+              <FormControl.Label>{label}</FormControl.Label>
+            </FormControl>
           ))}
         </div>
       </CardContent>

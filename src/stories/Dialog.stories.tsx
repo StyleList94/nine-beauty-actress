@@ -11,7 +11,7 @@ import {
 } from 'lib/components/dialog';
 import { Button } from 'lib/components/button';
 import { Input } from 'lib/components/input';
-import { Label } from 'lib/components/label';
+import { FormControl } from 'lib/components/form-control';
 
 const meta: Meta<typeof Dialog> = {
   component: Dialog,
@@ -122,14 +122,14 @@ export const Default: StoryObj<DefaultArgs> = {
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-3 py-4">
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="name">이름</Label>
-            <Input id="name" defaultValue="StyleList94" />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="username">사용자명</Label>
-            <Input id="username" defaultValue="@stylelist94" />
-          </div>
+          <FormControl>
+            <FormControl.Label>이름</FormControl.Label>
+            <Input defaultValue="StyleList94" />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>사용자명</FormControl.Label>
+            <Input defaultValue="@stylelist94" />
+          </FormControl>
         </div>
         <DialogFooter showCloseButton={args._footerShowCloseButton}>
           <Button>저장</Button>

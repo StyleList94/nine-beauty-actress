@@ -2,12 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { useState } from 'react';
 
-import {
-  FormControl,
-  FormControlLabel,
-  FormControlCaption,
-  FormControlValidation,
-} from 'lib/components/form-control';
+import { FormControl } from 'lib/components/form-control';
 import { Input } from 'lib/components/input';
 import { Checkbox } from 'lib/components/checkbox';
 import { Switch } from 'lib/components/switch';
@@ -117,15 +112,15 @@ export const Default: StoryObj<DefaultArgs> = {
         validation={args._validation === 'none' ? undefined : args._validation}
         layout={args._layout}
       >
-        <FormControlLabel>이메일</FormControlLabel>
+        <FormControl.Label>이메일</FormControl.Label>
         <Input type="email" placeholder="you@example.com" />
         {args._showCaption && (
-          <FormControlCaption>이메일은 공개되지 않습니다.</FormControlCaption>
+          <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
         )}
         {args._showValidation && (
-          <FormControlValidation>
+          <FormControl.Validation>
             올바른 이메일을 입력하세요.
-          </FormControlValidation>
+          </FormControl.Validation>
         )}
       </FormControl>
     </div>
@@ -156,23 +151,23 @@ export const WithValidation: StoryObj = {
     return (
       <div className="w-80">
         <FormControl required validation={validation}>
-          <FormControlLabel>이메일</FormControlLabel>
+          <FormControl.Label>이메일</FormControl.Label>
           <Input
             type="email"
             placeholder="you@example.com"
             value={email}
             onChange={handleChange}
           />
-          <FormControlCaption>이메일은 공개되지 않습니다.</FormControlCaption>
+          <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
           {validation === 'error' && (
-            <FormControlValidation>
+            <FormControl.Validation>
               올바른 이메일을 입력하세요.
-            </FormControlValidation>
+            </FormControl.Validation>
           )}
           {validation === 'success' && (
-            <FormControlValidation variant="success">
+            <FormControl.Validation variant="success">
               올바른 이메일입니다.
-            </FormControlValidation>
+            </FormControl.Validation>
           )}
         </FormControl>
       </div>
@@ -192,10 +187,10 @@ export const WithCheckbox: StoryObj = {
             checked={checked}
             onCheckedChange={(v) => setChecked(v === true)}
           />
-          <FormControlLabel>이용약관에 동의합니다</FormControlLabel>
-          <FormControlCaption>
+          <FormControl.Label>이용약관에 동의합니다</FormControl.Label>
+          <FormControl.Caption>
             서비스 이용을 위해 필수 동의가 필요합니다.
-          </FormControlCaption>
+          </FormControl.Caption>
         </FormControl>
       </div>
     );
@@ -211,8 +206,8 @@ export const WithSwitch: StoryObj = {
       <div className="w-80">
         <FormControl layout="horizontal">
           <Switch checked={checked} onCheckedChange={setChecked} />
-          <FormControlLabel>알림 수신</FormControlLabel>
-          <FormControlCaption>마케팅 알림을 수신합니다.</FormControlCaption>
+          <FormControl.Label>알림 수신</FormControl.Label>
+          <FormControl.Caption>마케팅 알림을 수신합니다.</FormControl.Caption>
         </FormControl>
       </div>
     );
@@ -227,9 +222,9 @@ export const WithSlider: StoryObj = {
     return (
       <div className="w-80">
         <FormControl>
-          <FormControlLabel>볼륨</FormControlLabel>
+          <FormControl.Label>볼륨</FormControl.Label>
           <Slider value={value} onValueChange={setValue} max={100} step={1} />
-          <FormControlCaption>현재 볼륨: {value[0]}%</FormControlCaption>
+          <FormControl.Caption>현재 볼륨: {value[0]}%</FormControl.Caption>
         </FormControl>
       </div>
     );
@@ -241,13 +236,13 @@ export const Disabled: StoryObj = {
   render: () => (
     <div className="flex flex-col gap-6 w-80">
       <FormControl disabled>
-        <FormControlLabel>이메일</FormControlLabel>
+        <FormControl.Label>이메일</FormControl.Label>
         <Input type="email" placeholder="you@example.com" />
-        <FormControlCaption>이메일은 공개되지 않습니다.</FormControlCaption>
+        <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
       </FormControl>
       <FormControl layout="horizontal" disabled>
         <Checkbox />
-        <FormControlLabel>이용약관에 동의합니다</FormControlLabel>
+        <FormControl.Label>이용약관에 동의합니다</FormControl.Label>
       </FormControl>
     </div>
   ),
@@ -263,7 +258,7 @@ export const Composition: StoryObj = {
     return (
       <div className="flex flex-col gap-6 w-80">
         <FormControl required>
-          <FormControlLabel>이름</FormControlLabel>
+          <FormControl.Label>이름</FormControl.Label>
           <Input
             placeholder="홍길동"
             value={name}
@@ -271,21 +266,21 @@ export const Composition: StoryObj = {
           />
         </FormControl>
         <FormControl required>
-          <FormControlLabel>이메일</FormControlLabel>
+          <FormControl.Label>이메일</FormControl.Label>
           <Input
             type="email"
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <FormControlCaption>이메일은 공개되지 않습니다.</FormControlCaption>
+          <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
         </FormControl>
         <FormControl layout="horizontal" required>
           <Checkbox
             checked={agreed}
             onCheckedChange={(v) => setAgreed(v === true)}
           />
-          <FormControlLabel>이용약관에 동의합니다</FormControlLabel>
+          <FormControl.Label>이용약관에 동의합니다</FormControl.Label>
         </FormControl>
       </div>
     );

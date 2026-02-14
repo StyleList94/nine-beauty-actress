@@ -2,12 +2,7 @@ import '@testing-library/jest-dom/vitest';
 
 import { render, screen } from '@testing-library/react';
 
-import {
-  FormControl,
-  FormControlLabel,
-  FormControlCaption,
-  FormControlValidation,
-} from 'lib/components/form-control';
+import { FormControl } from 'lib/components/form-control';
 import { Input } from 'lib/components/input';
 import { Checkbox } from 'lib/components/checkbox';
 
@@ -15,7 +10,7 @@ describe('FormControl', () => {
   it('should render children', () => {
     render(
       <FormControl>
-        <FormControlLabel>이메일</FormControlLabel>
+        <FormControl.Label>이메일</FormControl.Label>
         <Input placeholder="you@example.com" />
       </FormControl>,
     );
@@ -27,7 +22,7 @@ describe('FormControl', () => {
   it('should auto-link label to input via id', () => {
     render(
       <FormControl>
-        <FormControlLabel>이름</FormControlLabel>
+        <FormControl.Label>이름</FormControl.Label>
         <Input />
       </FormControl>,
     );
@@ -42,9 +37,9 @@ describe('FormControl', () => {
   it('should link caption via aria-describedby', () => {
     render(
       <FormControl>
-        <FormControlLabel>이메일</FormControlLabel>
+        <FormControl.Label>이메일</FormControl.Label>
         <Input />
-        <FormControlCaption>이메일은 공개되지 않습니다.</FormControlCaption>
+        <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
       </FormControl>,
     );
 
@@ -60,11 +55,11 @@ describe('FormControl', () => {
   it('should link validation via aria-describedby', () => {
     render(
       <FormControl validation="error">
-        <FormControlLabel>이메일</FormControlLabel>
+        <FormControl.Label>이메일</FormControl.Label>
         <Input />
-        <FormControlValidation>
+        <FormControl.Validation>
           올바른 이메일을 입력하세요.
-        </FormControlValidation>
+        </FormControl.Validation>
       </FormControl>,
     );
 
@@ -102,7 +97,7 @@ describe('FormControl', () => {
   it('should propagate disabled state', () => {
     render(
       <FormControl disabled>
-        <FormControlLabel>이메일</FormControlLabel>
+        <FormControl.Label>이메일</FormControl.Label>
         <Input />
       </FormControl>,
     );
@@ -114,7 +109,7 @@ describe('FormControl', () => {
   it('should propagate required state', () => {
     render(
       <FormControl required>
-        <FormControlLabel>이메일</FormControlLabel>
+        <FormControl.Label>이메일</FormControl.Label>
         <Input />
       </FormControl>,
     );
@@ -126,7 +121,7 @@ describe('FormControl', () => {
   it('should show required indicator on label', () => {
     render(
       <FormControl required>
-        <FormControlLabel>이메일</FormControlLabel>
+        <FormControl.Label>이메일</FormControl.Label>
         <Input />
       </FormControl>,
     );
@@ -142,7 +137,7 @@ describe('FormControl', () => {
   it('should allow external props to override context', () => {
     render(
       <FormControl required>
-        <FormControlLabel htmlFor="custom-id">이메일</FormControlLabel>
+        <FormControl.Label htmlFor="custom-id">이메일</FormControl.Label>
         <Input id="custom-id" disabled={false} required={false} />
       </FormControl>,
     );
@@ -168,7 +163,7 @@ describe('FormControl', () => {
     render(
       <FormControl layout="horizontal">
         <Checkbox />
-        <FormControlLabel>동의합니다</FormControlLabel>
+        <FormControl.Label>동의합니다</FormControl.Label>
       </FormControl>,
     );
 
@@ -201,7 +196,7 @@ describe('FormControl', () => {
   it('should set role and aria-live on validation', () => {
     render(
       <FormControl validation="error">
-        <FormControlValidation>에러 메시지</FormControlValidation>
+        <FormControl.Validation>에러 메시지</FormControl.Validation>
       </FormControl>,
     );
 

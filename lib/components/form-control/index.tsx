@@ -7,8 +7,9 @@ import {
   type ComponentProps,
 } from 'react';
 
+import * as LabelPrimitive from '@radix-ui/react-label';
+
 import { cn } from 'lib/core/utils';
-import { Label, type LabelProps } from 'lib/components/label';
 
 import {
   FormControlContext,
@@ -24,23 +25,6 @@ import {
   requiredIndicator,
 } from './style.css';
 
-/**
- * 너를 제어하고 싶어
- *
- * @remarks
- * - Label, Input, Caption, Validation 간 ARIA 속성 자동 연결
- * - layout prop으로 vertical/horizontal 레이아웃 전환
- * - required/disabled 상태 하위 컴포넌트에 자동 전파
- *
- * @example
- * ```tsx
- * <FormControl required>
- *   <FormControlLabel>이메일</FormControlLabel>
- *   <Input type="email" />
- *   <FormControlCaption>이메일은 공개되지 않습니다.</FormControlCaption>
- * </FormControl>
- * ```
- */
 export type FormControlProps = ComponentProps<'div'> & {
   /** 비활성화 상태 */
   disabled?: boolean;
@@ -52,7 +36,7 @@ export type FormControlProps = ComponentProps<'div'> & {
   layout?: FormControlLayout;
 };
 
-export const FormControl = forwardRef<HTMLDivElement, FormControlProps>(
+const FormControlRoot = forwardRef<HTMLDivElement, FormControlProps>(
   (
     {
       id: externalId,
@@ -106,19 +90,19 @@ export const FormControl = forwardRef<HTMLDivElement, FormControlProps>(
   },
 );
 
-FormControl.displayName = 'FormControl';
+FormControlRoot.displayName = 'FormControl';
 
 /** 네 이름을 불러줄게 */
-export type FormControlLabelProps = LabelProps;
+export type FormControlLabelProps = ComponentProps<typeof LabelPrimitive.Root>;
 
-export const FormControlLabel = forwardRef<
-  React.ComponentRef<typeof Label>,
+const Label = forwardRef<
+  React.ComponentRef<typeof LabelPrimitive.Root>,
   FormControlLabelProps
 >(({ htmlFor: externalHtmlFor, className, children, ...props }, ref) => {
   const ctx = useFormControlContext();
 
   return (
-    <Label
+    <LabelPrimitive.Root
       ref={ref}
       data-slot="form-control-label"
       htmlFor={externalHtmlFor ?? ctx?.id}
@@ -131,38 +115,37 @@ export const FormControlLabel = forwardRef<
           *
         </span>
       )}
-    </Label>
+    </LabelPrimitive.Root>
   );
 });
 
-FormControlLabel.displayName = 'FormControlLabel';
+Label.displayName = 'FormControl.Label';
 
 /** 살짝 귀띔해줄게 */
 export type FormControlCaptionProps = ComponentProps<'p'>;
 
-export const FormControlCaption = forwardRef<
-  HTMLParagraphElement,
-  FormControlCaptionProps
->(({ className, ...props }, ref) => {
-  const ctx = useFormControlContext();
+const Caption = forwardRef<HTMLParagraphElement, FormControlCaptionProps>(
+  ({ className, ...props }, ref) => {
+    const ctx = useFormControlContext();
 
-  useEffect(() => {
-    ctx?.setCaptionMounted(true);
-    return () => ctx?.setCaptionMounted(false);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => {
+      ctx?.setCaptionMounted(true);
+      return () => ctx?.setCaptionMounted(false);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return (
-    <p
-      ref={ref}
-      id={ctx ? `${ctx.id}-caption` : undefined}
-      data-slot="form-control-caption"
-      className={cn(formControlCaptionBase, className)}
-      {...props}
-    />
-  );
-});
+    return (
+      <p
+        ref={ref}
+        id={ctx ? `${ctx.id}-caption` : undefined}
+        data-slot="form-control-caption"
+        className={cn(formControlCaptionBase, className)}
+        {...props}
+      />
+    );
+  },
+);
 
-FormControlCaption.displayName = 'FormControlCaption';
+Caption.displayName = 'FormControl.Caption';
 
 /** 네가 맞는지 확인해볼게 */
 export type FormControlValidationVariant = 'error' | 'success';
@@ -172,7 +155,7 @@ export type FormControlValidationProps = ComponentProps<'p'> & {
   variant?: FormControlValidationVariant;
 };
 
-export const FormControlValidation = forwardRef<
+const Validation = forwardRef<
   HTMLParagraphElement,
   FormControlValidationProps
 >(({ variant: externalVariant, className, ...props }, ref) => {
@@ -198,4 +181,27 @@ export const FormControlValidation = forwardRef<
   );
 });
 
-FormControlValidation.displayName = 'FormControlValidation';
+Validation.displayName = 'FormControl.Validation';
+
+/**
+ * 너를 제어하고 싶어
+ *
+ * @remarks
+ * - Label, Input, Caption, Validation 간 ARIA 속성 자동 연결
+ * - layout prop으로 vertical/horizontal 레이아웃 전환
+ * - required/disabled 상태 하위 컴포넌트에 자동 전파
+ *
+ * @example
+ * ```tsx
+ * <FormControl required>
+ *   <FormControl.Label>이메일</FormControl.Label>
+ *   <Input type="email" />
+ *   <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
+ * </FormControl>
+ * ```
+ */
+export const FormControl = Object.assign(FormControlRoot, {
+  Label,
+  Caption,
+  Validation,
+});

@@ -14,7 +14,6 @@ import {
   type ToggleGroupSpacing,
 } from './components/toggle-group';
 import { Separator, type SeparatorProps } from './components/separator';
-import { Label, type LabelProps } from './components/label';
 import { Input, type InputProps } from './components/input';
 import { Code, type CodeProps } from './components/code';
 import {
@@ -125,9 +124,6 @@ import {
 import { Combobox, type ComboboxProps, type ComboboxOption } from './components/combobox';
 import {
   FormControl,
-  FormControlLabel,
-  FormControlCaption,
-  FormControlValidation,
   type FormControlProps,
   type FormControlLabelProps,
   type FormControlCaptionProps,
@@ -142,9 +138,6 @@ import {
 } from './components/form-control/context';
 import {
   CheckboxGroup,
-  CheckboxGroupLabel,
-  CheckboxGroupCaption,
-  CheckboxGroupValidation,
   type CheckboxGroupProps,
   type CheckboxGroupLabelProps,
   type CheckboxGroupCaptionProps,
@@ -185,7 +178,6 @@ export {
   ToggleGroup,
   ToggleGroupItem,
   Separator,
-  Label,
   Input,
   Code,
   Card,
@@ -242,15 +234,9 @@ export {
   CommandSeparator,
   Combobox,
   FormControl,
-  FormControlLabel,
-  FormControlCaption,
-  FormControlValidation,
   useFormControlContext,
   useFormControlInputProps,
   CheckboxGroup,
-  CheckboxGroupLabel,
-  CheckboxGroupCaption,
-  CheckboxGroupValidation,
   Toast,
   ToastTitle,
   ToastDescription,
@@ -281,7 +267,6 @@ export type {
   ToggleGroupSize,
   ToggleGroupSpacing,
   SeparatorProps,
-  LabelProps,
   InputProps,
   CodeProps,
   CardProps,

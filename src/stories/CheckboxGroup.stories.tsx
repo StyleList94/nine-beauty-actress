@@ -2,13 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { useState } from 'react';
 
-import {
-  CheckboxGroup,
-  CheckboxGroupLabel,
-  CheckboxGroupCaption,
-  CheckboxGroupValidation,
-} from 'lib/components/checkbox-group';
-import { FormControl, FormControlLabel } from 'lib/components/form-control';
+import { CheckboxGroup } from 'lib/components/checkbox-group';
+import { FormControl } from 'lib/components/form-control';
 import { Checkbox } from 'lib/components/checkbox';
 
 type DefaultArgs = {
@@ -97,40 +92,40 @@ export const Default: StoryObj<DefaultArgs> = {
             args._validation === 'none' ? undefined : args._validation
           }
         >
-          <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
-          <CheckboxGroupCaption>
+          <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
+          <CheckboxGroup.Caption>
             받고 싶은 알림을 선택하세요.
-          </CheckboxGroupCaption>
+          </CheckboxGroup.Caption>
           <FormControl layout="horizontal">
             <Checkbox
               checked={values.email}
               onCheckedChange={toggle('email')}
             />
-            <FormControlLabel>이메일 알림</FormControlLabel>
+            <FormControl.Label>이메일 알림</FormControl.Label>
           </FormControl>
           <FormControl layout="horizontal">
             <Checkbox
               checked={values.sms}
               onCheckedChange={toggle('sms')}
             />
-            <FormControlLabel>SMS 알림</FormControlLabel>
+            <FormControl.Label>SMS 알림</FormControl.Label>
           </FormControl>
           <FormControl layout="horizontal">
             <Checkbox
               checked={values.push}
               onCheckedChange={toggle('push')}
             />
-            <FormControlLabel>푸시 알림</FormControlLabel>
+            <FormControl.Label>푸시 알림</FormControl.Label>
           </FormControl>
           {args._validation === 'error' && (
-            <CheckboxGroupValidation>
+            <CheckboxGroup.Validation>
               하나 이상 선택해주세요.
-            </CheckboxGroupValidation>
+            </CheckboxGroup.Validation>
           )}
           {args._validation === 'success' && (
-            <CheckboxGroupValidation variant="success">
+            <CheckboxGroup.Validation variant="success">
               알림 설정이 완료되었습니다.
-            </CheckboxGroupValidation>
+            </CheckboxGroup.Validation>
           )}
         </CheckboxGroup>
       </div>
@@ -159,25 +154,25 @@ export const WithValidation: StoryObj = {
           required
           validation={hasSelection ? undefined : 'error'}
         >
-          <CheckboxGroupLabel>필수 동의 항목</CheckboxGroupLabel>
+          <CheckboxGroup.Label>필수 동의 항목</CheckboxGroup.Label>
           <FormControl layout="horizontal">
             <Checkbox
               checked={values.terms}
               onCheckedChange={toggle('terms')}
             />
-            <FormControlLabel>이용약관 동의</FormControlLabel>
+            <FormControl.Label>이용약관 동의</FormControl.Label>
           </FormControl>
           <FormControl layout="horizontal">
             <Checkbox
               checked={values.privacy}
               onCheckedChange={toggle('privacy')}
             />
-            <FormControlLabel>개인정보 처리방침 동의</FormControlLabel>
+            <FormControl.Label>개인정보 처리방침 동의</FormControl.Label>
           </FormControl>
           {!hasSelection && (
-            <CheckboxGroupValidation>
+            <CheckboxGroup.Validation>
               하나 이상 동의해주세요.
-            </CheckboxGroupValidation>
+            </CheckboxGroup.Validation>
           )}
         </CheckboxGroup>
       </div>
@@ -192,14 +187,14 @@ export const Disabled: StoryObj = {
   render: () => (
     <div className="w-80">
       <CheckboxGroup disabled>
-        <CheckboxGroupLabel>알림 설정</CheckboxGroupLabel>
+        <CheckboxGroup.Label>알림 설정</CheckboxGroup.Label>
         <FormControl layout="horizontal">
           <Checkbox checked />
-          <FormControlLabel>이메일 알림</FormControlLabel>
+          <FormControl.Label>이메일 알림</FormControl.Label>
         </FormControl>
         <FormControl layout="horizontal">
           <Checkbox />
-          <FormControlLabel>SMS 알림</FormControlLabel>
+          <FormControl.Label>SMS 알림</FormControl.Label>
         </FormControl>
       </CheckboxGroup>
     </div>
