@@ -9,9 +9,12 @@ export type ToastData = {
   variant?: ToastVariant;
   action?: ReactNode;
   duration?: number;
+  open: boolean;
 };
 
-type ToastInput = Omit<ToastData, 'id'>;
+type ToastInput = Omit<ToastData, 'id' | 'open'>;
+
+const ANIMATION_DURATION = 300;
 
 let toasts: ToastData[] = [];
 const listeners = new Set<() => void>();
@@ -26,20 +29,24 @@ function generateId(): string {
   return `toast-${counter}-${Date.now()}`;
 }
 
-export function dismiss(id: string): void {
+function remove(id: string): void {
   toasts = toasts.filter((t) => t.id !== id);
   notify();
 }
 
-export function toast(input: ToastInput): string {
-  const id = generateId();
-  toasts = [...toasts, { ...input, id }];
+export function dismiss(id: string): void {
+  toasts = toasts.map((t) =>
+    t.id === id ? { ...t, open: false } : t,
+  );
   notify();
 
-  const duration = input.duration ?? 5000;
-  if (duration > 0) {
-    setTimeout(() => dismiss(id), duration);
-  }
+  setTimeout(() => remove(id), ANIMATION_DURATION);
+}
+
+export function toast(input: ToastInput): string {
+  const id = generateId();
+  toasts = [...toasts, { ...input, id, open: true }];
+  notify();
 
   return id;
 }
@@ -47,8 +54,13 @@ export function toast(input: ToastInput): string {
 toast.dismiss = dismiss;
 
 export function dismissAll(): void {
-  toasts = [];
+  toasts = toasts.map((t) => ({ ...t, open: false }));
   notify();
+
+  setTimeout(() => {
+    toasts = [];
+    notify();
+  }, ANIMATION_DURATION);
 }
 
 function getSnapshot(): ToastData[] {

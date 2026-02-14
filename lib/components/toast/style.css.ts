@@ -1,4 +1,4 @@
-import { style, styleVariants, keyframes } from '@vanilla-extract/css';
+import { style, styleVariants, globalStyle, keyframes } from '@vanilla-extract/css';
 
 import { vars } from 'lib/core/styles/theme.css';
 import { spacing, radius, font, shadows, motion } from 'lib/core/styles/tokens';
@@ -8,9 +8,9 @@ const slideIn = keyframes({
   to: { transform: 'translateX(0)' },
 });
 
-const slideOut = keyframes({
-  from: { transform: 'translateX(0)', opacity: '1' },
-  to: { transform: 'translateX(100%)', opacity: '0' },
+const fadeOut = keyframes({
+  from: { opacity: '1' },
+  to: { opacity: '0' },
 });
 
 export const toastViewport = style({
@@ -36,6 +36,7 @@ export const toastViewport = style({
 });
 
 export const toastBase = style({
+  pointerEvents: 'auto',
   position: 'relative',
   display: 'flex',
   width: '100%',
@@ -48,11 +49,23 @@ export const toastBase = style({
   padding: spacing[16],
   paddingRight: spacing[32],
   boxShadow: shadows.lg,
-  transition: `all ${motion.duration.normal} ${motion.easing.ease}`,
+  transition: `background ${motion.duration.normal} ${motion.easing.ease}, opacity ${motion.duration.normal} ${motion.easing.ease}`,
   animation: `${slideIn} ${motion.duration.slow} ${motion.easing.easeOut}`,
   selectors: {
     '&[data-state="closed"]': {
-      animation: `${slideOut} ${motion.duration.normal} ${motion.easing.ease}`,
+      animation: `${fadeOut} ${motion.duration.normal} ${motion.easing.ease} forwards`,
+    },
+    '&[data-swipe="cancel"]': {
+      transform: 'translateX(0)',
+      transition: `transform ${motion.duration.fast} ${motion.easing.ease}`,
+    },
+    '&[data-swipe="move"]': {
+      transform: 'translateX(var(--radix-toast-swipe-move-x))',
+      transition: 'none',
+    },
+    '&[data-swipe="end"]': {
+      transform: 'translateX(100%)',
+      transition: `transform ${motion.duration.fast} ${motion.easing.ease}`,
     },
   },
 });
@@ -72,6 +85,10 @@ export const toastVariant = styleVariants({
 export const toastTitle = style({
   fontSize: font.size.sm,
   fontWeight: font.weight.semibold,
+});
+
+globalStyle(`${toastTitle} + div`, {
+  fontSize: font.size.xs,
 });
 
 export const toastDescription = style({
@@ -101,13 +118,13 @@ export const toastCloseButton = style({
 
 export const toastAction = style({
   display: 'inline-flex',
+  height: spacing[32],
   alignItems: 'center',
   justifyContent: 'center',
   flexShrink: 0,
   borderRadius: radius.md,
   border: `1px solid ${vars.color.border}`,
   paddingInline: spacing[12],
-  paddingBlock: spacing[4],
   fontSize: font.size.sm,
   fontWeight: font.weight.medium,
   background: 'transparent',
@@ -120,6 +137,10 @@ export const toastAction = style({
     },
     '&:focus-visible': {
       boxShadow: `0 0 0 2px ${vars.color.ring}`,
+    },
+    '&:disabled': {
+      pointerEvents: 'none',
+      opacity: 0.5,
     },
   },
 });
