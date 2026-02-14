@@ -39,7 +39,7 @@ lib/
 │           ├── radius.css.ts  # radius (border-radius)
 │           ├── shadows.css.ts # shadows (box-shadow)
 │           └── motion.css.ts  # motion (duration, easing)
-├── components/                # UI components (Button, Card, Input, Label, Switch, Dialog, Tooltip, etc.)
+├── components/                # UI components (Button, Card, TextInput, Switch, Dialog, Tooltip, etc.)
 └── hooks/                     # useDebounce, useMounted, useVirtualScroll
 ```
 
@@ -159,7 +159,7 @@ React ≥18, React-DOM ≥18, Motion ≥12 (not bundled)
 - Use `noControls` helper function for showcase stories: `const noControls = (story: string) => ({ parameters: { controls: { disable: true }, docs: { description: { story } } } })`
 - Use `parameters.docs.description.component` on meta for component-level description (matches TSDoc summary)
 - For composition components (Card), use custom `StoryObj<CustomArgs>` type with `_prefixed` internal arg keys, `name` for display, and `table.category` for sub-component grouping
-- Use library's own components in stories (Label, Input, Switch, etc.) instead of raw HTML elements
+- Use library's own components in stories (TextInput, Switch, etc.) instead of raw HTML elements
 
 ### TSDoc Convention
 

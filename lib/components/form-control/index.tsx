@@ -187,7 +187,7 @@ Validation.displayName = 'FormControl.Validation';
  * 너를 제어하고 싶어
  *
  * @remarks
- * - Label, Input, Caption, Validation 간 ARIA 속성 자동 연결
+ * - Label, TextInput, Caption, Validation 간 ARIA 속성 자동 연결
  * - layout prop으로 vertical/horizontal 레이아웃 전환
  * - required/disabled 상태 하위 컴포넌트에 자동 전파
  *
@@ -195,7 +195,7 @@ Validation.displayName = 'FormControl.Validation';
  * ```tsx
  * <FormControl required>
  *   <FormControl.Label>이메일</FormControl.Label>
- *   <Input type="email" />
+ *   <TextInput type="email" />
  *   <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
  * </FormControl>
  * ```
