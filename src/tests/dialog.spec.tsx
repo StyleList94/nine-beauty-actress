@@ -34,7 +34,7 @@ describe('Rendering and Props', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open Dialog</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -49,7 +49,7 @@ describe('Rendering and Props', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open Dialog</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Hidden Title</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -67,7 +67,7 @@ describe('Popup Open/Close', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Dialog Title</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -84,7 +84,7 @@ describe('Popup Open/Close', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Escape Dialog</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -104,7 +104,7 @@ describe('Popup Open/Close', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Close Button Dialog</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -126,7 +126,7 @@ describe('Popup Open/Close', () => {
       <CenteredWrapper>
         <Dialog onOpenChange={handleOpenChange}>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Callback Dialog</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -143,7 +143,7 @@ describe('Props', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Default Close</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -159,7 +159,7 @@ describe('Props', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent showCloseButton={false}>
+          <DialogContent showCloseButton={false} aria-describedby={undefined}>
             <DialogTitle>No Close</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -180,7 +180,7 @@ describe('Props', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent showCloseButton={false}>
+          <DialogContent showCloseButton={false} aria-describedby={undefined}>
             <DialogTitle>Footer Default</DialogTitle>
             <DialogFooter>
               <Button>Save</Button>
@@ -202,7 +202,7 @@ describe('Props', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent showCloseButton={false}>
+          <DialogContent showCloseButton={false} aria-describedby={undefined}>
             <DialogTitle>Footer Close</DialogTitle>
             <DialogFooter showCloseButton>
               <Button>Save</Button>
@@ -244,7 +244,7 @@ describe('Sub-components', () => {
           <DialogTrigger asChild>
             <Button variant="outline">Open</Button>
           </DialogTrigger>
-          <DialogContent showCloseButton={false}>
+          <DialogContent showCloseButton={false} aria-describedby={undefined}>
             <DialogTitle>Close Test</DialogTitle>
             <DialogClose asChild>
               <Button variant="outline">Close me</Button>
@@ -267,7 +267,7 @@ describe('Sub-components', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Slot Dialog</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -287,7 +287,7 @@ describe('Accessibility', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Focus Trap</DialogTitle>
             <TextInput placeholder="First input" />
             <Button>Action</Button>
@@ -312,7 +312,7 @@ describe('Accessibility', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Role Dialog</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -328,7 +328,7 @@ describe('Accessibility', () => {
       <CenteredWrapper>
         <Dialog>
           <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Overlay Dialog</DialogTitle>
           </DialogContent>
         </Dialog>
