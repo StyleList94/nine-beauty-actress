@@ -142,7 +142,7 @@ Vite builds to `dist/` with ESM-only output:
 
 ### Peer Dependencies
 
-React ≥18, React-DOM ≥18, Motion ≥12 (not bundled)
+React ≥19.2, React-DOM ≥19.2, Motion ≥12 (not bundled)
 
 ## Development Workflow
 
