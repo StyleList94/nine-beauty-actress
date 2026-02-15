@@ -7,8 +7,35 @@ const meta: Meta<typeof MainContainer> = {
   component: MainContainer,
   tags: ['autodocs'],
   argTypes: {
+    children: {
+      control: false,
+      description: '본문 컨텐츠를 렌더링합니다',
+      table: {
+        type: { summary: 'ReactNode' },
+      },
+    },
     className: {
-      control: { type: 'text' },
+      control: 'text',
+      description: 'main 요소 추가 클래스를 지정합니다',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    backdropClassName: {
+      control: 'text',
+      description: '배경 요소 추가 클래스를 지정합니다',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+  },
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        component:
+          '페이지 레이아웃의 본문 컨텐츠 영역 컨테이너입니다.',
+      },
     },
   },
 };
@@ -17,7 +44,7 @@ export default meta;
 
 type Story = StoryObj<typeof MainContainer>;
 
-export const Content: Story = {
+export const Default: Story = {
   args: {
     children: (
       <section>

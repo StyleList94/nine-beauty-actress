@@ -18,7 +18,7 @@ import * as useDebounceStories from './useDebounce.stories';
 
 ## Example
 
-<Story of={useDebounceStories.Example} />
+<Story of={useDebounceStories.Default} />
 
 ```tsx
 const InputSomething = ({ delay }: { delay: number }) => {
@@ -27,11 +27,9 @@ const InputSomething = ({ delay }: { delay: number }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <input
-        type="text"
+      <TextInput
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        className="border-2 border-zinc-200 dark:border-zinc-800 outline-0 rounded-sm w-48"
       />
       <p>Result: {debouncedValue}</p>
     </div>

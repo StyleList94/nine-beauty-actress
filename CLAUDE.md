@@ -22,7 +22,7 @@ pnpm build-storybook  # Build static Storybook
 
 ### Library Structure (`lib/`)
 
-```
+```text
 lib/
 ├── main.ts                    # Main entry - exports all components/hooks
 ├── core/
@@ -39,7 +39,7 @@ lib/
 │           ├── radius.css.ts  # radius (border-radius)
 │           ├── shadows.css.ts # shadows (box-shadow)
 │           └── motion.css.ts  # motion (duration, easing)
-├── components/                # 7 components (Button, Switch, ToggleGroup, FileUploader, Header, Footer, MainContainer)
+├── components/                # UI components (Button, Card, TextInput, Switch, Dialog, Tooltip, etc.)
 └── hooks/                     # useDebounce, useMounted, useVirtualScroll
 ```
 
@@ -47,7 +47,7 @@ lib/
 
 Each component follows:
 
-```
+```text
 component-name/
 ├── index.tsx        # Component + types (uses forwardRef)
 └── style.css.ts     # Vanilla Extract styles
@@ -56,6 +56,7 @@ component-name/
 ### Styling System
 
 - **Vanilla Extract**: Type-safe CSS-in-TS with zero runtime
+- **@vanilla-extract/recipes**: Used for component variant management (CVA equivalent)
 - **OKLCH color space**: Perceptually uniform colors
 - **Dark mode**: Media queries + `.dark` class + `[data-theme="dark"]` attribute
 - **Data attributes**: `data-slot`, `data-variant`, `data-size` for styling hooks
@@ -133,10 +134,10 @@ background: `oklch(from ${palette.green[500]} l c h / 0.5)`; // Wrong!
 
 ### Build Outputs
 
-Vite builds to `dist/` with dual ES/CJS exports:
+Vite builds to `dist/` with ESM-only output:
 
-- `main.es.js` / `main.cjs.js` - Components and hooks
-- `styles.es.js` / `styles.cjs.js` - Style exports only
+- `main.es.js` - Components and hooks
+- `styles.es.js` - Style exports only
 - `style.css` - All CSS bundled
 
 ### Peer Dependencies
@@ -149,6 +150,22 @@ React ≥18, React-DOM ≥18, Motion ≥12 (not bundled)
 2. **Stories**: Add to `src/stories/*.stories.tsx` with Meta + argTypes
 3. **Tests**: Add to `src/tests/*.test.tsx` using React Testing Library role queries
 4. **Export**: Add to `lib/main.ts`
+
+### Storybook Conventions
+
+- Use **Tailwind classes** for story layout (not inline styles) — Storybook has TailwindCSS configured
+- List components **vertically** (`flex flex-col`) by default; use **horizontal** (`flex flex-wrap`) only for size comparisons
+- Group variants together in a single story (e.g., all button variants in one `Variants` story)
+- Use `noControls` helper function for showcase stories: `const noControls = (story: string) => ({ parameters: { controls: { disable: true }, docs: { description: { story } } } })`
+- Use `parameters.docs.description.component` on meta for component-level description (matches TSDoc summary)
+- For composition components (Card), use custom `StoryObj<CustomArgs>` type with `_prefixed` internal arg keys, `name` for display, and `table.category` for sub-component grouping
+- Use library's own components in stories (TextInput, Switch, etc.) instead of raw HTML elements
+
+### TSDoc Convention
+
+- Main component: one-line summary + `@remarks` (bullet points) + `@example` (tsx code block)
+- Sub-components: single-line `/** description */`
+- Storybook `docs.description.component` should match the TSDoc summary line
 
 ## Code Quality
 

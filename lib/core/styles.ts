@@ -27,4 +27,4 @@ export {
   backdrop,
   mainContainer,
 } from '../components/main-container/style.css';
-export { default as button } from '../components/button/style.css';
+export { button } from '../components/button/style.css';

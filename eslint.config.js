@@ -10,7 +10,7 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat';
 
 export default defineConfig(
   {
-    ignores: ['dist', '!.storybook', '*.config.[jt]s', '*.config.m[jt]s'],
+    ignores: ['dist', 'storybook-static', '!.storybook', '*.config.[jt]s', '*.config.m[jt]s'],
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
@@ -44,7 +44,7 @@ export default defineConfig(
     },
   },
   {
-    files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+    files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(test).[jt]s?(x)'],
     ...testingLibrary.configs['flat/react'],
   },
   {

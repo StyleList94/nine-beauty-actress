@@ -7,16 +7,45 @@ import { cn } from 'lib/core/utils';
 import { Header } from 'lib/components/header';
 import { Switch } from 'lib/components/switch';
 
+const noControls = (story: string) => ({
+  parameters: {
+    controls: { disable: true },
+    docs: { description: { story } },
+  },
+});
+
 const meta: Meta<typeof Header> = {
   title: 'UI/Layout/Header',
   component: Header,
   tags: ['autodocs'],
   argTypes: {
+    children: {
+      control: false,
+      description: '헤더 컨텐츠를 렌더링합니다',
+      table: {
+        type: { summary: 'ReactNode' },
+      },
+    },
     wrapperStyle: {
-      control: { type: 'text' },
+      control: 'text',
+      description: 'wrapper 요소 추가 클래스를 지정합니다',
+      table: {
+        type: { summary: 'string' },
+      },
     },
     boxStyle: {
-      control: { type: 'text' },
+      control: 'text',
+      description: 'box 요소 추가 클래스를 지정합니다',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: '페이지 레이아웃의 Header 영역 컨테이너입니다.',
+      },
     },
   },
 };
@@ -41,7 +70,7 @@ const ThemeControlSwitch = ({
 
   return (
     <Switch
-      isChecked={isDarkTheme}
+      checked={isDarkTheme}
       onCheckedChange={toggleTheme}
       iconClassName="text-zinc-500/80 dark:text-zinc-400"
     >
@@ -86,6 +115,7 @@ const ThemeControlSwitch = ({
 };
 
 export const StyleList94: Story = {
+  ...noControls('StyleList94 헤더 예시입니다.'),
   name: 'StyleList94',
   args: {
     boxStyle: '2xl:max-w-[96rem]',
@@ -146,6 +176,7 @@ export const StyleList94: Story = {
 };
 
 export const StylishLog: Story = {
+  ...noControls('Stylish.LOG 헤더 예시입니다.'),
   name: 'Stylish.LOG',
   args: {
     boxStyle: 'lg:max-w-[64rem]',

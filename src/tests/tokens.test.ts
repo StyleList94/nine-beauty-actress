@@ -46,7 +46,7 @@ describe('palette', () => {
   });
 
   it('should have alpha variants', () => {
-    expect(palette.neutral['100/80']).toBe('oklch(96% 0 0 / 0.8)');
+    expect(palette.neutral['100/80']).toBe('oklch(96.7% 0.001 286.375 / 0.8)');
     expect(palette.green['500/50']).toBe('oklch(62% 0.18 145 / 0.5)');
     expect(palette.red['500/50']).toBe('oklch(60% 0.2 25 / 0.5)');
   });

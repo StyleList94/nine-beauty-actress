@@ -87,4 +87,77 @@ describe('useVirtualScroll', () => {
 
     expect(result.current.itemRange[0]).toBeGreaterThan(0);
   });
+
+  test('missing containerRef graceful fallback', () => {
+    const { result } = renderHook(() =>
+      useVirtualScroll({
+        itemCount: 10,
+        estimateHeight: 40,
+        scrollTarget: 'container',
+        buffer: 4,
+      }),
+    );
+
+    expect(result.current.itemRange[0]).toBe(0);
+    expect(Array.isArray(result.current.getVirtualItems())).toBe(true);
+  });
+
+  test('default parameters', () => {
+    const container = {
+      current: {
+        scrollTop: 0,
+        clientHeight: 500,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      } as unknown as HTMLDivElement,
+    };
+
+    const { result } = renderHook(() =>
+      useVirtualScroll({
+        itemCount: 50,
+        estimateHeight: 30,
+        containerRef: container,
+        heightOffset: 10,
+      }),
+    );
+
+    expect(result.current.itemRange[0]).toBe(0);
+  });
+
+  test('container ref becomes null during scroll', () => {
+    const container: { current: HTMLDivElement | null } = {
+      current: {
+        scrollTop: 0,
+        clientHeight: 500,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      } as unknown as HTMLDivElement,
+    };
+
+    const { result } = renderHook(() =>
+      useVirtualScroll({
+        itemCount: 100,
+        estimateHeight: 50,
+        scrollTarget: 'container',
+        containerRef: container as { current: HTMLDivElement },
+        buffer: 4,
+      }),
+    );
+
+    const node = container.current;
+    const calls = (
+      (node as unknown as { addEventListener: Mock }).addEventListener
+    ).mock.calls as [string, () => void][];
+    const scrollHandler = calls.find(
+      ([event]) => event === 'scroll',
+    )?.[1] as () => void;
+
+    container.current = null;
+
+    act(() => {
+      scrollHandler();
+    });
+
+    expect(result.current.itemRange[0]).toBe(0);
+  });
 });
