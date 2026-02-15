@@ -1,6 +1,6 @@
 {
   "name": "@stylelist94/nine-beauty-actress",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "Lovely G219",
   "type": "module",
   "files": [
@@ -30,7 +30,7 @@
     "type": "git",
     "url": "git+https://github.com/StyleList94/nine-beauty-actress.git"
   },
-  "homepage": "https://nine.stylelist94.dev",
+  "homepage": "https://nine.styleli.sh",
   "bugs": {
     "url": "https://github.com/StyleList94/nine-beauty-actress/issues"
   },
