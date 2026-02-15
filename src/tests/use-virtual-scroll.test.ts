@@ -145,10 +145,11 @@ describe('useVirtualScroll', () => {
     );
 
     const node = container.current;
-    const scrollHandler = (
+    const calls = (
       (node as unknown as { addEventListener: Mock }).addEventListener
-    ).mock.calls.find(
-      ([event]: [string]) => event === 'scroll',
+    ).mock.calls as [string, () => void][];
+    const scrollHandler = calls.find(
+      ([event]) => event === 'scroll',
     )?.[1] as () => void;
 
     container.current = null;

@@ -13,7 +13,7 @@ const fileUploaderBoxBase = style({
   justifyContent: 'center',
   alignItems: 'center',
   border: '2px dashed',
-  borderRadius: radius.sm,
+  borderRadius: radius.md,
   padding: spacing[16],
   userSelect: 'none',
 });
