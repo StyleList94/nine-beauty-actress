@@ -49,7 +49,7 @@ Each component follows:
 
 ```text
 component-name/
-├── index.tsx        # Component + types (uses forwardRef)
+├── index.tsx        # Component + types
 └── style.css.ts     # Vanilla Extract styles
 ```
 
@@ -128,8 +128,8 @@ background: `oklch(from ${palette.green[500]} l c h / 0.5)`; // Wrong!
 
 - **CSS**: Vanilla Extract + TailwindCSS v4
 - **Animation**: Motion library (Framer Motion successor)
-- **UI Primitives**: Radix UI (Switch, ToggleGroup)
-- **Testing**: Vitest + React Testing Library (jsdom environment, globals enabled)
+- **UI Primitives**: Radix UI (Checkbox, Collapsible, Dialog, Label, Popover, Scroll Area, Separator, Slider, Switch, ToggleGroup, Tooltip)
+- **Testing**: Vitest (globals enabled) — Browser tests via Playwright chromium (`*.spec.tsx`), Unit tests via jsdom (`*.test.ts`)
 - **Storybook**: React + Vite with autodocs
 
 ### Build Outputs
@@ -148,8 +148,36 @@ React ≥18, React-DOM ≥18, Motion ≥12 (not bundled)
 
 1. **Components**: Create in `lib/components/` with `index.tsx` + `style.css.ts`
 2. **Stories**: Add to `src/stories/*.stories.tsx` with Meta + argTypes
-3. **Tests**: Add to `src/tests/*.test.tsx` using React Testing Library role queries
+3. **Tests**: Browser tests → `src/tests/*.spec.tsx`, Unit tests → `src/tests/*.test.ts`
 4. **Export**: Add to `lib/main.ts`
+
+### Testing Conventions
+
+**Browser tests (`*.spec.tsx`)** — component rendering, interaction, accessibility:
+
+```tsx
+import { render } from 'vitest-browser-react';
+import { page, userEvent } from 'vitest/browser';
+```
+
+- `vitest/globals` enabled — no need to import `describe`, `it`, `expect`, `vi`
+- Use Locator API: `page.getByRole()`, `page.getByText()` (Testing Library style)
+- Async assertions: `await expect.element(locator).toBeVisible()`
+- Click: `await locator.click()` or `await userEvent.click(locator)`
+- Describe groups: `Rendering and Props`, `Popup Open/Close`, `Props`, `Sub-components`, `Accessibility`
+- Dialog without `DialogDescription` needs `aria-describedby={undefined}` on `DialogContent` (suppresses Radix warning)
+- Overlay components (Dialog, Popover, Combobox): test open/close/ESC/outside-click patterns
+
+**Unit tests (`*.test.ts`)** — pure functions, hooks, token validation:
+
+```ts
+// globals enabled, no imports needed
+describe('cn', () => {
+  it('should merge classes', () => {
+    expect(cn('foo', 'bar')).toBe('foo bar');
+  });
+});
+```
 
 ### Storybook Conventions
 
