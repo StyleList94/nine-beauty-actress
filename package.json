@@ -6,19 +6,19 @@
   "files": [
     "dist"
   ],
-  "module": "./dist/main.es.js",
+  "module": "./dist/main.js",
   "exports": {
     ".": {
       "types": "./dist/main.d.ts",
-      "import": "./dist/main.es.js"
+      "import": "./dist/main.js"
     },
     "./styles": {
       "types": "./dist/core/styles.d.ts",
-      "import": "./dist/styles.es.js"
+      "import": "./dist/styles.js"
     },
     "./tokens": {
       "types": "./dist/core/tokens.d.ts",
-      "import": "./dist/tokens.es.js"
+      "import": "./dist/tokens.js"
     },
     "./style.css": "./dist/style.css"
   },
