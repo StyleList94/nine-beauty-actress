@@ -202,6 +202,16 @@ describe('cn', () => {
 - Pre-commit: Husky runs lint-staged (ESLint --fix, Prettier --write)
 - TypeScript strict mode enabled
 
+## PR Review Checklist
+
+When reviewing PRs via `claude-code-action`, verify:
+
+- New components are exported in `lib/main.ts` with Story and tests
+- New tokens are synced in `src/tests/tokens.test.ts`
+- `package.json` exports paths match actual `dist/` output structure
+- Build output maintains `preserveModules` structure (no single-bundle regression)
+- No unintended dependency changes (deps should remain externalized, not inlined)
+
 ## Distribution
 
 Published to GitHub Packages. Users configure `.npmrc`:
