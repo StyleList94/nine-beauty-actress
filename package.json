@@ -20,7 +20,8 @@
       "types": "./dist/core/tokens.d.ts",
       "import": "./dist/tokens.js"
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": "./dist/style.css",
+    "./tailwind-theme.css": "./dist/tailwind-theme.css"
   },
   "types": "./dist/main.d.ts",
   "sideEffects": [
@@ -44,7 +45,7 @@
   ],
   "scripts": {
     "dev": "storybook dev -p 6006",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node build/generate-tailwind-theme.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "build-storybook": "storybook build",
