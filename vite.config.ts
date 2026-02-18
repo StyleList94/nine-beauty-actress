@@ -7,13 +7,26 @@ import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import sexyDeclareType from 'vite-plugin-sexy-declare-type';
+import clientDirective from 'rollup-plugin-im-client-component';
 import { playwright } from '@vitest/browser-playwright';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), sexyDeclareType(), vanillaExtractPlugin()],
+  plugins: [
+    react(),
+    sexyDeclareType(),
+    clientDirective({
+      extraPatterns: [
+        { source: /^@radix-ui\/react-/ },
+        { source: /^motion\// },
+        { source: 'cmdk' },
+        { source: /^lucide-react/ },
+      ],
+    }),
+    vanillaExtractPlugin(),
+  ],
   test: {
     coverage: {
       enabled: true,
