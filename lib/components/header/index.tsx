@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 
 import { cn } from 'lib/core/utils';
 
-import { headerContainer, headerContentBox } from './style.css';
+import { headerContainer, headerContentBox, headerSpacer } from './style.css';
 
 export type HeaderProps = {
   /** 컨텐츠 요소를 지정합니다 */
@@ -19,7 +19,7 @@ export const Header = ({ children, wrapperStyle, boxStyle }: HeaderProps) => (
     <header className={cn(headerContainer, wrapperStyle)}>
       <div className={cn(headerContentBox, boxStyle)}>{children}</div>
     </header>
-    <div className="mt-14" />
+    <div className={headerSpacer} />
   </>
 );
 
