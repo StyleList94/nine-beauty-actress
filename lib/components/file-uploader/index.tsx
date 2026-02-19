@@ -69,6 +69,7 @@ export const FileUploader = ({
     e.preventDefault();
     if (fileInputRef.current && e.dataTransfer.files.length > 0) {
       if (!isFileAccepted(e.dataTransfer.files[0], rest.accept)) {
+        setIsDragging(false);
         setBorderState('error');
         onDropError?.(e);
         return;
