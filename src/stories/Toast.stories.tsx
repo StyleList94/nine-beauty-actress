@@ -88,11 +88,12 @@ export const Default: StoryObj<DefaultArgs> = {
     },
     _duration: {
       name: 'duration',
-      control: false,
-      description: '자동 닫힘 시간(ms)을 지정합니다',
+      control: 'number',
+      description: '자동 닫힘 시간(ms)을 지정합니다. 0이면 자동으로 닫히지 않습니다.',
       table: {
         category: 'toast()',
         type: { summary: 'number' },
+        defaultValue: { summary: '5000' },
       },
     },
   },
@@ -100,6 +101,7 @@ export const Default: StoryObj<DefaultArgs> = {
     variant: 'default',
     title: '저장 완료',
     description: '변경사항이 저장되었습니다.',
+    _duration: 5000,
   },
   render: (args) => (
     <Button
@@ -109,6 +111,7 @@ export const Default: StoryObj<DefaultArgs> = {
           variant: args.variant,
           title: args.title,
           description: args.description,
+          duration: args._duration,
         })
       }
     >

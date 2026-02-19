@@ -8,6 +8,7 @@ export type ToastData = {
   description?: ReactNode;
   variant?: ToastVariant;
   action?: ReactNode;
+  /** 자동 닫힘 시간(ms). 0이면 자동으로 닫히지 않습니다. 기본값 5000ms */
   duration?: number;
   open: boolean;
 };
