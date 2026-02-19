@@ -159,6 +159,16 @@ function mapShadows(shadows) {
 }
 
 /**
+ * motion.duration → `--duration-*`
+ * @param {TokenMap} duration
+ */
+function mapDuration(duration) {
+  return Object.entries(duration)
+    .map(([name, value]) => `--duration-${name}: ${value};`)
+    .join('\n  ');
+}
+
+/**
  * motion.easing → `--ease-*`
  * @param {TokenMap} easing
  */
@@ -232,6 +242,9 @@ async function generate() {
     '/* Box Shadow */',
     mapShadows(shadows),
     '',
+    '/* Duration */',
+    mapDuration(motion.duration),
+    '',
     '/* Easing */',
     mapEasing(motion.easing),
   ];
@@ -240,7 +253,7 @@ async function generate() {
     .map((line) => (line === '' ? '' : `  ${line}`))
     .join('\n');
 
-  return `${HEADER}\n\n@theme {\n${body}\n}\n`;
+  return `${HEADER}\n\n@theme prefix(nine) {\n${body}\n}\n`;
 }
 
 // ── Main ──
