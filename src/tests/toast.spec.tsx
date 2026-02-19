@@ -131,6 +131,42 @@ describe('Dismissal API', () => {
   });
 });
 
+describe('Duration', () => {
+  it('should not auto-dismiss when duration is 0', async () => {
+    await render(<Toaster />);
+    toast({ title: 'Persistent Toast', duration: 0 });
+    await expect
+      .element(page.getByText('Persistent Toast'))
+      .toBeVisible();
+
+    // Wait longer than the default 5s auto-dismiss
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, 6000);
+    });
+
+    await expect
+      .element(page.getByText('Persistent Toast'))
+      .toBeVisible();
+  });
+
+  it('should auto-dismiss when duration is set', async () => {
+    await render(<Toaster />);
+    toast({ title: 'Auto Dismiss', duration: 1000 });
+    await expect
+      .element(page.getByText('Auto Dismiss'))
+      .toBeVisible();
+
+    // Wait for duration + animation buffer
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, 1500);
+    });
+
+    await expect
+      .element(page.getByText('Auto Dismiss'))
+      .not.toBeInTheDocument();
+  });
+});
+
 describe('Edge Cases', () => {
   it('should handle multiple toasts simultaneously', async () => {
     await render(<Toaster />);

@@ -163,7 +163,7 @@ export const button = recipe({
         boxShadow: `0 0 8px ${palette.purple['500/20']}`,
         selectors: {
           '&:hover:not(:disabled)': {
-            boxShadow: `0 0 12px ${palette.purple['500/20']}, 0 0 24px ${palette.orange[400]}40`,
+            boxShadow: `0 0 12px ${palette.purple['500/20']}, 0 0 24px color-mix(in oklch, ${palette.orange[400]} 25%, transparent)`,
           },
           '&:active:not(:disabled)': {
             boxShadow: `0 0 6px ${palette.purple['500/15']}`,

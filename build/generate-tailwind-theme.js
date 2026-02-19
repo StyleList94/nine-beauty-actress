@@ -5,6 +5,10 @@
  *
  * Reads compiled token JS files from dist/ and generates dist/tailwind-theme.css.
  * Run after vite build: `node build/generate-tailwind-theme.js`
+ *
+ * All CSS variable names are prefixed with `nine-` to avoid
+ * overriding Tailwind defaults (e.g. `--color-nine-red-500`).
+ * Utility classes: `bg-nine-red-500`, `shadow-nine-sm`, etc.
  */
 
 import { pathToFileURL } from 'node:url';
@@ -18,6 +22,8 @@ const TOKENS_DIR = resolve(DIST_DIR, 'core/styles/tokens');
 
 /** @typedef {Record<string, string>} TokenMap */
 /** @typedef {Record<string, string | Record<string, string>>} PaletteMap */
+
+const PREFIX = 'nine';
 
 // ── Helpers ──
 
@@ -47,7 +53,7 @@ function easingKeyToTailwind(key) {
 // ── Mapping Functions ──
 
 /**
- * palette → `--color-*` (alpha variants skipped)
+ * palette → `--color-nine-*` (alpha variants skipped)
  * @param {PaletteMap} palette
  */
 function mapPalette(palette) {
@@ -55,11 +61,11 @@ function mapPalette(palette) {
   const lines = [];
   for (const [colorName, value] of Object.entries(palette)) {
     if (typeof value === 'string') {
-      lines.push(`--color-${colorName}: ${value};`);
+      lines.push(`--color-${PREFIX}-${colorName}: ${value};`);
     } else {
       for (const [level, colorValue] of Object.entries(value)) {
         if (isAlphaVariant(level)) continue;
-        lines.push(`--color-${colorName}-${level}: ${colorValue};`);
+        lines.push(`--color-${PREFIX}-${colorName}-${level}: ${colorValue};`);
       }
     }
   }
@@ -67,104 +73,110 @@ function mapPalette(palette) {
 }
 
 /**
- * spacing → single `--spacing` base unit
+ * spacing → individual `--spacing-nine-*` values
  * @param {TokenMap} spacing
  */
 function mapSpacing(spacing) {
-  const baseUnit = spacing[1] || spacing['1'];
-  if (!baseUnit) {
-    throw new Error(
-      'spacing[1] not found — cannot derive base unit for --spacing',
-    );
-  }
-  return `--spacing: ${baseUnit};`;
+  return Object.entries(spacing)
+    .map(([key, value]) => `--spacing-${PREFIX}-${key}: ${value};`)
+    .join('\n  ');
 }
 
 /**
- * font.family → `--font-*`
+ * font.family → `--font-nine-*`
  * @param {TokenMap} family
  */
 function mapFontFamily(family) {
   return Object.entries(family)
-    .map(([name, value]) => `--font-${name}: ${value};`)
+    .map(([name, value]) => `--font-${PREFIX}-${name}: ${value};`)
     .join('\n  ');
 }
 
 /**
- * font.size → `--text-*`
+ * font.size → `--text-nine-*`
  * @param {TokenMap} size
  */
 function mapFontSize(size) {
   return Object.entries(size)
-    .map(([name, value]) => `--text-${name}: ${value};`)
+    .map(([name, value]) => `--text-${PREFIX}-${name}: ${value};`)
     .join('\n  ');
 }
 
 /**
- * font.weight → `--font-weight-*`
+ * font.weight → `--font-weight-nine-*`
  * @param {TokenMap} weight
  */
 function mapFontWeight(weight) {
   return Object.entries(weight)
-    .map(([name, value]) => `--font-weight-${name}: ${value};`)
+    .map(([name, value]) => `--font-weight-${PREFIX}-${name}: ${value};`)
     .join('\n  ');
 }
 
 /**
- * font.lineHeight → `--leading-*`
+ * font.lineHeight → `--leading-nine-*`
  * @param {TokenMap} lineHeight
  */
 function mapLineHeight(lineHeight) {
   return Object.entries(lineHeight)
-    .map(([name, value]) => `--leading-${name}: ${value};`)
+    .map(([name, value]) => `--leading-${PREFIX}-${name}: ${value};`)
     .join('\n  ');
 }
 
 /**
- * font.letterSpacing → `--tracking-*`
+ * font.letterSpacing → `--tracking-nine-*`
  * @param {TokenMap} letterSpacing
  */
 function mapLetterSpacing(letterSpacing) {
   return Object.entries(letterSpacing)
-    .map(([name, value]) => `--tracking-${name}: ${value};`)
+    .map(([name, value]) => `--tracking-${PREFIX}-${name}: ${value};`)
     .join('\n  ');
 }
 
 /**
- * radius → `--radius-*` (`default` → bare `--radius`)
+ * radius → `--radius-nine-*` (`default` → bare `--radius-nine`)
  * @param {TokenMap} radius
  */
 function mapRadius(radius) {
   return Object.entries(radius)
     .map(([name, value]) =>
       name === 'default'
-        ? `--radius: ${value};`
-        : `--radius-${name}: ${value};`,
+        ? `--radius-${PREFIX}: ${value};`
+        : `--radius-${PREFIX}-${name}: ${value};`,
     )
     .join('\n  ');
 }
 
 /**
- * shadows → `--shadow-*` (`default` → bare `--shadow`)
+ * shadows → `--shadow-nine-*` (`default` → bare `--shadow-nine`)
  * @param {TokenMap} shadows
  */
 function mapShadows(shadows) {
   return Object.entries(shadows)
     .map(([name, value]) =>
       name === 'default'
-        ? `--shadow: ${value};`
-        : `--shadow-${name}: ${value};`,
+        ? `--shadow-${PREFIX}: ${value};`
+        : `--shadow-${PREFIX}-${name}: ${value};`,
     )
     .join('\n  ');
 }
 
 /**
- * motion.easing → `--ease-*`
+ * motion.duration → `--duration-nine-*`
+ * @param {TokenMap} duration
+ */
+function mapDuration(duration) {
+  return Object.entries(duration)
+    .map(([name, value]) => `--duration-${PREFIX}-${name}: ${value};`)
+    .join('\n  ');
+}
+
+/**
+ * motion.easing → `--ease-nine-*`
  * @param {TokenMap} easing
  */
 function mapEasing(easing) {
   return Object.entries(easing)
-    .map(([name, value]) => `--ease-${easingKeyToTailwind(name)}: ${value};`)
+    .map(([name, value]) => `--ease-${PREFIX}-${easingKeyToTailwind(name)}: ${value};`)
     .join('\n  ');
 }
 
@@ -192,6 +204,7 @@ async function importToken(filename, exportName) {
 const HEADER = `/* Nine Beauty Actress — Tailwind v4 Theme
  * Auto-generated from Vanilla Extract tokens
  * Usage: @import '@stylelist94/nine-beauty-actress/tailwind-theme.css';
+ * Utilities: bg-nine-red-500, shadow-nine-sm, p-nine-16, etc.
  */`;
 
 async function generate() {
@@ -208,7 +221,7 @@ async function generate() {
     '/* Colors — OKLCH */',
     mapPalette(palette),
     '',
-    '/* Spacing — base unit (p-16 = 1rem = 16px) */',
+    '/* Spacing — px-keyed rem scale (p-nine-16 = 1rem = 16px) */',
     mapSpacing(spacing),
     '',
     '/* Font Family */',
@@ -232,6 +245,9 @@ async function generate() {
     '/* Box Shadow */',
     mapShadows(shadows),
     '',
+    '/* Duration */',
+    mapDuration(motion.duration),
+    '',
     '/* Easing */',
     mapEasing(motion.easing),
   ];
@@ -240,7 +256,7 @@ async function generate() {
     .map((line) => (line === '' ? '' : `  ${line}`))
     .join('\n');
 
-  return `${HEADER}\n\n@theme {\n${body}\n}\n`;
+  return `${HEADER}\n\n@theme extend {\n${body}\n}\n`;
 }
 
 // ── Main ──

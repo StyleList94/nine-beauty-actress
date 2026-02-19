@@ -128,7 +128,7 @@ export function Toaster(): ReactElement {
           key={t.id}
           open={t.open}
           variant={t.variant}
-          duration={t.duration}
+          duration={t.duration === 0 ? Infinity : t.duration}
           onOpenChange={(open) => {
             if (!open) dismiss(t.id);
           }}

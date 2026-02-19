@@ -114,6 +114,15 @@ background: palette.purple['500/10']; // 10% opacity
 
 // ❌ Don't wrap OKLCH in oklch() - already OKLCH format
 background: `oklch(from ${palette.green[500]} l c h / 0.5)`; // Wrong!
+
+// ❌ Don't append hex alpha to VE vars — produces `var(--_hash)20` (invalid CSS)
+boxShadow: `0 0 0 3px ${vars.color.destructive.base}20`; // Wrong!
+
+// ❌ Don't append hex alpha to OKLCH values — produces `oklch(...)40` (invalid CSS)
+boxShadow: `0 0 24px ${palette.orange[400]}40`; // Wrong!
+
+// ✅ Use color-mix for transparency with VE vars or OKLCH values
+boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 20%, transparent)`;
 ```
 
 ### Styling Gotchas
@@ -123,6 +132,7 @@ background: `oklch(from ${palette.green[500]} l c h / 0.5)`; // Wrong!
 - **Library shouldn't set global body styles** - app-level responsibility, use `src/styles.css` for Storybook only
 - **CSS transition needs initial value** - e.g., `boxShadow: 'none'` required for shadow transitions
 - **Token tests sync** - update `src/tests/tokens.test.ts` when adding new tokens
+- **No Tailwind in library components** - components in `lib/` must use VE styles only. Tailwind is for Storybook (`src/`) only
 
 ### Key Technologies
 
@@ -219,3 +229,9 @@ Published to GitHub Packages. Users configure `.npmrc`:
 ```ini
 @stylelist94:registry=https://npm.pkg.github.com
 ```
+
+### Tailwind Theme Integration
+
+- `build/generate-tailwind-theme.js` — auto-generates Tailwind v4 `@theme prefix(nine)` CSS from VE tokens
+- Prefix `nine` — utilities like `bg-nine-purple-500`, `text-nine-neutral-950` to avoid overriding Tailwind defaults
+- Radix Toast `duration: 0` → converted to `Infinity` (Radix treats 0 as falsy, falling back to default 5s)

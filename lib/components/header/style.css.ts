@@ -14,6 +14,10 @@ export const headerContainer = style({
   backgroundColor: vars.color.background,
 });
 
+export const headerSpacer = style({
+  height: spacing[56],
+});
+
 export const headerContentBox = style({
   display: 'flex',
   alignItems: 'center',

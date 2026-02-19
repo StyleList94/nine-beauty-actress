@@ -116,10 +116,8 @@ function ButtonWithRipple({
     [],
   );
 
-  const removeLastRipple = useCallback(() => {
-    setRipples((prev) =>
-      prev.length ? prev.slice(0, prev.length - 1) : prev,
-    );
+  const removeFirstRipple = useCallback(() => {
+    setRipples((prev) => (prev.length ? prev.slice(1) : prev));
   }, []);
 
   const handlePointerDown = useCallback(
@@ -139,41 +137,41 @@ function ButtonWithRipple({
   const handlePointerUp = useCallback(
     (event: PointerEvent<HTMLButtonElement>) => {
       if (!disableRipple) {
-        removeLastRipple();
+        removeFirstRipple();
       }
       onPointerUp?.(event);
     },
-    [disableRipple, removeLastRipple, onPointerUp],
+    [disableRipple, removeFirstRipple, onPointerUp],
   );
 
   const handlePointerCancel = useCallback(
     (event: PointerEvent<HTMLButtonElement>) => {
       if (!disableRipple) {
-        removeLastRipple();
+        removeFirstRipple();
       }
       onPointerCancel?.(event);
     },
-    [disableRipple, removeLastRipple, onPointerCancel],
+    [disableRipple, removeFirstRipple, onPointerCancel],
   );
 
   const handlePointerLeave = useCallback(
     (event: PointerEvent<HTMLButtonElement>) => {
       if (!disableRipple) {
-        removeLastRipple();
+        removeFirstRipple();
       }
       onPointerLeave?.(event);
     },
-    [disableRipple, removeLastRipple, onPointerLeave],
+    [disableRipple, removeFirstRipple, onPointerLeave],
   );
 
   const handleBlur = useCallback(
     (event: FocusEvent<HTMLButtonElement>) => {
       if (!disableRipple) {
-        removeLastRipple();
+        removeFirstRipple();
       }
       onBlur?.(event);
     },
-    [disableRipple, removeLastRipple, onBlur],
+    [disableRipple, removeFirstRipple, onBlur],
   );
 
   const handleKeyDown = useCallback(
@@ -198,11 +196,11 @@ function ButtonWithRipple({
   const handleKeyUp = useCallback(
     (event: KeyboardEvent<HTMLButtonElement>) => {
       if (!disableRipple && (event.key === ' ' || event.key === 'Enter')) {
-        removeLastRipple();
+        removeFirstRipple();
       }
       onKeyUp?.(event);
     },
-    [disableRipple, removeLastRipple, onKeyUp],
+    [disableRipple, removeFirstRipple, onKeyUp],
   );
 
   const setRefs = useCallback(

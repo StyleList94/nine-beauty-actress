@@ -22,6 +22,7 @@ export { default as footer } from '../components/footer/style.css';
 export {
   headerContainer,
   headerContentBox,
+  headerSpacer,
 } from '../components/header/style.css';
 export {
   backdrop,

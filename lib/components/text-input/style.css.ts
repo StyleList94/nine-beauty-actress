@@ -36,7 +36,10 @@ export const inputBase = style({
     },
     '&[aria-invalid="true"]': {
       borderColor: vars.color.destructive.base,
-      boxShadow: `0 0 0 3px ${vars.color.destructive.base}20`,
+      boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 20%, transparent)`,
+    },
+    ':is(.dark, [data-theme="dark"]) &[aria-invalid="true"]': {
+      boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 40%, transparent)`,
     },
     '&::-webkit-file-upload-button': {
       display: 'inline-flex',
