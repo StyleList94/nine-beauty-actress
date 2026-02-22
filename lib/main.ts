@@ -123,6 +123,12 @@ import {
 } from './components/command';
 import { Combobox, type ComboboxProps, type ComboboxOption } from './components/combobox';
 import {
+  Calendar,
+  type CalendarProps,
+  type DateRange,
+  type DayButtonProps,
+} from './components/calendar';
+import {
   FormControl,
   type FormControlProps,
   type FormControlLabelProps,
@@ -233,6 +239,7 @@ export {
   CommandShortcut,
   CommandSeparator,
   Combobox,
+  Calendar,
   FormControl,
   useFormControlContext,
   useFormControlInputProps,
@@ -310,6 +317,9 @@ export type {
   CommandSeparatorProps,
   ComboboxProps,
   ComboboxOption,
+  CalendarProps,
+  DateRange,
+  DayButtonProps,
   FormControlProps,
   FormControlLabelProps,
   FormControlCaptionProps,

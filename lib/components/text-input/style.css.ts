@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 import { vars } from 'lib/core/styles/theme.css';
 import { spacing, radius, font, shadows, motion } from 'lib/core/styles/tokens';
@@ -51,4 +51,10 @@ export const inputBase = style({
       color: vars.color.foreground,
     },
   },
+});
+
+globalStyle(`${inputBase}::-webkit-datetime-edit`, {
+  display: 'flex',
+  alignItems: 'center',
+  height: '100%',
 });
