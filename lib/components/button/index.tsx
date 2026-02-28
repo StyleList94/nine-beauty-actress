@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useMemo,
   useRef,
   useState,
   type ComponentProps,
@@ -203,10 +204,12 @@ function ButtonWithRipple({
     [disableRipple, removeFirstRipple, onKeyUp],
   );
 
+  const mergedRef = useMemo(() => mergeRefs(buttonRef, ref), [ref]);
+
   return (
     <LazyMotion features={domAnimation}>
       <m.button
-        ref={mergeRefs(buttonRef, ref)}
+        ref={mergedRef}
         type="button"
         className={cn(buttonRecipe({ variant, size }), className)}
         disabled={disabled}

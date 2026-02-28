@@ -137,6 +137,7 @@ const baseClassNames: Record<string, string> = {
  * - react-day-picker v9 기반의 캘린더
  * - single, multiple, range 선택 모드 지원
  * - 키보드 네비게이션 및 접근성 지원
+ * - `--nine-calendar-cell-size` CSS 변수로 셀 크기 커스텀 가능 (기본값: `2rem`)
  *
  * @example
  * ```tsx

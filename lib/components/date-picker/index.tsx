@@ -146,15 +146,15 @@ export type DatePickerInputProps = {
 };
 
 export type DatePickerCalendarProps = {
-  /** 시간 선택 UI 표시 */
+  /** 시간 선택 UI 표시 (single 모드에서만 동작) */
   showTimePicker?: boolean;
   /**
    * Popover 정렬 방향
    * @defaultValue 'start'
    */
   align?: 'start' | 'center' | 'end';
-  /** Calendar에 전달할 추가 props (react-day-picker) */
-  calendarProps?: Partial<CalendarProps>;
+  /** Calendar에 전달할 추가 props (mode, selected, onSelect 제외) */
+  calendarProps?: Omit<Partial<CalendarProps>, 'mode' | 'selected' | 'onSelect'>;
   /** 프리셋 패널 등 추가 콘텐츠 (DatePicker.Presets) */
   children?: ReactNode;
   /** 추가 CSS 클래스 */
@@ -198,24 +198,27 @@ function buildCalendarProps(
     onRangeSelect: (range: DateRange | undefined) => void;
     singleValue: Date | undefined;
     onSingleSelect: (date: Date | undefined) => void;
-    calendarProps?: Partial<CalendarProps>;
+    calendarProps?: Omit<
+      Partial<CalendarProps>,
+      'mode' | 'selected' | 'onSelect'
+    >;
   },
 ): CalendarProps {
   if (mode === 'range') {
     return {
+      ...options.calendarProps,
       mode: 'range' as const,
       selected: options.pendingRange,
       onSelect: options.onRangeSelect,
       numberOfMonths: options.calendarProps?.numberOfMonths ?? 2,
-      ...options.calendarProps,
     } as CalendarProps;
   }
 
   return {
+    ...options.calendarProps,
     mode: 'single' as const,
     selected: options.singleValue,
     onSelect: options.onSingleSelect,
-    ...options.calendarProps,
   } as CalendarProps;
 }
 
@@ -399,9 +402,9 @@ function Input({
  * DatePicker의 팝업 캘린더 패널입니다.
  *
  * @remarks
- * - single 모드: 날짜 선택 시 자동으로 닫힘
+ * - single 모드: 날짜 선택 시 자동으로 닫힘 (`showTimePicker` 활성화 시 제외)
  * - range 모드: 두 번째 날짜 선택 시 자동으로 닫힘
- * - `showTimePicker`로 시간 선택 UI 추가 가능
+ * - `showTimePicker`로 시간 선택 UI 추가 가능 (single 모드 전용)
  *
  * @example
  * ```tsx
@@ -421,6 +424,12 @@ function DatePickerCalendar({
   const [time, setTime] = useState(() =>
     getInitialTime(showTimePicker, context.mode, context.value),
   );
+
+  useEffect(() => {
+    if (showTimePicker && context.mode === 'single') {
+      setTime(getInitialTime(showTimePicker, context.mode, context.value));
+    }
+  }, [showTimePicker, context.mode, context.value]);
 
   const applyTime = (date: Date, timeStr: string): Date => {
     const [hours, minutes] = timeStr.split(':').map(Number);
@@ -450,7 +459,7 @@ function DatePickerCalendar({
   const valueRef = useRef(context.value);
   valueRef.current = context.value;
 
-  // 팝오버 열릴 때 최신 value로 초기화, 닫힐 때 리셋
+  // 팝오버 열릴 때 최신 value로 pending 상태 초기화
   useEffect(() => {
     if (context.open) {
       setPendingRange(valueRef.current as DateRange | undefined);

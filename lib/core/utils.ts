@@ -3,6 +3,19 @@ import { clsx, type ClassValue } from 'clsx';
 
 export const cn = (...args: ClassValue[]) => clsx(args);
 
+/**
+ * 여러 ref를 하나의 콜백 ref로 합칩니다.
+ *
+ * @remarks
+ * - 콜백 ref와 객체 ref(`RefObject`) 모두 지원
+ * - `undefined`인 ref는 자동으로 무시
+ *
+ * @example
+ * ```tsx
+ * const buttonRef = useRef<HTMLButtonElement>(null);
+ * <button ref={mergeRefs(buttonRef, forwardedRef)} />
+ * ```
+ */
 export const mergeRefs =
   <T>(...refs: (Ref<T> | undefined)[]): ((node: T | null) => void) =>
   (node) =>
@@ -40,6 +53,20 @@ export const isFileAccepted = (file: File, accept?: string) => {
   });
 };
 
+/**
+ * 지정한 시간(ms) 동안 호출이 없을 때만 함수를 실행합니다.
+ *
+ * @param func - 디바운스할 함수
+ * @param wait - 대기 시간 (밀리초)
+ * @returns 디바운스된 함수
+ *
+ * @example
+ * ```ts
+ * const debouncedSearch = debounce((query: string) => {
+ *   fetch(`/api/search?q=${query}`);
+ * }, 300);
+ * ```
+ */
 export const debounce = <T extends (...args: never[]) => void>(
   func: T,
   wait: number,

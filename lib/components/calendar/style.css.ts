@@ -3,7 +3,7 @@ import { globalStyle, style } from '@vanilla-extract/css';
 import { vars } from 'lib/core/styles/theme.css';
 import { spacing, radius, motion, font } from 'lib/core/styles/tokens';
 
-const cellSize = `var(--nine-cell-size, ${spacing[32]})`;
+const cellSize = `var(--nine-calendar-cell-size, ${spacing[32]})`;
 
 export const calendar = style({
   padding: spacing[12],

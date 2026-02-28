@@ -449,7 +449,7 @@ export const BookedDates: Story = {
 
 export const CustomCellSize: Story = {
   ...noControls(
-    '`--nine-cell-size` CSS 변수로 셀 크기를 키워 날짜별 가격 등 추가 정보를 표시할 수 있습니다.',
+    '`--nine-calendar-cell-size` CSS 변수로 셀 크기를 키워 날짜별 가격 등 추가 정보를 표시할 수 있습니다.',
   ),
   render: function Render() {
     const defaultMonth = new Date(new Date().getFullYear(), 11, 8);
@@ -467,7 +467,7 @@ export const CustomCellSize: Story = {
             selected={range}
             onSelect={setRange}
             captionLayout="dropdown"
-            className="[--nine-cell-size:3rem] border-none! rounded-none!"
+            className="[--nine-calendar-cell-size:3rem] border-none! rounded-none!"
             components={{
               DayButton: PriceDayButton,
             }}
