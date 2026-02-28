@@ -29,9 +29,9 @@ function ControlledCalendar({
     <Calendar
       mode="single"
       selected={date}
-      onSelect={(d) => {
-        setDate(d);
-        externalOnSelect?.(d);
+      onSelect={(selectedDate) => {
+        setDate(selectedDate);
+        externalOnSelect?.(selectedDate);
       }}
     />
   );
@@ -175,9 +175,9 @@ describe('Range Selection', () => {
           mode="range"
           defaultMonth={new Date(2026, 1, 1)}
           selected={range}
-          onSelect={(r) => {
-            setRange(r);
-            handleSelect(r);
+          onSelect={(selectedRange) => {
+            setRange(selectedRange);
+            handleSelect(selectedRange);
           }}
         />
       );

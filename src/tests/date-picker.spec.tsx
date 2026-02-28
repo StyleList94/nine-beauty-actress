@@ -39,9 +39,9 @@ function ControlledDatePicker({
   return (
     <DatePicker
       value={date}
-      onValueChange={(d: Date | undefined) => {
-        setDate(d);
-        externalOnChange?.(d);
+      onValueChange={(nextDate: Date | undefined) => {
+        setDate(nextDate);
+        externalOnChange?.(nextDate);
       }}
       clearable={clearable}
       disabled={disabled}
@@ -66,9 +66,9 @@ function ControlledRangePicker({
     <DatePicker
       mode="range"
       value={range}
-      onValueChange={(r: DateRange | undefined) => {
-        setRange(r);
-        externalOnChange?.(r);
+      onValueChange={(nextRange: DateRange | undefined) => {
+        setRange(nextRange);
+        externalOnChange?.(nextRange);
       }}
     >
       <DatePicker.Input placeholder="Select range" />
@@ -345,9 +345,9 @@ describe('Presets', () => {
       return (
         <DatePicker
           value={date}
-          onValueChange={(d: Date | undefined) => {
-            setDate(d);
-            handleChange(d);
+          onValueChange={(nextDate: Date | undefined) => {
+            setDate(nextDate);
+            handleChange(nextDate);
           }}
         >
           <DatePicker.Input />

@@ -31,78 +31,193 @@ import * as styles from './style.css';
 // ── Context ──
 
 type DatePickerContextValue = {
+  /** 날짜 선택 모드 */
   mode: 'single' | 'range';
+  /** 현재 선택된 날짜 값 */
   value: Date | DateRange | undefined;
+  /** 날짜 값 변경 핸들러 */
   onValueChange: (value: Date | DateRange | undefined) => void;
+  /** Popover 열림 상태 */
   open: boolean;
+  /** Popover 열림 상태 변경 핸들러 */
   setOpen: (open: boolean) => void;
+  /** date-fns 포맷 문자열 */
   formatStr: string;
+  /** 비활성화 상태 */
   disabled: boolean;
+  /** Clear 버튼 표시 여부 */
   clearable: boolean;
 };
 
 const DatePickerContext = createContext<DatePickerContextValue | null>(null);
 
+/** DatePicker 컴파운드 컴포넌트 내부에서 컨텍스트를 가져오는 hook */
 function useDatePickerContext() {
-  const ctx = use(DatePickerContext);
-  if (!ctx) {
+  const context = use(DatePickerContext);
+  if (!context) {
     throw new Error(
       'DatePicker compound components must be used within <DatePicker>',
     );
   }
-  return ctx;
+  return context;
 }
 
 // ── Types ──
 
 type DatePickerSingleProps = {
+  /**
+   * 날짜 선택 모드
+   * @defaultValue 'single'
+   */
   mode?: 'single';
+  /** 선택된 날짜 */
   value?: Date;
+  /** 날짜 변경 시 호출되는 콜백 */
   onValueChange?: (date: Date | undefined) => void;
-  /** date-fns format string. Default: `'PPP'` */
+  /**
+   * date-fns 포맷 문자열
+   * @defaultValue 'PPP'
+   */
   formatStr?: string;
-  /** Clear 버튼 표시 여부. Default: `true` */
+  /**
+   * Clear 버튼 표시 여부
+   * @defaultValue true
+   */
   clearable?: boolean;
+  /**
+   * 비활성화 상태
+   * @defaultValue false
+   */
   disabled?: boolean;
   /** Popover 열림 상태 제어 (controlled) */
   open?: boolean;
+  /** Popover 열림 상태 변경 콜백 */
   onOpenChange?: (open: boolean) => void;
+  /** 서브 컴포넌트 (DatePicker.Input, DatePicker.Calendar 등) */
   children: ReactNode;
 };
 
 type DatePickerRangeProps = {
+  /** 날짜 범위 선택 모드 */
   mode: 'range';
+  /** 선택된 날짜 범위 */
   value?: DateRange;
+  /** 날짜 범위 변경 시 호출되는 콜백 */
   onValueChange?: (range: DateRange | undefined) => void;
-  /** date-fns format string. Default: `'LLL dd, y'` */
+  /**
+   * date-fns 포맷 문자열
+   * @defaultValue 'LLL dd, y'
+   */
   formatStr?: string;
+  /**
+   * Clear 버튼 표시 여부
+   * @defaultValue true
+   */
   clearable?: boolean;
+  /**
+   * 비활성화 상태
+   * @defaultValue false
+   */
   disabled?: boolean;
+  /** Popover 열림 상태 제어 (controlled) */
   open?: boolean;
+  /** Popover 열림 상태 변경 콜백 */
   onOpenChange?: (open: boolean) => void;
+  /** 서브 컴포넌트 (DatePicker.Input, DatePicker.Calendar 등) */
   children: ReactNode;
 };
 
 export type DatePickerProps = DatePickerSingleProps | DatePickerRangeProps;
 
 export type DatePickerInputProps = {
+  /**
+   * 날짜 미선택 시 표시할 텍스트
+   * @defaultValue 'Pick a date'
+   */
   placeholder?: string;
+  /** 추가 CSS 클래스 */
   className?: string;
+  /** HTML id 속성 (FormControl 연동) */
   id?: string;
+  /** 유효성 검사 실패 상태 */
   'aria-invalid'?: AriaAttributes['aria-invalid'];
+  /** 접근성 설명 요소 ID */
   'aria-describedby'?: string;
 };
 
 export type DatePickerCalendarProps = {
   /** 시간 선택 UI 표시 */
   showTimePicker?: boolean;
-  /** Popover 정렬. Default: `'start'` */
+  /**
+   * Popover 정렬 방향
+   * @defaultValue 'start'
+   */
   align?: 'start' | 'center' | 'end';
-  /** Calendar에 전달할 추가 props */
+  /** Calendar에 전달할 추가 props (react-day-picker) */
   calendarProps?: Partial<CalendarProps>;
+  /** 프리셋 패널 등 추가 콘텐츠 (DatePicker.Presets) */
   children?: ReactNode;
+  /** 추가 CSS 클래스 */
   className?: string;
 };
+
+// ── Helpers ──
+
+function formatDisplayText(
+  value: Date | DateRange | undefined,
+  mode: 'single' | 'range',
+  formatStr: string,
+): string | null {
+  if (!value) return null;
+
+  if (mode === 'range') {
+    const { from, to } = value as DateRange;
+    if (!from) return null;
+    if (!to) return format(from, formatStr);
+    return `${format(from, formatStr)} – ${format(to, formatStr)}`;
+  }
+
+  return format(value as Date, formatStr);
+}
+
+function getInitialTime(
+  showTimePicker: boolean | undefined,
+  mode: 'single' | 'range',
+  value: Date | DateRange | undefined,
+): string {
+  if (showTimePicker && mode === 'single' && value instanceof Date) {
+    return format(value, 'HH:mm');
+  }
+  return '00:00';
+}
+
+function buildCalendarProps(
+  mode: 'single' | 'range',
+  options: {
+    pendingRange: DateRange | undefined;
+    onRangeSelect: (range: DateRange | undefined) => void;
+    singleValue: Date | undefined;
+    onSingleSelect: (date: Date | undefined) => void;
+    calendarProps?: Partial<CalendarProps>;
+  },
+): CalendarProps {
+  if (mode === 'range') {
+    return {
+      mode: 'range' as const,
+      selected: options.pendingRange,
+      onSelect: options.onRangeSelect,
+      numberOfMonths: options.calendarProps?.numberOfMonths ?? 2,
+      ...options.calendarProps,
+    } as CalendarProps;
+  }
+
+  return {
+    mode: 'single' as const,
+    selected: options.singleValue,
+    onSelect: options.onSingleSelect,
+    ...options.calendarProps,
+  } as CalendarProps;
+}
 
 // ── DatePicker (Root) ──
 
@@ -121,6 +236,11 @@ export type DatePickerCalendarProps = {
  *   <DatePicker.Calendar />
  * </DatePicker>
  * ```
+ *
+ * @see {@link Input} - 트리거 버튼
+ * @see {@link DatePickerCalendar} - 캘린더 패널
+ * @see {@link Presets} - 프리셋 컨테이너
+ * @see {@link Preset} - 개별 프리셋 버튼
  */
 function DatePickerRoot({
   mode = 'single',
@@ -152,14 +272,14 @@ function DatePickerRoot({
     formatStr ?? (mode === 'range' ? 'LLL dd, y' : 'PPP');
 
   const handleChange = useCallback(
-    (val: Date | DateRange | undefined) => {
+    (nextValue: Date | DateRange | undefined) => {
       if (mode === 'range') {
         (onValueChange as DatePickerRangeProps['onValueChange'])?.(
-          val as DateRange | undefined,
+          nextValue as DateRange | undefined,
         );
       } else {
         (onValueChange as DatePickerSingleProps['onValueChange'])?.(
-          val as Date | undefined,
+          nextValue as Date | undefined,
         );
       }
     },
@@ -200,7 +320,14 @@ function DatePickerRoot({
 
 // ── DatePicker.Input ──
 
-/** Input 스타일의 DatePicker 트리거입니다. */
+/**
+ * Input 스타일의 DatePicker 트리거입니다.
+ *
+ * @example
+ * ```tsx
+ * <DatePicker.Input placeholder="날짜를 선택하세요" />
+ * ```
+ */
 function Input({
   placeholder = 'Pick a date',
   className,
@@ -208,34 +335,26 @@ function Input({
   'aria-invalid': ariaInvalid,
   'aria-describedby': ariaDescribedby,
 }: DatePickerInputProps) {
-  const ctx = useDatePickerContext();
+  const context = useDatePickerContext();
 
-  const fcProps = useFormControlInputProps({
+  const formControlProps = useFormControlInputProps({
     id,
-    disabled: ctx.disabled,
+    disabled: context.disabled,
     'aria-invalid': ariaInvalid,
     'aria-describedby': ariaDescribedby,
   });
 
-  const displayText = useMemo(() => {
-    if (!ctx.value) return null;
+  const displayText = useMemo(
+    () => formatDisplayText(context.value, context.mode, context.formatStr),
+    [context.value, context.mode, context.formatStr],
+  );
 
-    if (ctx.mode === 'range') {
-      const range = ctx.value as DateRange;
-      if (!range.from) return null;
-      if (!range.to) return format(range.from, ctx.formatStr);
-      return `${format(range.from, ctx.formatStr)} – ${format(range.to, ctx.formatStr)}`;
-    }
-
-    return format(ctx.value as Date, ctx.formatStr);
-  }, [ctx.value, ctx.mode, ctx.formatStr]);
-
-  const handleClear = (e: React.SyntheticEvent) => {
-    e.stopPropagation();
-    ctx.onValueChange(undefined);
+  const handleClear = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    context.onValueChange(undefined);
   };
 
-  const showClear = ctx.clearable && ctx.value;
+  const showClear = context.clearable && context.value;
 
   return (
     <PopoverTrigger asChild>
@@ -244,7 +363,7 @@ function Input({
         disableRipple
         data-slot="date-picker-input"
         className={cn(styles.datePickerTrigger, className)}
-        {...fcProps}
+        {...formControlProps}
       >
         <CalendarIcon size={16} className={styles.datePickerIcon} />
         {displayText ? (
@@ -257,8 +376,9 @@ function Input({
             <span
               className={styles.datePickerClearBtn}
               onClick={handleClear}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') handleClear(e);
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ')
+                  handleClear(event);
               }}
               role="button"
               tabIndex={-1}
@@ -275,7 +395,21 @@ function Input({
 
 // ── DatePicker.Calendar ──
 
-/** DatePicker의 팝업 캘린더 패널입니다. */
+/**
+ * DatePicker의 팝업 캘린더 패널입니다.
+ *
+ * @remarks
+ * - single 모드: 날짜 선택 시 자동으로 닫힘
+ * - range 모드: 두 번째 날짜 선택 시 자동으로 닫힘
+ * - `showTimePicker`로 시간 선택 UI 추가 가능
+ *
+ * @example
+ * ```tsx
+ * <DatePicker.Calendar showTimePicker align="center" />
+ * ```
+ *
+ * @see {@link Presets} - 날짜 프리셋 패널
+ */
 function DatePickerCalendar({
   showTimePicker,
   align = 'start',
@@ -283,81 +417,73 @@ function DatePickerCalendar({
   children,
   className,
 }: DatePickerCalendarProps) {
-  const ctx = useDatePickerContext();
-  const [time, setTime] = useState(() => {
-    if (!showTimePicker) return '00:00';
-    if (ctx.mode === 'single' && ctx.value instanceof Date) {
-      return format(ctx.value, 'HH:mm');
-    }
-    return '00:00';
-  });
+  const context = useDatePickerContext();
+  const [time, setTime] = useState(() =>
+    getInitialTime(showTimePicker, context.mode, context.value),
+  );
 
   const applyTime = (date: Date, timeStr: string): Date => {
     const [hours, minutes] = timeStr.split(':').map(Number);
-    const result = new Date(date);
-    result.setHours(hours, minutes, 0, 0);
-    return result;
+    const dateWithTime = new Date(date);
+    dateWithTime.setHours(hours, minutes, 0, 0);
+    return dateWithTime;
   };
 
   const handleSingleSelect = (date: Date | undefined) => {
     if (showTimePicker && date) {
-      ctx.onValueChange(applyTime(date, time));
+      context.onValueChange(applyTime(date, time));
     } else {
-      ctx.onValueChange(date);
+      context.onValueChange(date);
       if (date) {
-        ctx.setOpen(false);
+        context.setOpen(false);
       }
     }
   };
 
   // ── Range: 내부 pending 상태 (완성 전까지 onValueChange 미호출) ──
   const [pendingRange, setPendingRange] = useState<DateRange | undefined>(
-    ctx.mode === 'range' ? (ctx.value as DateRange | undefined) : undefined,
+    context.mode === 'range'
+      ? (context.value as DateRange | undefined)
+      : undefined,
   );
   const rangeClickCount = useRef(0);
+  const valueRef = useRef(context.value);
+  valueRef.current = context.value;
 
-  // 팝오버 열릴 때 ctx.value로 초기화, 닫힐 때 리셋
+  // 팝오버 열릴 때 최신 value로 초기화, 닫힐 때 리셋
   useEffect(() => {
-    if (ctx.open) {
-      setPendingRange(ctx.value as DateRange | undefined);
+    if (context.open) {
+      setPendingRange(valueRef.current as DateRange | undefined);
       rangeClickCount.current = 0;
     }
-  }, [ctx.open]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [context.open]);
 
   const handleRangeSelect = (range: DateRange | undefined) => {
     rangeClickCount.current += 1;
     setPendingRange(range);
 
     if (rangeClickCount.current >= 2) {
-      ctx.onValueChange(range);
+      context.onValueChange(range);
       rangeClickCount.current = 0;
-      ctx.setOpen(false);
+      context.setOpen(false);
     }
   };
 
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTime = e.target.value;
+  const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = event.target.value;
     setTime(newTime);
-    if (ctx.mode === 'single' && ctx.value instanceof Date) {
-      ctx.onValueChange(applyTime(ctx.value, newTime));
+    if (context.mode === 'single' && context.value instanceof Date) {
+      context.onValueChange(applyTime(context.value, newTime));
     }
   };
 
-  const baseCalendarProps: CalendarProps =
-    ctx.mode === 'range'
-      ? ({
-          mode: 'range' as const,
-          selected: pendingRange,
-          onSelect: handleRangeSelect,
-          numberOfMonths: calendarProps?.numberOfMonths ?? 2,
-          ...calendarProps,
-        } as CalendarProps)
-      : ({
-          mode: 'single' as const,
-          selected: ctx.value as Date | undefined,
-          onSelect: handleSingleSelect,
-          ...calendarProps,
-        } as CalendarProps);
+  const baseCalendarProps = buildCalendarProps(context.mode, {
+    pendingRange,
+    onRangeSelect: handleRangeSelect,
+    singleValue: context.value as Date | undefined,
+    onSingleSelect: handleSingleSelect,
+    calendarProps,
+  });
 
   const hasPresets = !!children;
   const needsCardWrap = hasPresets || showTimePicker;
@@ -417,11 +543,25 @@ function DatePickerCalendar({
 // ── DatePicker.Presets ──
 
 export type DatePickerPresetsProps = {
+  /** 프리셋 버튼 목록 (DatePicker.Preset) */
   children: ReactNode;
+  /** 추가 CSS 클래스 */
   className?: string;
 };
 
-/** 날짜 프리셋 버튼 컨테이너입니다. */
+/**
+ * 날짜 프리셋 버튼 컨테이너입니다.
+ *
+ * @example
+ * ```tsx
+ * <DatePicker.Presets>
+ *   <DatePicker.Preset label="오늘" value={new Date()} />
+ *   <DatePicker.Preset label="어제" value={subDays(new Date(), 1)} />
+ * </DatePicker.Presets>
+ * ```
+ *
+ * @see {@link Preset} - 개별 프리셋 버튼
+ */
 function Presets({ children, className }: DatePickerPresetsProps) {
   return (
     <div
@@ -436,18 +576,28 @@ function Presets({ children, className }: DatePickerPresetsProps) {
 // ── DatePicker.Preset ──
 
 export type DatePickerPresetProps = {
+  /** 프리셋 버튼에 표시할 텍스트 */
   label: string;
+  /** 프리셋 클릭 시 설정할 날짜 값 */
   value: Date | DateRange;
+  /** 추가 CSS 클래스 */
   className?: string;
 };
 
-/** 개별 날짜 프리셋 버튼입니다. */
+/**
+ * 개별 날짜 프리셋 버튼입니다.
+ *
+ * @example
+ * ```tsx
+ * <DatePicker.Preset label="오늘" value={new Date()} />
+ * ```
+ */
 function Preset({ label, value, className }: DatePickerPresetProps) {
-  const ctx = useDatePickerContext();
+  const context = useDatePickerContext();
 
   const handleClick = () => {
-    ctx.onValueChange(value);
-    ctx.setOpen(false);
+    context.onValueChange(value);
+    context.setOpen(false);
   };
 
   return (

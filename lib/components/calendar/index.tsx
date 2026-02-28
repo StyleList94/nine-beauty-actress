@@ -17,15 +17,49 @@ import { cn } from 'lib/core/utils';
 
 import * as styles from './style.css';
 
-export type CalendarProps = ComponentProps<typeof DayPicker>;
+type DayPickerProps = ComponentProps<typeof DayPicker>;
+
+type CalendarDocumentedProps = {
+  /**
+   * 현재 월 외 날짜 표시 여부
+   * @defaultValue true
+   */
+  showOutsideDays?: boolean;
+  /**
+   * 캡션 헤더 레이아웃
+   * @defaultValue 'label'
+   */
+  captionLayout?: DayPickerProps['captionLayout'];
+  /** 추가 CSS 클래스 */
+  className?: string;
+  /** 개별 요소별 CSS 클래스 오버라이드 */
+  classNames?: DayPickerProps['classNames'];
+  /** 날짜 표시 포맷터 */
+  formatters?: DayPickerProps['formatters'];
+  /** 커스텀 렌더링 컴포넌트 */
+  components?: DayPickerProps['components'];
+};
+
+/**
+ * Calendar 컴포넌트의 props
+ *
+ * @remarks
+ * react-day-picker의 DayPicker props를 기반으로 하며,
+ * Calendar가 직접 처리하는 props(`showOutsideDays`, `captionLayout` 등)에
+ * 대한 한국어 설명이 포함되어 있습니다.
+ */
+export type CalendarProps = DayPickerProps & CalendarDocumentedProps;
 
 export type {
+  /** 날짜 범위 선택 결과 (`{ from, to }`) */
   DateRange,
+  /** 커스텀 날짜 버튼 컴포넌트의 props */
   DayButtonProps,
 } from 'react-day-picker';
 
 const defaultClassNames = getDefaultClassNames();
 
+/** 월 네비게이션 및 드롭다운에 사용되는 화살표 아이콘 컴포넌트 */
 function Chevron({ className, orientation, ...rest }: ChevronProps) {
   if (orientation === 'left') {
     return <ChevronLeftIcon className={className} {...rest} />;
@@ -124,16 +158,16 @@ export function Calendar({
 }: CalendarProps) {
   const mergedClassNames = useMemo(() => {
     if (!classNames) return baseClassNames;
-    const consumer = classNames as Record<string, string>;
-    const merged: Record<string, string> = {};
+    const consumerClassNames = classNames as Record<string, string>;
+    const combined: Record<string, string> = {};
     const allKeys = new Set([
       ...Object.keys(baseClassNames),
-      ...Object.keys(consumer),
+      ...Object.keys(consumerClassNames),
     ]);
     for (const key of allKeys) {
-      merged[key] = cn(baseClassNames[key], consumer[key]);
+      combined[key] = cn(baseClassNames[key], consumerClassNames[key]);
     }
-    return merged;
+    return combined;
   }, [classNames]);
 
   const mergedFormatters = useMemo(
