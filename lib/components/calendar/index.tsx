@@ -159,15 +159,11 @@ export function Calendar({
   const mergedClassNames = useMemo(() => {
     if (!classNames) return baseClassNames;
     const consumerClassNames = classNames as Record<string, string>;
-    const combined: Record<string, string> = {};
-    const allKeys = new Set([
-      ...Object.keys(baseClassNames),
-      ...Object.keys(consumerClassNames),
-    ]);
-    for (const key of allKeys) {
-      combined[key] = cn(baseClassNames[key], consumerClassNames[key]);
-    }
-    return combined;
+    return Object.fromEntries(
+      Object.keys({ ...baseClassNames, ...consumerClassNames }).map(
+        (key) => [key, cn(baseClassNames[key], consumerClassNames[key])],
+      ),
+    );
   }, [classNames]);
 
   const mergedFormatters = useMemo(
