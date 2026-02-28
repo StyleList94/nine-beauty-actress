@@ -129,6 +129,14 @@ import {
   type DayButtonProps,
 } from './components/calendar';
 import {
+  DatePicker,
+  type DatePickerProps,
+  type DatePickerInputProps,
+  type DatePickerCalendarProps,
+  type DatePickerPresetsProps,
+  type DatePickerPresetProps,
+} from './components/date-picker';
+import {
   FormControl,
   type FormControlProps,
   type FormControlLabelProps,
@@ -240,6 +248,7 @@ export {
   CommandSeparator,
   Combobox,
   Calendar,
+  DatePicker,
   FormControl,
   useFormControlContext,
   useFormControlInputProps,
@@ -320,6 +329,11 @@ export type {
   CalendarProps,
   DateRange,
   DayButtonProps,
+  DatePickerProps,
+  DatePickerInputProps,
+  DatePickerCalendarProps,
+  DatePickerPresetsProps,
+  DatePickerPresetProps,
   FormControlProps,
   FormControlLabelProps,
   FormControlCaptionProps,
