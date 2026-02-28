@@ -50,11 +50,12 @@ export type CheckboxGroupCaptionProps = ComponentProps<'p'>;
 
 function Caption({ className, ref, ...props }: CheckboxGroupCaptionProps) {
   const ctx = useCheckboxGroupContext();
+  const setCaptionMounted = ctx?.setCaptionMounted;
 
   useEffect(() => {
-    ctx?.setCaptionMounted(true);
-    return () => ctx?.setCaptionMounted(false);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    setCaptionMounted?.(true);
+    return () => setCaptionMounted?.(false);
+  }, [setCaptionMounted]);
 
   return (
     <p
@@ -83,11 +84,12 @@ function Validation({
 }: CheckboxGroupValidationProps) {
   const ctx = useCheckboxGroupContext();
   const variant = externalVariant ?? ctx?.validation ?? 'error';
+  const setValidationMounted = ctx?.setValidationMounted;
 
   useEffect(() => {
-    ctx?.setValidationMounted(true);
-    return () => ctx?.setValidationMounted(false);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    setValidationMounted?.(true);
+    return () => setValidationMounted?.(false);
+  }, [setValidationMounted]);
 
   return (
     <p

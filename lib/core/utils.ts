@@ -1,6 +1,21 @@
+import { type Ref } from 'react';
 import { clsx, type ClassValue } from 'clsx';
 
 export const cn = (...args: ClassValue[]) => clsx(args);
+
+export const mergeRefs =
+  <T>(...refs: (Ref<T> | undefined)[]): ((node: T | null) => void) =>
+  (node) =>
+    refs
+      .filter((ref): ref is NonNullable<typeof ref> => ref != null)
+      .forEach((ref) => {
+        if (typeof ref === 'function') {
+          ref(node);
+        } else {
+          const mutableRef = ref as { current: T | null };
+          mutableRef.current = node;
+        }
+      });
 
 export const isFileAccepted = (file: File, accept?: string) => {
   if (!accept) return true; // accept 미설정 시 모두 허용

@@ -1,4 +1,4 @@
-import { cn, isFileAccepted, debounce } from 'lib/core/utils';
+import { cn, mergeRefs, isFileAccepted, debounce } from 'lib/core/utils';
 
 describe('cn', () => {
   it('should return a single class', () => {
@@ -11,6 +11,56 @@ describe('cn', () => {
 
   it('should ignore falsy values', () => {
     expect(cn('foo', false, null, undefined, 0, '', 'bar')).toBe('foo bar');
+  });
+});
+
+describe('mergeRefs', () => {
+  it('should assign node to callback ref', () => {
+    const callbackRef = vi.fn();
+    const merged = mergeRefs(callbackRef);
+    const node = document.createElement('div');
+
+    merged(node);
+    expect(callbackRef).toHaveBeenCalledWith(node);
+  });
+
+  it('should assign node to object ref', () => {
+    const objectRef = { current: null as HTMLDivElement | null };
+    const merged = mergeRefs(objectRef);
+    const node = document.createElement('div');
+
+    merged(node);
+    expect(objectRef.current).toBe(node);
+  });
+
+  it('should assign node to multiple refs', () => {
+    const callbackRef = vi.fn();
+    const objectRef = { current: null as HTMLDivElement | null };
+    const merged = mergeRefs(callbackRef, objectRef);
+    const node = document.createElement('div');
+
+    merged(node);
+    expect(callbackRef).toHaveBeenCalledWith(node);
+    expect(objectRef.current).toBe(node);
+  });
+
+  it('should skip undefined refs', () => {
+    const callbackRef = vi.fn();
+    const merged = mergeRefs(undefined, callbackRef, undefined);
+    const node = document.createElement('div');
+
+    merged(node);
+    expect(callbackRef).toHaveBeenCalledWith(node);
+  });
+
+  it('should handle null on unmount', () => {
+    const callbackRef = vi.fn();
+    const objectRef = { current: document.createElement('div') as HTMLDivElement | null };
+    const merged = mergeRefs(callbackRef, objectRef);
+
+    merged(null);
+    expect(callbackRef).toHaveBeenCalledWith(null);
+    expect(objectRef.current).toBeNull();
   });
 });
 

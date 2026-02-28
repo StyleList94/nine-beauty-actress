@@ -18,7 +18,7 @@ import {
 import * as m from 'motion/react-m';
 import { Slot } from '@radix-ui/react-slot';
 
-import { cn } from 'lib/core/utils';
+import { cn, mergeRefs } from 'lib/core/utils';
 
 import {
   button as buttonRecipe,
@@ -203,23 +203,10 @@ function ButtonWithRipple({
     [disableRipple, removeFirstRipple, onKeyUp],
   );
 
-  const setRefs = useCallback(
-    (node: HTMLButtonElement | null) => {
-      buttonRef.current = node;
-      if (typeof ref === 'function') {
-        ref(node);
-      } else if (ref != null) {
-        // eslint-disable-next-line no-param-reassign
-        (ref as { current: HTMLButtonElement | null }).current = node;
-      }
-    },
-    [ref],
-  );
-
   return (
     <LazyMotion features={domAnimation}>
       <m.button
-        ref={setRefs}
+        ref={mergeRefs(buttonRef, ref)}
         type="button"
         className={cn(buttonRecipe({ variant, size }), className)}
         disabled={disabled}
