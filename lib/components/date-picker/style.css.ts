@@ -3,6 +3,11 @@ import { style } from '@vanilla-extract/css';
 import { vars } from 'lib/core/styles/theme.css';
 import { spacing, radius, motion } from 'lib/core/styles/tokens';
 
+export const datePickerInputWrap = style({
+  position: 'relative',
+  width: '100%',
+});
+
 export const datePickerTrigger = style({
   width: '100%',
   justifyContent: 'flex-start',
@@ -28,17 +33,22 @@ export const datePickerIcon = style({
 });
 
 export const datePickerClearBtn = style({
-  marginLeft: 'auto',
+  position: 'absolute',
+  right: spacing[8],
+  top: '50%',
+  transform: 'translateY(-50%)',
   opacity: 0,
+  pointerEvents: 'none',
   transition: `opacity ${motion.duration.fast} ${motion.easing.ease}`,
   selectors: {
     '&:hover': {
       opacity: 1,
     },
-    [`${datePickerTrigger}:hover &`]: {
+    [`${datePickerInputWrap}:hover &`]: {
       opacity: 0.5,
+      pointerEvents: 'auto',
     },
-    [`${datePickerTrigger}:hover &:hover`]: {
+    [`${datePickerInputWrap}:hover &:hover`]: {
       opacity: 1,
     },
   },

@@ -56,9 +56,11 @@ function ControlledDatePicker({
 function ControlledRangePicker({
   initialValue,
   onValueChange: externalOnChange,
+  clearable,
 }: {
   initialValue?: DateRange;
   onValueChange?: (range: DateRange | undefined) => void;
+  clearable?: boolean;
 }) {
   const [range, setRange] = useState<DateRange | undefined>(initialValue);
 
@@ -66,6 +68,7 @@ function ControlledRangePicker({
     <DatePicker
       mode="range"
       value={range}
+      clearable={clearable}
       onValueChange={(nextRange: DateRange | undefined) => {
         setRange(nextRange);
         externalOnChange?.(nextRange);
@@ -306,6 +309,53 @@ describe('Range Mode', () => {
 
     const grids = page.getByRole('grid');
     await expect.element(grids.first()).toBeVisible();
+  });
+
+  it('should fresh-start from on re-open with complete range and update display', async () => {
+    const handleChange = vi.fn();
+    const initialRange: DateRange = {
+      from: new Date(2026, 2, 5),
+      to: new Date(2026, 2, 10),
+    };
+    await render(
+      <CenteredWrapper>
+        <ControlledRangePicker
+          initialValue={initialRange}
+          onValueChange={handleChange}
+        />
+      </CenteredWrapper>,
+    );
+    await expect
+      .element(page.getByText(/Mar 05, 2026/))
+      .toBeInTheDocument();
+
+    const trigger = page.getByRole('button', { name: /Mar 05/ });
+    await trigger.click();
+    await expect
+      .element(trigger)
+      .toHaveAttribute('aria-expanded', 'true');
+    await expect.element(page.getByRole('grid').first()).toBeVisible();
+
+    await page.getByRole('button', { name: /March 20/ }).click();
+    await expect.element(page.getByRole('grid').first()).toBeVisible();
+    expect(handleChange).not.toHaveBeenCalled();
+
+    await page.getByRole('button', { name: /March 25/ }).click();
+    await expect
+      .element(page.getByRole('grid'))
+      .not.toBeInTheDocument();
+
+    expect(handleChange).toHaveBeenCalledOnce();
+    const newRange = handleChange.mock.calls[0][0] as DateRange;
+    expect(newRange.from?.getDate()).toBe(20);
+    expect(newRange.to?.getDate()).toBe(25);
+
+    await expect
+      .element(page.getByText(/Mar 20, 2026/))
+      .toBeInTheDocument();
+    await expect
+      .element(page.getByText(/Mar 25, 2026/))
+      .toBeInTheDocument();
   });
 });
 

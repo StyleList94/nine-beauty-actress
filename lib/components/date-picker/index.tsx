@@ -352,47 +352,46 @@ function Input({
     [context.value, context.mode, context.formatStr],
   );
 
-  const handleClear = (event: React.SyntheticEvent) => {
-    event.stopPropagation();
+  const handleClear = () => {
     context.onValueChange(undefined);
   };
 
   const showClear = context.clearable && context.value;
 
   return (
-    <PopoverTrigger asChild>
-      <Button
-        variant="outline"
-        disableRipple
-        data-slot="date-picker-input"
-        className={cn(styles.datePickerTrigger, className)}
-        {...formControlProps}
-      >
-        <CalendarIcon size={16} className={styles.datePickerIcon} />
-        {displayText ? (
-          <span>{displayText}</span>
-        ) : (
-          <span className={styles.datePickerPlaceholder}>{placeholder}</span>
-        )}
-        {showClear && (
-          <Button asChild variant="ghost" size="icon-xs">
-            <span
-              className={styles.datePickerClearBtn}
-              onClick={handleClear}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ')
-                  handleClear(event);
-              }}
-              role="button"
-              tabIndex={-1}
-              aria-label="Clear date"
-            >
-              <XIcon size={14} />
+    <div className={styles.datePickerInputWrap}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          disableRipple
+          data-slot="date-picker-input"
+          className={cn(styles.datePickerTrigger, className)}
+          {...formControlProps}
+        >
+          <CalendarIcon size={16} className={styles.datePickerIcon} />
+          {displayText ? (
+            <span>{displayText}</span>
+          ) : (
+            <span className={styles.datePickerPlaceholder}>
+              {placeholder}
             </span>
-          </Button>
-        )}
-      </Button>
-    </PopoverTrigger>
+          )}
+        </Button>
+      </PopoverTrigger>
+      {showClear && (
+        <Button
+          variant="ghost"
+          size="icon-xs"
+          disableRipple
+          className={styles.datePickerClearBtn}
+          onClick={handleClear}
+          aria-label="Clear date"
+          tabIndex={-1}
+        >
+          <XIcon size={14} />
+        </Button>
+      )}
+    </div>
   );
 }
 
@@ -456,18 +455,43 @@ function DatePickerCalendar({
       : undefined,
   );
   const rangeClickCount = useRef(0);
+  const needsFreshStart = useRef(false);
   const valueRef = useRef(context.value);
   valueRef.current = context.value;
 
-  // 팝오버 열릴 때 최신 value로 pending 상태 초기화
   useEffect(() => {
     if (context.open) {
-      setPendingRange(valueRef.current as DateRange | undefined);
+      const val = valueRef.current as DateRange | undefined;
+      setPendingRange(val);
       rangeClickCount.current = 0;
+      needsFreshStart.current = !!(val?.from && val.to);
     }
   }, [context.open]);
 
   const handleRangeSelect = (range: DateRange | undefined) => {
+    if (needsFreshStart.current) {
+      needsFreshStart.current = false;
+      let clickedDate: Date | undefined;
+      if (
+        range?.from &&
+        range.from.getTime() !== pendingRange?.from?.getTime()
+      ) {
+        clickedDate = range.from;
+      } else if (
+        range?.to &&
+        range.to.getTime() !== pendingRange?.to?.getTime()
+      ) {
+        clickedDate = range.to;
+      } else {
+        clickedDate = range?.from ?? range?.to;
+      }
+      setPendingRange(
+        clickedDate ? { from: clickedDate, to: undefined } : undefined,
+      );
+      rangeClickCount.current = 1;
+      return;
+    }
+
     rangeClickCount.current += 1;
     setPendingRange(range);
 
