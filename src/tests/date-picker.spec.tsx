@@ -1,6 +1,6 @@
 import type { DateRange } from 'react-day-picker';
 
-import { useState } from 'react';
+import { Component, useState, type ReactNode } from 'react';
 import { render } from 'vitest-browser-react';
 import { page, userEvent } from 'vitest/browser';
 
@@ -27,12 +27,14 @@ function ControlledDatePicker({
   clearable,
   disabled,
   formatStr,
+  showTimePicker,
 }: {
   initialValue?: Date;
   onValueChange?: (d: Date | undefined) => void;
   clearable?: boolean;
   disabled?: boolean;
   formatStr?: string;
+  showTimePicker?: boolean;
 }) {
   const [date, setDate] = useState<Date | undefined>(initialValue);
 
@@ -48,7 +50,7 @@ function ControlledDatePicker({
       formatStr={formatStr}
     >
       <DatePicker.Input />
-      <DatePicker.Calendar />
+      <DatePicker.Calendar showTimePicker={showTimePicker} />
     </DatePicker>
   );
 }
@@ -178,6 +180,57 @@ describe('Popup Open/Close', () => {
       .not.toBeInTheDocument();
   });
 
+  it('should support controlled open state', async () => {
+    const handleOpenChange = vi.fn();
+
+    function ControlledOpenPicker() {
+      const [open, setOpen] = useState(false);
+      return (
+        <>
+          <button
+            type="button"
+            data-testid="external-toggle"
+            onClick={() => {
+              const next = !open;
+              setOpen(next);
+              handleOpenChange(next);
+            }}
+          >
+            Toggle
+          </button>
+          <DatePicker open={open} onOpenChange={(v) => {
+            setOpen(v);
+            handleOpenChange(v);
+          }}>
+            <DatePicker.Input />
+            <DatePicker.Calendar />
+          </DatePicker>
+        </>
+      );
+    }
+
+    await render(
+      <CenteredWrapper>
+        <ControlledOpenPicker />
+      </CenteredWrapper>,
+    );
+
+    await expect
+      .element(page.getByRole('grid'))
+      .not.toBeInTheDocument();
+
+    await page.getByTestId('external-toggle').click();
+    await expect
+      .element(page.getByRole('grid'))
+      .toBeVisible();
+
+    await userEvent.keyboard('{Escape}');
+    await expect
+      .element(page.getByRole('grid'))
+      .not.toBeInTheDocument();
+    expect(handleOpenChange).toHaveBeenCalledWith(false);
+  });
+
   it('should close calendar when a date is selected (single mode)', async () => {
     await render(
       <CenteredWrapper>
@@ -295,6 +348,21 @@ describe('Range Mode', () => {
       .toBeInTheDocument();
     await expect
       .element(page.getByText(/Jan 20, 2026/))
+      .toBeInTheDocument();
+  });
+
+  it('should display partial range when only from is provided', async () => {
+    const range: DateRange = {
+      from: new Date(2026, 0, 10),
+      to: undefined,
+    };
+    await render(
+      <CenteredWrapper>
+        <ControlledRangePicker initialValue={range} />
+      </CenteredWrapper>,
+    );
+    await expect
+      .element(page.getByText(/Jan 10, 2026/))
       .toBeInTheDocument();
   });
 
@@ -468,7 +536,104 @@ describe('FormControl Integration', () => {
   });
 });
 
+describe('Time Picker', () => {
+  it('should render time input when showTimePicker is enabled', async () => {
+    const testDate = new Date(2026, 0, 15, 14, 30);
+    await render(
+      <CenteredWrapper>
+        <ControlledDatePicker
+          initialValue={testDate}
+          showTimePicker
+        />
+      </CenteredWrapper>,
+    );
+    const trigger = page.getByRole('button', { name: /january 15/i });
+    await trigger.click();
+
+    const timeInput = page.getByRole('textbox');
+    await expect.element(timeInput).toBeVisible();
+    await expect.element(timeInput).toHaveValue('14:30');
+  });
+
+  it('should update time when time input changes', async () => {
+    const handleChange = vi.fn();
+    const testDate = new Date(2026, 0, 15, 10, 0);
+    await render(
+      <CenteredWrapper>
+        <ControlledDatePicker
+          initialValue={testDate}
+          onValueChange={handleChange}
+          showTimePicker
+        />
+      </CenteredWrapper>,
+    );
+    const trigger = page.getByRole('button', { name: /january 15/i });
+    await trigger.click();
+
+    const timeInput = page.getByRole('textbox');
+    await timeInput.fill('18:30');
+
+    expect(handleChange).toHaveBeenCalled();
+    const updatedDate = handleChange.mock.lastCall?.[0] as Date;
+    expect(updatedDate.getHours()).toBe(18);
+    expect(updatedDate.getMinutes()).toBe(30);
+  });
+
+  it('should not auto-close when date is selected with showTimePicker', async () => {
+    await render(
+      <CenteredWrapper>
+        <ControlledDatePicker showTimePicker />
+      </CenteredWrapper>,
+    );
+    const trigger = page.getByRole('button', { name: /pick a date/i });
+    await trigger.click();
+    await expect.element(page.getByRole('grid')).toBeVisible();
+
+    await page
+      .getByRole('button', { name: /March 15/ })
+      .click();
+
+    await expect
+      .element(page.getByRole('grid'))
+      .toBeVisible();
+  });
+});
+
 describe('Accessibility', () => {
+  it('should throw when sub-component is used outside DatePicker', async () => {
+    class ErrorBoundary extends Component<
+      { children: ReactNode },
+      { error: string | null }
+    > {
+      state = { error: null as string | null };
+      static getDerivedStateFromError(err: Error) {
+        return { error: err.message };
+      }
+      render() {
+        const { error } = this.state;
+        const { children } = this.props;
+        if (error) {
+          return <div data-testid="error">{error}</div>;
+        }
+        return children;
+      }
+    }
+
+    await render(
+      <CenteredWrapper>
+        <ErrorBoundary>
+          <DatePicker.Input />
+        </ErrorBoundary>
+      </CenteredWrapper>,
+    );
+
+    await expect
+      .element(page.getByTestId('error'))
+      .toHaveTextContent(
+        'DatePicker compound components must be used within <DatePicker>',
+      );
+  });
+
   it('should have data-slot attribute on trigger', async () => {
     await render(
       <CenteredWrapper>
