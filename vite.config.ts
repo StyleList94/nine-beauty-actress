@@ -23,6 +23,7 @@ export default defineConfig({
         { source: /^motion\// },
         { source: 'cmdk' },
         { source: /^lucide-react/ },
+        { source: /^react-day-picker/ },
       ],
     }),
     vanillaExtractPlugin(),
@@ -87,6 +88,8 @@ export default defineConfig({
             '@radix-ui/react-toast',
             '@radix-ui/react-toggle-group',
             '@radix-ui/react-tooltip',
+            'react-day-picker',
+            'date-fns',
           ],
         },
         test: {
@@ -124,6 +127,8 @@ export default defineConfig({
         /^lucide-react/,
         'clsx',
         'cmdk',
+        /^react-day-picker/,
+        /^date-fns/,
       ],
       output: {
         preserveModules: true,

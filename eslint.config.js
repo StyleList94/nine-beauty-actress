@@ -38,7 +38,7 @@ export default defineConfig(
     extends: [stylishTypeScript],
   },
   {
-    files: ['.storybook/**/*.ts'],
+    files: ['.storybook/**/*.ts', 'src/stories/**/*.tsx'],
     rules: {
       'import/no-extraneous-dependencies': 'off',
     },

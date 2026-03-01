@@ -26,7 +26,7 @@ pnpm build-storybook  # Build static Storybook
 lib/
 ├── main.ts                    # Main entry - exports all components/hooks
 ├── core/
-│   ├── utils.ts               # cn(), isFileAccepted(), debounce()
+│   ├── utils.ts               # cn(), mergeRefs(), isFileAccepted(), debounce()
 │   ├── styles.ts              # Re-exports all style exports
 │   ├── tokens.ts              # Re-exports all token exports
 │   └── styles/
@@ -125,6 +125,13 @@ boxShadow: `0 0 24px ${palette.orange[400]}40`; // Wrong!
 boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 20%, transparent)`;
 ```
 
+### Core Utilities (`lib/core/utils.ts`)
+
+- `cn()` — class name merging (clsx wrapper)
+- `mergeRefs()` — combines multiple refs into one callback ref (use instead of manual ref-merging boilerplate)
+- `isFileAccepted()` — validates file against accept string
+- `debounce()` — standard debounce
+
 ### Styling Gotchas
 
 - **VE CSS vars are hashed** - `vars.color.*` compiles to `--_1ndu90r0` etc, can't reference in plain CSS
@@ -139,6 +146,7 @@ boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 20%, tr
 - **CSS**: Vanilla Extract + TailwindCSS v4
 - **Animation**: Motion library (Framer Motion successor)
 - **UI Primitives**: Radix UI (Checkbox, Collapsible, Dialog, Label, Popover, Scroll Area, Separator, Slider, Switch, ToggleGroup, Tooltip)
+- **Date**: react-day-picker v9, date-fns v4 (Calendar, DatePicker)
 - **Testing**: Vitest (globals enabled) — Browser tests via Playwright chromium (`*.spec.tsx`), Unit tests via jsdom (`*.test.ts`)
 - **Storybook**: React + Vite with autodocs
 
@@ -211,6 +219,10 @@ describe('cn', () => {
 - Prettier: 80 char width, single quotes, trailing commas
 - Pre-commit: Husky runs lint-staged (ESLint --fix, Prettier --write)
 - TypeScript strict mode enabled
+- Prefer functional paradigm (`.filter()/.forEach()/.map()`) over imperative loops
+- React 19: `MutableRefObject` is deprecated — `RefObject` is mutable by default, no cast needed
+- `no-param-reassign` with refs: assign to local variable before mutating `.current`
+- `exhaustive-deps` with context: destructure stable `useState` setters from context, add to deps
 
 ## PR Review Checklist
 
