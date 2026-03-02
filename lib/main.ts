@@ -1,3 +1,5 @@
+import type { UseDataTableOptions } from './hooks/use-data-table';
+
 import {
   Button,
   type ButtonProps,
@@ -48,6 +50,16 @@ import {
   TableCaption,
   type TableProps,
 } from './components/table';
+import {
+  DataTable,
+  DataTableContent,
+  DataTablePagination,
+  DataTableEmpty,
+  type DataTableProps,
+  type DataTableContentProps,
+  type DataTablePaginationProps,
+  type DataTableEmptyProps,
+} from './components/data-table';
 import { Checkbox, type CheckboxProps } from './components/checkbox';
 import {
   Collapsible,
@@ -220,6 +232,7 @@ import {
   type HeatmapChartProps,
 } from './components/chart';
 
+import useDataTable from './hooks/use-data-table';
 import useDebounce from './hooks/use-debounce';
 import useMounted from './hooks/use-mounted';
 import useVirtualScroll from './hooks/use-virtual-scroll';
@@ -251,6 +264,10 @@ export {
   TableHead,
   TableCell,
   TableCaption,
+  DataTable,
+  DataTableContent,
+  DataTablePagination,
+  DataTableEmpty,
   Checkbox,
   Collapsible,
   CollapsibleTrigger,
@@ -316,6 +333,7 @@ export {
   RadialChart,
   Sparkline,
   Heatmap,
+  useDataTable,
   useDebounce,
   useMounted,
   useVirtualScroll,
@@ -340,6 +358,11 @@ export type {
   CodeProps,
   CardProps,
   TableProps,
+  DataTableProps,
+  DataTableContentProps,
+  DataTablePaginationProps,
+  DataTableEmptyProps,
+  UseDataTableOptions,
   CheckboxProps,
   CollapsibleProps,
   CollapsibleTriggerProps,
@@ -420,3 +443,11 @@ export type {
   SparklineProps,
   HeatmapChartProps,
 };
+
+export type {
+  ColumnDef,
+  SortingState,
+  PaginationState,
+  Row,
+  OnChangeFn,
+} from '@tanstack/react-table';
