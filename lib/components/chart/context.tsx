@@ -7,6 +7,7 @@ export type ChartContextValue = {
   config: ResolvedChartConfig;
   width: number;
   height: number;
+  animated: boolean;
 };
 
 export const ChartContext = createContext<ChartContextValue | null>(null);

@@ -10,8 +10,11 @@ import {
 import {
   XYChart,
   AnimatedLineSeries,
+  LineSeries,
   AnimatedBarSeries,
+  BarSeries,
   AnimatedAreaSeries,
+  AreaSeries,
 } from '@visx/xychart';
 
 import { useChartConfig } from './context';
@@ -102,7 +105,7 @@ function ComposedChartRoot({
   margin,
   children,
 }: ComposedChartProps) {
-  const { config, height } = useChartConfig();
+  const { config, height, animated } = useChartConfig();
   const theme = useXYChartTheme(config);
   const { legends, seriesMarkers, xyChildren, hasYAxis } =
     separateChildren(children);
@@ -132,9 +135,10 @@ function ComposedChartRoot({
           };
 
           switch (type) {
-            case 'line':
+            case 'line': {
+              const LineComp = animated ? AnimatedLineSeries : LineSeries;
               return (
-                <AnimatedLineSeries
+                <LineComp
                   key={dataKey}
                   dataKey={dataKey}
                   data={data}
@@ -142,9 +146,11 @@ function ComposedChartRoot({
                   {...accessors}
                 />
               );
-            case 'bar':
+            }
+            case 'bar': {
+              const BarComp = animated ? AnimatedBarSeries : BarSeries;
               return (
-                <AnimatedBarSeries
+                <BarComp
                   key={dataKey}
                   dataKey={dataKey}
                   data={data}
@@ -153,9 +159,11 @@ function ComposedChartRoot({
                   {...accessors}
                 />
               );
-            case 'area':
+            }
+            case 'area': {
+              const AreaComp = animated ? AnimatedAreaSeries : AreaSeries;
               return (
-                <AnimatedAreaSeries
+                <AreaComp
                   key={dataKey}
                   dataKey={dataKey}
                   data={data}
@@ -164,6 +172,7 @@ function ComposedChartRoot({
                   {...accessors}
                 />
               );
+            }
             default:
               return null;
           }

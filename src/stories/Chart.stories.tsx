@@ -14,6 +14,7 @@ import {
   Sparkline,
   Heatmap,
 } from 'lib/components/chart';
+import { vars } from 'lib/core/styles/theme.css';
 
 const meta: Meta = {
   title: 'UI/Chart',
@@ -355,17 +356,28 @@ export const HeatmapStory: StoryObj = {
 
 export const CustomColor: StoryObj = {
   ...noControls(
-    'config.color로 시리즈별 커스텀 색상 지정 (다크모드 대응 시 테마에 따라 다른 color를 주입)',
+    'animated={false}로 CSS 변수 다크모드 자동 대응. config.color에 vars.color.* 사용 가능 (react-spring baking 우회)',
   ),
-  render: () => {
-    const customConfig: ChartConfig = {
-      p50: { label: 'p50', color: 'oklch(55% 0.2 260)' },
-      p95: { label: 'p95', color: 'oklch(70% 0.18 30)' },
-      p99: { label: 'p99', color: 'oklch(75% 0.15 145)' },
-    };
+  render: (_args, { globals }) => {
+    const isDark = globals.theme === 'dark';
+    const customConfig: ChartConfig = isDark
+      ? {
+          p50: { label: 'p50', color: vars.color.primary.base },
+          p95: { label: 'p95', color: vars.color.warning.base },
+          p99: { label: 'p99', color: vars.color.error.base },
+        }
+      : {
+          p50: { label: 'p50', color: 'oklch(55% 0.2 260)' },
+          p95: { label: 'p95', color: 'oklch(70% 0.18 30)' },
+          p99: { label: 'p99', color: 'oklch(75% 0.15 145)' },
+        };
     return (
       <div className="w-[600px]">
-        <ChartContainer config={customConfig} className="h-[300px]">
+        <ChartContainer
+          config={customConfig}
+          animated={false}
+          className="h-[300px]"
+        >
           <LineChart data={latencyData} xKey="timestamp">
             <LineChart.Grid />
             <LineChart.XAxis />

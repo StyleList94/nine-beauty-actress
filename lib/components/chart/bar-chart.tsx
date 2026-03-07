@@ -8,8 +8,11 @@ import {
 import {
   XYChart,
   AnimatedBarSeries,
+  BarSeries,
   AnimatedBarStack,
+  BarStack,
   AnimatedBarGroup,
+  BarGroup,
 } from '@visx/xychart';
 
 import { useChartConfig } from './context';
@@ -71,7 +74,7 @@ function BarChartRoot({
   margin,
   children,
 }: BarChartProps) {
-  const { config, height } = useChartConfig();
+  const { config, height, animated } = useChartConfig();
   const theme = useXYChartTheme(config);
   const { legends, xyChildren, hasYAxis } = separateChildren(children);
   const resolvedMargin = margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
@@ -86,11 +89,14 @@ function BarChartRoot({
 
   const r = barRadius ?? 4;
   const lastKey = keys[keys.length - 1];
+  const Series = animated ? AnimatedBarSeries : BarSeries;
+  const Stack = animated ? AnimatedBarStack : BarStack;
+  const Group = animated ? AnimatedBarGroup : BarGroup;
 
   const barSeries = keys.map((key) => {
     const isTop = !stacked || key === lastKey;
     return (
-      <AnimatedBarSeries
+      <Series
         key={key}
         dataKey={key}
         data={data}
@@ -118,9 +124,9 @@ function BarChartRoot({
       >
         {xyChildren}
         {stacked ? (
-          <AnimatedBarStack>{barSeries}</AnimatedBarStack>
+          <Stack>{barSeries}</Stack>
         ) : (
-          <AnimatedBarGroup>{barSeries}</AnimatedBarGroup>
+          <Group>{barSeries}</Group>
         )}
       </XYChart>
       {legends}

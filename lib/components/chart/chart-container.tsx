@@ -38,6 +38,8 @@ function resolveConfig(config: ChartConfig): ResolvedChartConfig {
 
 export type ChartContainerProps = ComponentProps<'div'> & {
   config: ChartConfig;
+  /** false 시 non-animated 시리즈 사용 (CSS vars in config.color 지원, 다크모드 자동 대응 가능) */
+  animated?: boolean;
 };
 
 /**
@@ -50,6 +52,7 @@ export type ChartContainerProps = ComponentProps<'div'> & {
  */
 function ChartContainer({
   config,
+  animated = true,
   className,
   children,
   ref,
@@ -71,6 +74,7 @@ function ChartContainer({
             config: resolvedConfig,
             width,
             height,
+            animated,
           };
 
           return (

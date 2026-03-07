@@ -7,7 +7,13 @@ import {
   type ReactNode,
 } from 'react';
 
-import { XYChart, AnimatedAreaSeries, AnimatedAreaStack } from '@visx/xychart';
+import {
+  XYChart,
+  AnimatedAreaSeries,
+  AreaSeries,
+  AnimatedAreaStack,
+  AreaStack,
+} from '@visx/xychart';
 
 import { useChartConfig } from './context';
 import { getCurveFactory } from './utils';
@@ -69,15 +75,17 @@ function AreaChartRoot({
   margin,
   children,
 }: AreaChartProps) {
-  const { config, height } = useChartConfig();
+  const { config, height, animated } = useChartConfig();
   const theme = useXYChartTheme(config);
   const { legends, xyChildren, hasYAxis } = separateChildren(children);
   const resolvedMargin = margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
   const keys = series ?? Object.keys(config);
   const curveFactory = getCurveFactory(curve);
+  const Series = animated ? AnimatedAreaSeries : AreaSeries;
+  const Stack = animated ? AnimatedAreaStack : AreaStack;
 
   const areaSeries = keys.map((key) => (
-    <AnimatedAreaSeries
+    <Series
       key={key}
       dataKey={key}
       data={data}
@@ -99,7 +107,7 @@ function AreaChartRoot({
       >
         {xyChildren}
         {stacked ? (
-          <AnimatedAreaStack>{areaSeries}</AnimatedAreaStack>
+          <Stack>{areaSeries}</Stack>
         ) : (
           areaSeries
         )}

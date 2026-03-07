@@ -50,7 +50,7 @@ describe('ChartContainer', () => {
 
 describe('LineChart', () => {
   it('should render SVG with lines', async () => {
-    const { container } = await render(
+    await render(
       <Wrapper>
         <ChartContainer config={testConfig} className="h-[300px]">
           <LineChart data={testData} xKey="x">
@@ -62,16 +62,13 @@ describe('LineChart', () => {
       </Wrapper>,
     );
 
-    // ParentSize uses ResizeObserver (async), so poll for the SVG
-    await expect
-      .poll(() => container.querySelector('svg'))
-      .not.toBeNull();
+    await expect.element(page.getByRole('img').first()).toBeVisible();
   });
 });
 
 describe('BarChart', () => {
   it('should render SVG with bars', async () => {
-    const { container } = await render(
+    await render(
       <Wrapper>
         <ChartContainer config={testConfig} className="h-[300px]">
           <BarChart data={testData} xKey="x">
@@ -82,15 +79,13 @@ describe('BarChart', () => {
       </Wrapper>,
     );
 
-    await expect
-      .poll(() => container.querySelector('svg'))
-      .not.toBeNull();
+    await expect.element(page.getByRole('img').first()).toBeVisible();
   });
 });
 
 describe('AreaChart', () => {
   it('should render SVG with area', async () => {
-    const { container } = await render(
+    await render(
       <Wrapper>
         <ChartContainer config={testConfig} className="h-[300px]">
           <AreaChart data={testData} xKey="x">
@@ -101,9 +96,7 @@ describe('AreaChart', () => {
       </Wrapper>,
     );
 
-    await expect
-      .poll(() => container.querySelector('svg'))
-      .not.toBeNull();
+    await expect.element(page.getByRole('img').first()).toBeVisible();
   });
 });
 
@@ -177,5 +170,48 @@ describe('Sparkline', () => {
 
     const sparkline = container.querySelector('[data-slot="sparkline"]');
     expect(sparkline).not.toBeNull();
+  });
+
+  it('should be accessible via role img', async () => {
+    await render(
+      <Sparkline
+        data={sparkData}
+        dataKey="value"
+        aria-label="Trend sparkline"
+      />,
+    );
+
+    await expect.element(page.getByRole('img').first()).toBeVisible();
+  });
+});
+
+describe('animated prop', () => {
+  it('animated=false + LineChart 렌더링', async () => {
+    await render(
+      <Wrapper>
+        <ChartContainer config={testConfig} animated={false} className="h-[300px]">
+          <LineChart data={testData} xKey="x">
+            <LineChart.Grid />
+            <LineChart.XAxis />
+          </LineChart>
+        </ChartContainer>
+      </Wrapper>,
+    );
+
+    await expect.element(page.getByRole('img').first()).toBeVisible();
+  });
+
+  it('animated=false + BarChart 렌더링', async () => {
+    await render(
+      <Wrapper>
+        <ChartContainer config={testConfig} animated={false} className="h-[300px]">
+          <BarChart data={testData} xKey="x">
+            <BarChart.XAxis />
+          </BarChart>
+        </ChartContainer>
+      </Wrapper>,
+    );
+
+    await expect.element(page.getByRole('img').first()).toBeVisible();
   });
 });

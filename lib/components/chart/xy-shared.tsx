@@ -9,7 +9,9 @@ import { useMemo, type ReactNode } from 'react';
 
 import {
   AnimatedGrid,
+  Grid,
   AnimatedAxis,
+  Axis,
   Tooltip as VisxTooltip,
   buildChartTheme,
 } from '@visx/xychart';
@@ -54,8 +56,10 @@ export function useXYChartTheme(config: ResolvedChartConfig) {
 
 /** 그리드 라인 */
 function ChartGrid({ columns = false, rows = true, numTicks }: ChartGridProps) {
+  const { animated } = useChartConfig();
+  const GridComponent = animated ? AnimatedGrid : Grid;
   return (
-    <AnimatedGrid
+    <GridComponent
       columns={columns}
       rows={rows}
       numTicks={numTicks}
@@ -77,9 +81,11 @@ function ChartXAxis({
   label,
   hide = false,
 }: ChartAxisProps) {
+  const { animated } = useChartConfig();
   if (hide) return null;
+  const AxisComponent = animated ? AnimatedAxis : Axis;
   return (
-    <AnimatedAxis
+    <AxisComponent
       orientation="bottom"
       numTicks={numTicks}
       tickFormat={tickFormat as (value: unknown) => string}
@@ -97,9 +103,11 @@ function ChartYAxis({
   label,
   hide = false,
 }: ChartAxisProps) {
+  const { animated } = useChartConfig();
   if (hide) return null;
+  const AxisComponent = animated ? AnimatedAxis : Axis;
   return (
-    <AnimatedAxis
+    <AxisComponent
       orientation="left"
       numTicks={numTicks}
       tickFormat={tickFormat as (value: unknown) => string}

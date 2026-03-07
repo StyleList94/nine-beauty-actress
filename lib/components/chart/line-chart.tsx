@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 
-import { XYChart, AnimatedLineSeries } from '@visx/xychart';
+import { XYChart, AnimatedLineSeries, LineSeries } from '@visx/xychart';
 
 import { useChartConfig } from './context';
 import { getCurveFactory } from './utils';
@@ -65,12 +65,13 @@ function LineChartRoot({
   margin,
   children,
 }: LineChartProps) {
-  const { config, height } = useChartConfig();
+  const { config, height, animated } = useChartConfig();
   const theme = useXYChartTheme(config);
   const { legends, xyChildren, hasYAxis } = separateChildren(children);
   const resolvedMargin = margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
   const keys = series ?? Object.keys(config);
   const curveFactory = getCurveFactory(curve);
+  const Series = animated ? AnimatedLineSeries : LineSeries;
 
   return (
     <>
@@ -83,7 +84,7 @@ function LineChartRoot({
       >
         {xyChildren}
         {keys.map((key) => (
-          <AnimatedLineSeries
+          <Series
             key={key}
             dataKey={key}
             data={data}
