@@ -16,7 +16,7 @@ import {
 } from 'lib/components/chart';
 
 const meta: Meta = {
-  title: 'Data Display/Chart',
+  title: 'UI/Chart',
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -189,32 +189,6 @@ export const Line: StoryObj = {
   ),
 };
 
-export const CustomColor: StoryObj = {
-  ...noControls(
-    'config.color로 시리즈별 커스텀 색상 지정 (다크모드 대응 시 테마에 따라 다른 color를 주입)',
-  ),
-  render: () => {
-    const customConfig: ChartConfig = {
-      p50: { label: 'p50', color: 'oklch(55% 0.2 260)' },
-      p95: { label: 'p95', color: 'oklch(70% 0.18 30)' },
-      p99: { label: 'p99', color: 'oklch(75% 0.15 145)' },
-    };
-    return (
-      <div className="w-[600px]">
-        <ChartContainer config={customConfig} className="h-[300px]">
-          <LineChart data={latencyData} xKey="timestamp">
-            <LineChart.Grid />
-            <LineChart.XAxis />
-            <LineChart.YAxis />
-            <LineChart.Tooltip />
-            <LineChart.Legend />
-          </LineChart>
-        </ChartContainer>
-      </div>
-    );
-  },
-};
-
 export const Bar: StoryObj = {
   ...noControls('카테고리 비교에 적합한 막대 차트'),
   render: () => (
@@ -223,7 +197,6 @@ export const Bar: StoryObj = {
         <BarChart data={statusData} xKey="hour">
           <BarChart.Grid />
           <BarChart.XAxis />
-          <BarChart.YAxis />
           <BarChart.Tooltip showGlyphs={false} />
           <BarChart.Legend />
         </BarChart>
@@ -240,7 +213,6 @@ export const StackedBar: StoryObj = {
         <BarChart data={statusData} xKey="hour" stacked>
           <BarChart.Grid />
           <BarChart.XAxis />
-          <BarChart.YAxis />
           <BarChart.Tooltip showGlyphs={false} />
           <BarChart.Legend />
         </BarChart>
@@ -379,4 +351,30 @@ export const HeatmapStory: StoryObj = {
       </ChartContainer>
     </div>
   ),
+};
+
+export const CustomColor: StoryObj = {
+  ...noControls(
+    'config.color로 시리즈별 커스텀 색상 지정 (다크모드 대응 시 테마에 따라 다른 color를 주입)',
+  ),
+  render: () => {
+    const customConfig: ChartConfig = {
+      p50: { label: 'p50', color: 'oklch(55% 0.2 260)' },
+      p95: { label: 'p95', color: 'oklch(70% 0.18 30)' },
+      p99: { label: 'p99', color: 'oklch(75% 0.15 145)' },
+    };
+    return (
+      <div className="w-[600px]">
+        <ChartContainer config={customConfig} className="h-[300px]">
+          <LineChart data={latencyData} xKey="timestamp">
+            <LineChart.Grid />
+            <LineChart.XAxis />
+            <LineChart.YAxis />
+            <LineChart.Tooltip />
+            <LineChart.Legend />
+          </LineChart>
+        </ChartContainer>
+      </div>
+    );
+  },
 };

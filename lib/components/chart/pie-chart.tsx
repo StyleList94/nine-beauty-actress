@@ -51,15 +51,6 @@ function PieLegend({ direction = 'row' }: PieLegendProps) {
 }
 PieLegend.__chartLegend = true as const;
 
-type PieTooltipProps = {
-  render?: (data: PieTooltipData) => ReactNode;
-};
-
-function PieTooltip(_props: PieTooltipProps) {
-  return null;
-}
-PieTooltip.__pieTooltip = true as const;
-
 export type PieChartProps = {
   data: Record<string, unknown>[];
   dataKey: string;
@@ -213,5 +204,4 @@ function PieChartRoot({
  */
 export const PieChart = Object.assign(PieChartRoot, {
   Legend: PieLegend,
-  Tooltip: PieTooltip,
 });

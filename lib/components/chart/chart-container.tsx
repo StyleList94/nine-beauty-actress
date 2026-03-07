@@ -61,6 +61,7 @@ function ChartContainer({
     <div
       ref={ref}
       data-slot="chart"
+      role="img"
       className={cn(chartContainer, className)}
       {...props}
     >

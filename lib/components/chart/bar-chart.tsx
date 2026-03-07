@@ -16,6 +16,7 @@ import { useChartConfig } from './context';
 import {
   useXYChartTheme,
   xyChartMargin,
+  xyChartMarginNoYAxis,
   ChartGrid,
   ChartXAxis,
   ChartYAxis,
@@ -40,20 +41,22 @@ export type BarChartProps = {
 function separateChildren(children: ReactNode) {
   const legends: ReactNode[] = [];
   const xyChildren: ReactNode[] = [];
+  let hasYAxis = false;
 
   Children.forEach(children, (child) => {
-    if (
-      isValidElement(child) &&
-      typeof child.type === 'function' &&
-      '__chartLegend' in child.type
-    ) {
-      legends.push(child);
-    } else {
-      xyChildren.push(child);
+    if (isValidElement(child) && typeof child.type === 'function') {
+      if ('__chartLegend' in child.type) {
+        legends.push(child);
+        return;
+      }
+      if ('__chartYAxis' in child.type) {
+        hasYAxis = true;
+      }
     }
+    xyChildren.push(child);
   });
 
-  return { legends, xyChildren };
+  return { legends, xyChildren, hasYAxis };
 }
 
 function BarChartRoot({
@@ -65,12 +68,13 @@ function BarChartRoot({
   barRadius,
   xScale,
   yScale,
-  margin = xyChartMargin,
+  margin,
   children,
 }: BarChartProps) {
   const { config, height } = useChartConfig();
   const theme = useXYChartTheme(config);
-  const { legends, xyChildren } = separateChildren(children);
+  const { legends, xyChildren, hasYAxis } = separateChildren(children);
+  const resolvedMargin = margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
   const keys = series ?? Object.keys(config);
 
   const defaultXScale: ComponentProps<typeof XYChart>['xScale'] = horizontal
@@ -110,7 +114,7 @@ function BarChartRoot({
         xScale={xScale ?? defaultXScale}
         yScale={yScale ?? defaultYScale}
         theme={theme}
-        margin={margin}
+        margin={resolvedMargin}
       >
         {xyChildren}
         {stacked ? (

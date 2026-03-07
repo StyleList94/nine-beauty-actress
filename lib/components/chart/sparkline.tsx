@@ -16,6 +16,7 @@ export type SparklineProps = {
   width?: number;
   strokeWidth?: number;
   className?: string;
+  'aria-label'?: string;
 };
 
 /**
@@ -42,6 +43,7 @@ export function Sparkline({
   width: widthProp,
   strokeWidth = 1.5,
   className,
+  'aria-label': ariaLabel,
 }: SparklineProps) {
   const curveFactory = getCurveFactory(curve);
   const w = widthProp ?? data.length * 8;
@@ -67,6 +69,8 @@ export function Sparkline({
   return (
     <svg
       data-slot="sparkline"
+      role="img"
+      aria-label={ariaLabel}
       width={w}
       height={height}
       className={className}

@@ -14,6 +14,7 @@ import { getCurveFactory } from './utils';
 import {
   useXYChartTheme,
   xyChartMargin,
+  xyChartMarginNoYAxis,
   ChartGrid,
   ChartXAxis,
   ChartYAxis,
@@ -36,20 +37,22 @@ export type LineChartProps = {
 function separateChildren(children: ReactNode) {
   const legends: ReactNode[] = [];
   const xyChildren: ReactNode[] = [];
+  let hasYAxis = false;
 
   Children.forEach(children, (child) => {
-    if (
-      isValidElement(child) &&
-      typeof child.type === 'function' &&
-      '__chartLegend' in child.type
-    ) {
-      legends.push(child);
-    } else {
-      xyChildren.push(child);
+    if (isValidElement(child) && typeof child.type === 'function') {
+      if ('__chartLegend' in child.type) {
+        legends.push(child);
+        return;
+      }
+      if ('__chartYAxis' in child.type) {
+        hasYAxis = true;
+      }
     }
+    xyChildren.push(child);
   });
 
-  return { legends, xyChildren };
+  return { legends, xyChildren, hasYAxis };
 }
 
 function LineChartRoot({
@@ -59,12 +62,13 @@ function LineChartRoot({
   curve = 'monotone',
   xScale = { type: 'point', padding: 0 },
   yScale = { type: 'linear' },
-  margin = xyChartMargin,
+  margin,
   children,
 }: LineChartProps) {
   const { config, height } = useChartConfig();
   const theme = useXYChartTheme(config);
-  const { legends, xyChildren } = separateChildren(children);
+  const { legends, xyChildren, hasYAxis } = separateChildren(children);
+  const resolvedMargin = margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
   const keys = series ?? Object.keys(config);
   const curveFactory = getCurveFactory(curve);
 
@@ -75,7 +79,7 @@ function LineChartRoot({
         xScale={xScale}
         yScale={yScale}
         theme={theme}
-        margin={margin}
+        margin={resolvedMargin}
       >
         {xyChildren}
         {keys.map((key) => (

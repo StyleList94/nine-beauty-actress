@@ -19,6 +19,7 @@ import { getCurveFactory } from './utils';
 import {
   useXYChartTheme,
   xyChartMargin,
+  xyChartMarginNoYAxis,
   ChartGrid,
   ChartXAxis,
   ChartYAxis,
@@ -64,14 +65,12 @@ function separateChildren(children: ReactNode) {
     props: ComposedSeriesProps;
   }[] = [];
   const xyChildren: ReactNode[] = [];
+  let hasYAxis = false;
 
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
 
-    if (
-      typeof child.type === 'function' &&
-      '__chartLegend' in child.type
-    ) {
+    if (typeof child.type === 'function' && '__chartLegend' in child.type) {
       legends.push(child);
     } else if (
       typeof child.type === 'function' &&
@@ -82,11 +81,17 @@ function separateChildren(children: ReactNode) {
         props: child.props as ComposedSeriesProps,
       });
     } else {
+      if (
+        typeof child.type === 'function' &&
+        '__chartYAxis' in child.type
+      ) {
+        hasYAxis = true;
+      }
       xyChildren.push(child);
     }
   });
 
-  return { legends, seriesMarkers, xyChildren };
+  return { legends, seriesMarkers, xyChildren, hasYAxis };
 }
 
 function ComposedChartRoot({
@@ -94,12 +99,14 @@ function ComposedChartRoot({
   xKey,
   xScale = { type: 'band', paddingInner: 0.3, paddingOuter: 0.15 },
   yScale = { type: 'linear' },
-  margin = xyChartMargin,
+  margin,
   children,
 }: ComposedChartProps) {
   const { config, height } = useChartConfig();
   const theme = useXYChartTheme(config);
-  const { legends, seriesMarkers, xyChildren } = separateChildren(children);
+  const { legends, seriesMarkers, xyChildren, hasYAxis } =
+    separateChildren(children);
+  const resolvedMargin = margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
 
   return (
     <>
@@ -108,7 +115,7 @@ function ComposedChartRoot({
         xScale={xScale}
         yScale={yScale}
         theme={theme}
-        margin={margin}
+        margin={resolvedMargin}
       >
         {xyChildren}
         {seriesMarkers.map(({ type, props }) => {

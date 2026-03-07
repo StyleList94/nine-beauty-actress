@@ -28,13 +28,11 @@ import {
   chartLegendIndicator,
 } from './style.css';
 
-/** XY 차트 기본 마진 (visx 기본값 50px 대체) */
-export const xyChartMargin = {
-  top: 8,
-  right: 16,
-  bottom: 24,
-  left: 36,
-} as const;
+/** XY 차트 기본 마진 (YAxis 있을 때) */
+export const xyChartMargin = { top: 8, right: 16, bottom: 24, left: 36 } as const;
+
+/** XY 차트 기본 마진 (YAxis 없을 때) */
+export const xyChartMarginNoYAxis = { top: 8, right: 16, bottom: 24, left: 8 } as const;
 
 /** XY 차트 visx 테마 생성 */
 export function useXYChartTheme(config: ResolvedChartConfig) {
@@ -111,6 +109,7 @@ function ChartYAxis({
     />
   );
 }
+ChartYAxis.__chartYAxis = true as const;
 
 type ChartTooltipInternalProps = {
   /** 데이터 포인트에 점 표시 (라인/에리어용, 바 차트에서는 false 권장) */
