@@ -30,10 +30,21 @@ function RadialTooltip() {
 RadialTooltip.__radialTooltip = true as const;
 
 export type RadialChartProps = {
+  /** data 배열 (각 항목이 하나의 동심원 링으로 표시됩니다) */
   data: Record<string, unknown>[];
+  /** 각 항목의 수치 값을 담은 data 필드명 */
   dataKey: string;
+  /** 각 항목의 이름을 담은 data 필드명 (config 키와 매핑됩니다) */
   nameKey: string;
+  /**
+   * 100% 기준 최대값
+   * @defaultValue 100
+   */
   maxValue?: number;
+  /**
+   * 링 두께 (px)
+   * @defaultValue 16
+   */
   thickness?: number;
   children?: ReactNode;
 };
@@ -184,6 +195,7 @@ function RadialChartRoot({
  * ```tsx
  * <ChartContainer config={kpiConfig}>
  *   <RadialChart data={kpiData} dataKey="usage" nameKey="metric" maxValue={100}>
+ *     <RadialChart.Tooltip />
  *     <RadialChart.Legend />
  *   </RadialChart>
  * </ChartContainer>

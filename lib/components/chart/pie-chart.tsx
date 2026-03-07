@@ -23,12 +23,26 @@ type PieTooltipData = {
 };
 
 export type PieChartProps = {
+  /** data 배열 */
   data: Record<string, unknown>[];
+  /** 각 조각의 수치 값을 담은 data 필드명 */
   dataKey: string;
+  /** 각 조각의 이름을 담은 data 필드명 (config 키와 매핑됩니다) */
   nameKey: string;
-  /** 0이면 파이, 0.6이면 도넛 (0~1 비율) */
+  /**
+   * 내부 반지름 비율 (0~1). 0이면 파이, 0.6이면 도넛
+   * @defaultValue 0.6
+   */
   innerRadius?: number;
+  /**
+   * 조각 간 간격 (라디안)
+   * @defaultValue 0.02
+   */
   padAngle?: number;
+  /**
+   * 조각 모서리 둥글기 (px)
+   * @defaultValue 4
+   */
   cornerRadius?: number;
   children?: ReactNode;
 };
@@ -162,7 +176,8 @@ function PieChartRoot({
  * - innerRadius: 0이면 파이, 0.6이면 도넛 (0~1 비율)
  * - padAngle: 조각 간 간격
  * - cornerRadius: 조각 모서리 둥글기
- * - Compound: Legend, Tooltip
+ * - 툴팁은 마우스 호버 시 자동으로 표시됩니다 (별도 Tooltip 서브컴포넌트 불필요)
+ * - Compound: Legend
  *
  * @example
  * ```tsx

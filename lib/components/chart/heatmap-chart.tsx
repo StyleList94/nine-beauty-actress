@@ -39,10 +39,18 @@ function HeatmapTooltip() {
 HeatmapTooltip.__heatmapTooltip = true as const;
 
 export type HeatmapChartProps = {
+  /** data 배열 (각 항목은 xKey, yKey, valueKey를 포함해야 합니다) */
   data: Record<string, unknown>[];
+  /** X축 카테고리를 담은 data 필드명 */
   xKey: string;
+  /** Y축 카테고리를 담은 data 필드명 */
   yKey: string;
+  /** 셀 색상 강도를 결정하는 수치 값의 data 필드명 */
   valueKey: string;
+  /**
+   * 차트 내부 여백
+   * @defaultValue `{ top: 10, right: 10, bottom: 40, left: 60 }`
+   */
   margin?: { top: number; right: number; bottom: number; left: number };
 };
 
@@ -201,11 +209,7 @@ function HeatmapChartRoot({
  * @example
  * ```tsx
  * <ChartContainer config={heatConfig}>
- *   <Heatmap data={heatmapData} xKey="hour" yKey="day" valueKey="count">
- *     <Heatmap.XAxis />
- *     <Heatmap.YAxis />
- *     <Heatmap.Tooltip />
- *   </Heatmap>
+ *   <Heatmap data={heatmapData} xKey="hour" yKey="day" valueKey="count" />
  * </ChartContainer>
  * ```
  */

@@ -177,7 +177,7 @@ export const Line: StoryObj = {
   ...noControls('시계열 데이터에 적합한 선형 차트'),
   render: () => (
     <div className="w-[600px]">
-      <ChartContainer config={latencyConfig} className="h-[300px]">
+      <ChartContainer config={latencyConfig}>
         <LineChart data={latencyData} xKey="timestamp">
           <LineChart.Grid />
           <LineChart.XAxis />
@@ -194,7 +194,7 @@ export const Bar: StoryObj = {
   ...noControls('카테고리 비교에 적합한 막대 차트'),
   render: () => (
     <div className="w-[600px]">
-      <ChartContainer config={statusConfig} className="h-[300px]">
+      <ChartContainer config={statusConfig}>
         <BarChart data={statusData} xKey="hour">
           <BarChart.Grid />
           <BarChart.XAxis />
@@ -210,10 +210,26 @@ export const StackedBar: StoryObj = {
   ...noControls('누적 막대 차트'),
   render: () => (
     <div className="w-[600px]">
-      <ChartContainer config={statusConfig} className="h-[300px]">
+      <ChartContainer config={statusConfig}>
         <BarChart data={statusData} xKey="hour" stacked>
           <BarChart.Grid />
           <BarChart.XAxis />
+          <BarChart.Tooltip showGlyphs={false} />
+          <BarChart.Legend />
+        </BarChart>
+      </ChartContainer>
+    </div>
+  ),
+};
+
+export const HorizontalBar: StoryObj = {
+  ...noControls('horizontal=true로 수평 막대 차트'),
+  render: () => (
+    <div className="w-[600px]">
+      <ChartContainer config={statusConfig}>
+        <BarChart data={statusData} xKey="hour" horizontal>
+          <BarChart.Grid />
+          <BarChart.YAxis />
           <BarChart.Tooltip showGlyphs={false} />
           <BarChart.Legend />
         </BarChart>
@@ -226,8 +242,24 @@ export const Area: StoryObj = {
   ...noControls('트래픽 흐름 시각화에 적합한 영역 차트'),
   render: () => (
     <div className="w-[600px]">
-      <ChartContainer config={trafficConfig} className="h-[300px]">
+      <ChartContainer config={trafficConfig}>
         <AreaChart data={trafficData} xKey="timestamp" fillOpacity={0.3}>
+          <AreaChart.Grid />
+          <AreaChart.XAxis />
+          <AreaChart.Tooltip />
+          <AreaChart.Legend />
+        </AreaChart>
+      </ChartContainer>
+    </div>
+  ),
+};
+
+export const StackedArea: StoryObj = {
+  ...noControls('stacked=true로 누적 영역 차트'),
+  render: () => (
+    <div className="w-[600px]">
+      <ChartContainer config={trafficConfig}>
+        <AreaChart data={trafficData} xKey="timestamp" stacked fillOpacity={0.4}>
           <AreaChart.Grid />
           <AreaChart.XAxis />
           <AreaChart.Tooltip />
@@ -242,7 +274,7 @@ export const Composed: StoryObj = {
   ...noControls('막대와 선을 혼합한 복합 차트'),
   render: () => (
     <div className="w-[600px]">
-      <ChartContainer config={composedConfig} className="h-[300px]">
+      <ChartContainer config={composedConfig}>
         <ComposedChart data={statusData} xKey="hour">
           <ComposedChart.Bar dataKey="success" />
           <ComposedChart.Line dataKey="error" />
@@ -257,11 +289,36 @@ export const Composed: StoryObj = {
   ),
 };
 
+export const ComposedWithArea: StoryObj = {
+  ...noControls('Bar + Line + Area 복합 차트'),
+  render: () => (
+    <div className="w-[600px]">
+      <ChartContainer
+        config={{
+          success: { label: 'Requests' },
+          redirect: { label: 'Trend (area)' },
+          error: { label: 'Error (line)' },
+        }}
+      >
+        <ComposedChart data={statusData} xKey="hour">
+          <ComposedChart.Bar dataKey="success" />
+          <ComposedChart.Area dataKey="redirect" fillOpacity={0.3} />
+          <ComposedChart.Line dataKey="error" />
+          <ComposedChart.Grid />
+          <ComposedChart.XAxis />
+          <ComposedChart.Tooltip />
+          <ComposedChart.Legend />
+        </ComposedChart>
+      </ChartContainer>
+    </div>
+  ),
+};
+
 export const Donut: StoryObj = {
   ...noControls('비율 표시에 적합한 도넛 차트'),
   render: () => (
     <div className="w-[400px]">
-      <ChartContainer config={appConfig} className="h-[300px]">
+      <ChartContainer config={appConfig}>
         <PieChart
           data={appData}
           dataKey="count"
@@ -279,7 +336,7 @@ export const Pie: StoryObj = {
   ...noControls('innerRadius=0으로 파이 차트'),
   render: () => (
     <div className="w-[400px]">
-      <ChartContainer config={appConfig} className="h-[300px]">
+      <ChartContainer config={appConfig}>
         <PieChart
           data={appData}
           dataKey="count"
@@ -299,8 +356,10 @@ export const Radar: StoryObj = {
   ...noControls('다축 비교에 적합한 레이더 차트'),
   render: () => (
     <div className="w-[500px]">
-      <ChartContainer config={skillConfig} className="h-[400px]">
-        <RadarChart data={skillData} axisKey="skill" maxValue={100}>
+      <ChartContainer config={skillConfig} height={400}>
+        <RadarChart data={skillData} axisKey="skill" maxValue={100} levels={4}>
+          <RadarChart.Grid />
+          <RadarChart.Tooltip />
           <RadarChart.Legend />
         </RadarChart>
       </ChartContainer>
@@ -312,13 +371,14 @@ export const Radial: StoryObj = {
   ...noControls('KPI 게이지에 적합한 방사형 차트'),
   render: () => (
     <div className="w-[300px]">
-      <ChartContainer config={kpiConfig} className="h-[300px]">
+      <ChartContainer config={kpiConfig}>
         <RadialChart
           data={kpiData}
           dataKey="usage"
           nameKey="metric"
           maxValue={100}
         >
+          <RadialChart.Tooltip />
           <RadialChart.Legend />
         </RadialChart>
       </ChartContainer>
@@ -342,7 +402,7 @@ export const HeatmapStory: StoryObj = {
   ...noControls('시간×요일 요청 수 히트맵'),
   render: () => (
     <div className="w-[600px]">
-      <ChartContainer config={heatConfig} className="h-[300px]">
+      <ChartContainer config={heatConfig}>
         <Heatmap
           data={heatmapData}
           xKey="hour"
@@ -376,7 +436,6 @@ export const CustomColor: StoryObj = {
         <ChartContainer
           config={customConfig}
           animated={false}
-          className="h-[300px]"
         >
           <LineChart data={latencyData} xKey="timestamp">
             <LineChart.Grid />

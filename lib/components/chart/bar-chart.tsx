@@ -27,15 +27,32 @@ import {
 } from './xy-shared';
 
 export type BarChartProps = {
+  /** data 배열 (각 항목은 xKey + 시리즈 키를 포함해야 합니다) */
   data: Record<string, unknown>[];
+  /** X축으로 사용할 data 필드명 */
   xKey: string;
-  /** 표시할 시리즈 키 (미지정 시 config의 모든 키 사용) */
+  /** 표시할 시리즈 키 목록. 미지정 시 config의 모든 키를 사용합니다 */
   series?: string[];
+  /**
+   * 누적 막대 모드
+   * @defaultValue false
+   */
   stacked?: boolean;
+  /**
+   * 수평 막대 모드
+   * @defaultValue false
+   */
   horizontal?: boolean;
+  /**
+   * 막대 상단 모서리 둥글기 (px)
+   * @defaultValue 4
+   */
   barRadius?: number;
+  /** visx XYChart xScale 설정 */
   xScale?: ComponentProps<typeof XYChart>['xScale'];
+  /** visx XYChart yScale 설정 */
   yScale?: ComponentProps<typeof XYChart>['yScale'];
+  /** 차트 내부 여백 (기본: YAxis 유무에 따라 자동 결정) */
   margin?: ComponentProps<typeof XYChart>['margin'];
   children?: ReactNode;
 };
@@ -94,7 +111,7 @@ function BarChartRoot({
   return (
     <>
       <XYChart
-        height={height || 300}
+        height={height}
         xScale={xScale ?? defaultXScale}
         yScale={yScale ?? defaultYScale}
         theme={theme}

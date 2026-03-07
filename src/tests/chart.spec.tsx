@@ -528,7 +528,7 @@ describe('RadarChart', () => {
       <Wrapper>
         <ChartContainer config={radarConfig} className="h-[300px]">
           <RadarChart data={radarData} axisKey="skill">
-            <RadarChart.Grid levels={3} />
+            <RadarChart.Grid />
             <RadarChart.Tooltip />
           </RadarChart>
         </ChartContainer>

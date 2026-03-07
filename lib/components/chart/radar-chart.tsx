@@ -28,11 +28,7 @@ type RadarTooltipData = {
   entries: { key: string; label: string; color: string; value: number }[];
 };
 
-type RadarGridProps = {
-  levels?: number;
-};
-
-function RadarGrid(_props: RadarGridProps) {
+function RadarGrid() {
   return null;
 }
 RadarGrid.__radarGrid = true as const;
@@ -43,10 +39,21 @@ function RadarTooltip() {
 RadarTooltip.__radarTooltip = true as const;
 
 export type RadarChartProps = {
+  /** data 배열 (각 항목이 하나의 축을 나타냅니다) */
   data: Record<string, unknown>[];
+  /** 각 축의 레이블을 담은 data 필드명 */
   axisKey: string;
+  /** 모든 시리즈의 최대값. 미지정 시 data에서 자동 계산 */
   maxValue?: number;
+  /**
+   * 영역 채움 투명도 (0~1)
+   * @defaultValue 0.25
+   */
   fillOpacity?: number;
+  /**
+   * 그리드 링 개수
+   * @defaultValue 5
+   */
   levels?: number;
   children?: ReactNode;
 };
@@ -260,9 +267,10 @@ function RadarChartRoot({
  *
  * @example
  * ```tsx
- * <ChartContainer config={skillConfig}>
- *   <RadarChart data={skillData} axisKey="skill">
+ * <ChartContainer config={skillConfig} height={400}>
+ *   <RadarChart data={skillData} axisKey="skill" maxValue={100} levels={4}>
  *     <RadarChart.Grid />
+ *     <RadarChart.Tooltip />
  *     <RadarChart.Legend />
  *   </RadarChart>
  * </ChartContainer>

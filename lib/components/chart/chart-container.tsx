@@ -37,8 +37,21 @@ function resolveConfig(config: ChartConfig): ResolvedChartConfig {
 }
 
 export type ChartContainerProps = ComponentProps<'div'> & {
+  /**
+   * 차트 데이터-시리즈 매핑 설정. 키는 data의 필드명과 일치해야 합니다.
+   * @see {@link ChartConfig}
+   */
   config: ChartConfig;
-  /** false 시 non-animated 시리즈 사용 (CSS vars in config.color 지원, 다크모드 자동 대응 가능) */
+  /**
+   * 컨테이너 높이 (px). `style={{ height: N }}`으로도 오버라이드 가능
+   * @defaultValue 300
+   */
+  height?: number;
+  /**
+   * false 시 non-animated 시리즈 사용.
+   * config.color에 CSS 변수(vars.color.*)를 사용할 때 필요합니다 (다크모드 자동 대응).
+   * @defaultValue true
+   */
   animated?: boolean;
 };
 
@@ -46,14 +59,38 @@ export type ChartContainerProps = ComponentProps<'div'> & {
  * 차트를 감싸는 반응형 컨테이너
  *
  * @remarks
- * - ParentSize로 반응형 래핑
+ * - ParentSize로 반응형 래핑 (부모 크기 자동 감지)
+ * - 기본 높이 300px. `height` prop으로 변경 가능
  * - config에서 color 미지정 시 기본 chart 팔레트 자동 할당
  * - React context로 resolved config + dimensions 전달
+ *
+ * @example
+ * ```tsx
+ * const config: ChartConfig = {
+ *   revenue: { label: '매출' },
+ *   cost: { label: '비용', color: 'oklch(73% 0.17 22)' },
+ * };
+ *
+ * <ChartContainer config={config}>
+ *   <LineChart data={data} xKey="month">
+ *     <LineChart.Grid />
+ *     <LineChart.XAxis />
+ *     <LineChart.Tooltip />
+ *   </LineChart>
+ * </ChartContainer>
+ *
+ * // 높이 변경
+ * <ChartContainer config={config} height={500}>
+ *   <LineChart data={data} xKey="month" />
+ * </ChartContainer>
+ * ```
  */
 function ChartContainer({
   config,
+  height = 300,
   animated = true,
   className,
+  style,
   children,
   ref,
   ...props
@@ -66,14 +103,15 @@ function ChartContainer({
       data-slot="chart"
       role="img"
       className={cn(chartContainer, className)}
+      style={{ height, ...style }}
       {...props}
     >
       <ParentSize>
-        {({ width, height }) => {
+        {({ width, height: measuredHeight }) => {
           const contextValue: ChartContextValue = {
             config: resolvedConfig,
             width,
-            height,
+            height: measuredHeight,
             animated,
           };
 

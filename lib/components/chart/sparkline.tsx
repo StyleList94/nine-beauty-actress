@@ -8,14 +8,35 @@ import { scaleLinear } from '@visx/scale';
 import { getCurveFactory } from './utils';
 
 export type SparklineProps = {
+  /** data 배열 */
   data: Record<string, unknown>[];
+  /** 수치 값을 담은 data 필드명 */
   dataKey: string;
+  /**
+   * 선 색상
+   * @defaultValue 'oklch(62% 0.15 265)' (chart blue)
+   */
   color?: string;
+  /**
+   * 선 곡선 종류
+   * @defaultValue 'monotone'
+   */
   curve?: CurveType;
+  /**
+   * SVG 높이 (px)
+   * @defaultValue 32
+   */
   height?: number;
+  /** SVG 너비 (px). 미지정 시 `data.length * 8` */
   width?: number;
+  /**
+   * 선 두께 (px)
+   * @defaultValue 1.5
+   */
   strokeWidth?: number;
+  /** SVG에 적용할 className */
   className?: string;
+  /** 접근성 레이블 */
   'aria-label'?: string;
 };
 

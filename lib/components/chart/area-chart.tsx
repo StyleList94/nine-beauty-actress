@@ -28,15 +28,32 @@ import {
 } from './xy-shared';
 
 export type AreaChartProps = {
+  /** data 배열 (각 항목은 xKey + 시리즈 키를 포함해야 합니다) */
   data: Record<string, unknown>[];
+  /** X축으로 사용할 data 필드명 */
   xKey: string;
-  /** 표시할 시리즈 키 (미지정 시 config의 모든 키 사용) */
+  /** 표시할 시리즈 키 목록. 미지정 시 config의 모든 키를 사용합니다 */
   series?: string[];
+  /**
+   * 영역 채움 투명도 (0~1)
+   * @defaultValue 0.3
+   */
   fillOpacity?: number;
+  /**
+   * 누적 영역 모드
+   * @defaultValue false
+   */
   stacked?: boolean;
+  /**
+   * 선 곡선 종류
+   * @defaultValue 'monotone'
+   */
   curve?: CurveType;
+  /** visx XYChart xScale 설정 (기본: point scale) */
   xScale?: ComponentProps<typeof XYChart>['xScale'];
+  /** visx XYChart yScale 설정 (기본: linear scale) */
   yScale?: ComponentProps<typeof XYChart>['yScale'];
+  /** 차트 내부 여백 (기본: YAxis 유무에 따라 자동 결정) */
   margin?: ComponentProps<typeof XYChart>['margin'];
   children?: ReactNode;
 };
@@ -77,7 +94,7 @@ function AreaChartRoot({
   return (
     <>
       <XYChart
-        height={height || 300}
+        height={height}
         xScale={xScale}
         yScale={yScale}
         theme={theme}
@@ -111,7 +128,9 @@ function AreaChartRoot({
  *   <AreaChart data={data} xKey="timestamp" fillOpacity={0.3}>
  *     <AreaChart.Grid />
  *     <AreaChart.XAxis />
+ *     <AreaChart.YAxis />
  *     <AreaChart.Tooltip />
+ *     <AreaChart.Legend />
  *   </AreaChart>
  * </ChartContainer>
  * ```
