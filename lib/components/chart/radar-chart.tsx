@@ -8,6 +8,7 @@ import { localPoint } from '@visx/event';
 import { vars } from 'lib/core/styles/theme.css';
 
 import { useChartConfig } from './context';
+import { ChartLegend } from './xy-shared';
 import {
   generatePolygonPoints,
   pointsToPath,
@@ -20,9 +21,6 @@ import {
   chartTooltipIndicator,
   chartTooltipLabel,
   chartTooltipValue,
-  chartLegendContainer,
-  chartLegendItem,
-  chartLegendIndicator,
 } from './style.css';
 
 type RadarTooltipData = {
@@ -38,33 +36,6 @@ function RadarGrid(_props: RadarGridProps) {
   return null;
 }
 RadarGrid.__radarGrid = true as const;
-
-type RadarLegendProps = {
-  direction?: 'row' | 'column';
-};
-
-function RadarLegend({ direction = 'row' }: RadarLegendProps) {
-  const { config } = useChartConfig();
-
-  return (
-    <div
-      data-slot="chart-legend"
-      className={chartLegendContainer}
-      style={{ flexDirection: direction }}
-    >
-      {Object.entries(config).map(([key, entry]) => (
-        <div key={key} className={chartLegendItem}>
-          <span
-            className={chartLegendIndicator}
-            style={{ background: entry.color }}
-          />
-          <span>{entry.label}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-RadarLegend.__chartLegend = true as const;
 
 function RadarTooltip() {
   return null;
@@ -120,8 +91,8 @@ function RadarChartRoot({
         <Group top={cy} left={cx}>
           {/* Grid rings */}
           {Array.from({ length: levels }, (_, i) => {
-            const r = (radius / levels) * (i + 1);
-            const points = generatePolygonPoints(0, 0, r, sides);
+            const ringRadius = (radius / levels) * (i + 1);
+            const points = generatePolygonPoints(0, 0, ringRadius, sides);
             return (
               <path
                 key={`grid-${i}`}
@@ -299,6 +270,6 @@ function RadarChartRoot({
  */
 export const RadarChart = Object.assign(RadarChartRoot, {
   Grid: RadarGrid,
-  Legend: RadarLegend,
+  Legend: ChartLegend,
   Tooltip: RadarTooltip,
 });

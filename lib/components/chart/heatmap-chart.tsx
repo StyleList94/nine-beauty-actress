@@ -9,6 +9,7 @@ import { localPoint } from '@visx/event';
 import { vars } from 'lib/core/styles/theme.css';
 
 import { useChartConfig } from './context';
+import { axisTickLabelProps } from './xy-shared';
 import {
   chartTooltipContainer,
   chartTooltipRow,
@@ -71,24 +72,24 @@ function HeatmapChartRoot({
   const innerHeight = height - margin.top - margin.bottom;
 
   const { cells, xScale, yScale } = useMemo(() => {
-    const xVals = [...new Set(data.map((d) => String(d[xKey])))];
-    const yVals = [...new Set(data.map((d) => String(d[yKey])))];
+    const xValues = [...new Set(data.map((d) => String(d[xKey])))];
+    const yValues = [...new Set(data.map((d) => String(d[yKey])))];
     const max = Math.max(
       ...data.map((d) => Number(d[valueKey]) || 0),
     );
 
-    const xS = scaleBand({
-      domain: xVals,
+    const xBandScale = scaleBand({
+      domain: xValues,
       range: [0, innerWidth],
       padding: 0.05,
     });
-    const yS = scaleBand({
-      domain: yVals,
+    const yBandScale = scaleBand({
+      domain: yValues,
       range: [0, innerHeight],
       padding: 0.05,
     });
 
-    const colorS = scaleLinear({
+    const colorScale = scaleLinear({
       domain: [0, max],
       range: [0.08, 1],
     });
@@ -98,25 +99,19 @@ function HeatmapChartRoot({
       const yVal = String(d[yKey]);
       const value = Number(d[valueKey]) || 0;
       return {
-        x: xS(xVal) ?? 0,
-        y: yS(yVal) ?? 0,
-        width: Math.max(xS.bandwidth() - GAP, 0),
-        height: Math.max(yS.bandwidth() - GAP, 0),
+        x: xBandScale(xVal) ?? 0,
+        y: yBandScale(yVal) ?? 0,
+        width: Math.max(xBandScale.bandwidth() - GAP, 0),
+        height: Math.max(yBandScale.bandwidth() - GAP, 0),
         xVal,
         yVal,
         value,
-        opacity: value === 0 ? 0.04 : colorS(value),
+        opacity: value === 0 ? 0.04 : colorScale(value),
       };
     });
 
-    return { cells: cellData, xScale: xS, yScale: yS };
+    return { cells: cellData, xScale: xBandScale, yScale: yBandScale };
   }, [data, xKey, yKey, valueKey, innerWidth, innerHeight]);
-
-  const axisTickLabelProps = {
-    fill: vars.color.mutedForeground,
-    fontSize: 12,
-    fontFamily: 'inherit',
-  } as const;
 
   return (
     <div style={{ position: 'relative' }}>

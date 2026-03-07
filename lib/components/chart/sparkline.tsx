@@ -46,7 +46,7 @@ export function Sparkline({
   'aria-label': ariaLabel,
 }: SparklineProps) {
   const curveFactory = getCurveFactory(curve);
-  const w = widthProp ?? data.length * 8;
+  const width = widthProp ?? data.length * 8;
 
   const { xScale, yScale } = useMemo(() => {
     const values = data.map((d) => Number(d[dataKey]) || 0);
@@ -57,21 +57,21 @@ export function Sparkline({
     return {
       xScale: scaleLinear({
         domain: [0, data.length - 1],
-        range: [0, w],
+        range: [0, width],
       }),
       yScale: scaleLinear({
         domain: [min - padding, max + padding],
         range: [height, 0],
       }),
     };
-  }, [data, dataKey, w, height]);
+  }, [data, dataKey, width, height]);
 
   return (
     <svg
       data-slot="sparkline"
       role="img"
       aria-label={ariaLabel}
-      width={w}
+      width={width}
       height={height}
       className={className}
     >

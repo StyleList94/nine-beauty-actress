@@ -5,7 +5,7 @@ import type {
   ChartLegendProps,
 } from './types';
 
-import { useMemo, type ReactNode } from 'react';
+import { Children, isValidElement, useMemo, type ReactNode } from 'react';
 
 import {
   AnimatedGrid,
@@ -39,7 +39,7 @@ export const xyChartMarginNoYAxis = { top: 8, right: 16, bottom: 24, left: 8 } a
 /** XY 차트 visx 테마 생성 */
 export function useXYChartTheme(config: ResolvedChartConfig) {
   return useMemo(() => {
-    const colors = Object.values(config).map((c) => c.color);
+    const colors = Object.values(config).map((entry) => entry.color);
     return buildChartTheme({
       backgroundColor: 'transparent',
       colors,
@@ -68,7 +68,7 @@ function ChartGrid({ columns = false, rows = true, numTicks }: ChartGridProps) {
   );
 }
 
-const axisTickLabelProps = {
+export const axisTickLabelProps = {
   fill: vars.color.mutedForeground,
   fontSize: 12,
   fontFamily: 'inherit',
@@ -211,5 +211,26 @@ function ChartLegend({ direction = 'row' }: ChartLegendProps) {
   );
 }
 ChartLegend.__chartLegend = true as const;
+
+export function separateChildren(children: ReactNode) {
+  const legends: ReactNode[] = [];
+  const xyChildren: ReactNode[] = [];
+  let hasYAxis = false;
+
+  Children.forEach(children, (child) => {
+    if (isValidElement(child) && typeof child.type === 'function') {
+      if ('__chartLegend' in child.type) {
+        legends.push(child);
+        return;
+      }
+      if ('__chartYAxis' in child.type) {
+        hasYAxis = true;
+      }
+    }
+    xyChildren.push(child);
+  });
+
+  return { legends, xyChildren, hasYAxis };
+}
 
 export { ChartGrid, ChartXAxis, ChartYAxis, ChartTooltip, ChartLegend };

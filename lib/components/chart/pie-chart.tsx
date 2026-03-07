@@ -6,15 +6,13 @@ import { useTooltip, TooltipWithBounds } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
 
 import { useChartConfig } from './context';
+import { ChartLegend } from './xy-shared';
 import {
   chartTooltipContainer,
   chartTooltipRow,
   chartTooltipIndicator,
   chartTooltipLabel,
   chartTooltipValue,
-  chartLegendContainer,
-  chartLegendItem,
-  chartLegendIndicator,
 } from './style.css';
 
 type PieTooltipData = {
@@ -23,33 +21,6 @@ type PieTooltipData = {
   color: string;
   value: number;
 };
-
-type PieLegendProps = {
-  direction?: 'row' | 'column';
-};
-
-function PieLegend({ direction = 'row' }: PieLegendProps) {
-  const { config } = useChartConfig();
-
-  return (
-    <div
-      data-slot="chart-legend"
-      className={chartLegendContainer}
-      style={{ flexDirection: direction }}
-    >
-      {Object.entries(config).map(([key, entry]) => (
-        <div key={key} className={chartLegendItem}>
-          <span
-            className={chartLegendIndicator}
-            style={{ background: entry.color }}
-          />
-          <span>{entry.label}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-PieLegend.__chartLegend = true as const;
 
 export type PieChartProps = {
   data: Record<string, unknown>[];
@@ -82,7 +53,7 @@ function PieChartRoot({
   } = useTooltip<PieTooltipData>();
 
   const radius = Math.min(width, height) / 2;
-  const innerR = radius * innerRadius;
+  const innerRadiusPx = radius * innerRadius;
   const cx = width / 2;
   const cy = height / 2;
 
@@ -96,7 +67,7 @@ function PieChartRoot({
             data={data}
             pieValue={(d) => Number(d[dataKey]) || 0}
             outerRadius={radius - 8}
-            innerRadius={innerR}
+            innerRadius={innerRadiusPx}
             padAngle={padAngle}
             cornerRadius={cornerRadius}
           >
@@ -119,21 +90,21 @@ function PieChartRoot({
                         'opacity 150ms ease, transform 150ms ease',
                     }}
                     onMouseEnter={(e) => {
-                      const el = e.currentTarget;
-                      el.style.opacity = '0.8';
-                      el.style.filter = 'brightness(1.1)';
+                      const element = e.currentTarget;
+                      element.style.opacity = '0.8';
+                      element.style.filter = 'brightness(1.1)';
                     }}
                     onMouseLeave={(e) => {
-                      const el = e.currentTarget;
-                      el.style.opacity = '1';
-                      el.style.filter = 'none';
+                      const element = e.currentTarget;
+                      element.style.opacity = '1';
+                      element.style.filter = 'none';
                       hideTooltip();
                     }}
                     onMouseMove={(event) => {
-                      const svgEl =
+                      const svgElement =
                         event.currentTarget.ownerSVGElement;
-                      if (!svgEl) return;
-                      const coords = localPoint(svgEl, event);
+                      if (!svgElement) return;
+                      const coords = localPoint(svgElement, event);
                       if (coords) {
                         showTooltip({
                           tooltipLeft: coords.x,
@@ -203,5 +174,5 @@ function PieChartRoot({
  * ```
  */
 export const PieChart = Object.assign(PieChartRoot, {
-  Legend: PieLegend,
+  Legend: ChartLegend,
 });

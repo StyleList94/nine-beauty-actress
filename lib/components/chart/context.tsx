@@ -13,9 +13,9 @@ export type ChartContextValue = {
 export const ChartContext = createContext<ChartContextValue | null>(null);
 
 export function useChartConfig() {
-  const ctx = use(ChartContext);
-  if (!ctx) {
+  const context = use(ChartContext);
+  if (!context) {
     throw new Error('useChartConfig must be used within a ChartContainer');
   }
-  return ctx;
+  return context;
 }

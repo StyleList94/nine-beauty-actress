@@ -1,8 +1,6 @@
 import type { CurveType } from './types';
 
 import {
-  Children,
-  isValidElement,
   type ComponentProps,
   type ReactNode,
 } from 'react';
@@ -15,6 +13,7 @@ import {
   useXYChartTheme,
   xyChartMargin,
   xyChartMarginNoYAxis,
+  separateChildren,
   ChartGrid,
   ChartXAxis,
   ChartYAxis,
@@ -33,27 +32,6 @@ export type LineChartProps = {
   margin?: ComponentProps<typeof XYChart>['margin'];
   children?: ReactNode;
 };
-
-function separateChildren(children: ReactNode) {
-  const legends: ReactNode[] = [];
-  const xyChildren: ReactNode[] = [];
-  let hasYAxis = false;
-
-  Children.forEach(children, (child) => {
-    if (isValidElement(child) && typeof child.type === 'function') {
-      if ('__chartLegend' in child.type) {
-        legends.push(child);
-        return;
-      }
-      if ('__chartYAxis' in child.type) {
-        hasYAxis = true;
-      }
-    }
-    xyChildren.push(child);
-  });
-
-  return { legends, xyChildren, hasYAxis };
-}
 
 function LineChartRoot({
   data,

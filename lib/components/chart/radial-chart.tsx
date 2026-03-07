@@ -8,15 +8,13 @@ import { localPoint } from '@visx/event';
 import { vars } from 'lib/core/styles/theme.css';
 
 import { useChartConfig } from './context';
+import { ChartLegend } from './xy-shared';
 import {
   chartTooltipContainer,
   chartTooltipRow,
   chartTooltipIndicator,
   chartTooltipLabel,
   chartTooltipValue,
-  chartLegendContainer,
-  chartLegendItem,
-  chartLegendIndicator,
 } from './style.css';
 
 type RadialTooltipData = {
@@ -30,33 +28,6 @@ function RadialTooltip() {
   return null;
 }
 RadialTooltip.__radialTooltip = true as const;
-
-type RadialLegendProps = {
-  direction?: 'row' | 'column';
-};
-
-function RadialLegend({ direction = 'row' }: RadialLegendProps) {
-  const { config } = useChartConfig();
-
-  return (
-    <div
-      data-slot="chart-legend"
-      className={chartLegendContainer}
-      style={{ flexDirection: direction }}
-    >
-      {Object.entries(config).map(([key, entry]) => (
-        <div key={key} className={chartLegendItem}>
-          <span
-            className={chartLegendIndicator}
-            style={{ background: entry.color }}
-          />
-          <span>{entry.label}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-RadialLegend.__chartLegend = true as const;
 
 export type RadialChartProps = {
   data: Record<string, unknown>[];
@@ -103,10 +74,10 @@ function RadialChartRoot({
               configEntries.find(([k]) => k === name)?.[1] ??
               configEntries[i % configEntries.length]?.[1];
 
-            const outerR = maxRadius - i * (thickness + gap);
-            const innerR = outerR - thickness;
+            const outerRadius = maxRadius - i * (thickness + gap);
+            const innerRadius = outerRadius - thickness;
 
-            if (innerR < 0) return null;
+            if (innerRadius < 0) return null;
 
             const endAngle = ratio * Math.PI * 2;
 
@@ -118,15 +89,15 @@ function RadialChartRoot({
                   cursor: 'pointer',
                 }}
                 onMouseEnter={(e) => {
-                  const el = e.currentTarget;
-                  el.style.opacity = '0.85';
-                  el.style.filter = 'brightness(1.1)';
+                  const element = e.currentTarget;
+                  element.style.opacity = '0.85';
+                  element.style.filter = 'brightness(1.1)';
                 }}
                 onMouseMove={(event) => {
-                  const svgEl =
+                  const svgElement =
                     event.currentTarget.ownerSVGElement;
-                  if (!svgEl) return;
-                  const coords = localPoint(svgEl, event);
+                  if (!svgElement) return;
+                  const coords = localPoint(svgElement, event);
                   if (coords) {
                     showTooltip({
                       tooltipLeft: coords.x,
@@ -141,9 +112,9 @@ function RadialChartRoot({
                   }
                 }}
                 onMouseLeave={(e) => {
-                  const el = e.currentTarget;
-                  el.style.opacity = '1';
-                  el.style.filter = 'none';
+                  const element = e.currentTarget;
+                  element.style.opacity = '1';
+                  element.style.filter = 'none';
                   hideTooltip();
                 }}
               >
@@ -151,8 +122,8 @@ function RadialChartRoot({
                 <Arc
                   startAngle={0}
                   endAngle={Math.PI * 2}
-                  outerRadius={outerR}
-                  innerRadius={innerR}
+                  outerRadius={outerRadius}
+                  innerRadius={innerRadius}
                   fill={vars.color.muted}
                   opacity={0.3}
                 />
@@ -160,8 +131,8 @@ function RadialChartRoot({
                 <Arc
                   startAngle={0}
                   endAngle={endAngle}
-                  outerRadius={outerR}
-                  innerRadius={innerR}
+                  outerRadius={outerRadius}
+                  innerRadius={innerRadius}
                   fill={configEntry.color}
                   cornerRadius={thickness / 2}
                 />
@@ -219,6 +190,6 @@ function RadialChartRoot({
  * ```
  */
 export const RadialChart = Object.assign(RadialChartRoot, {
-  Legend: RadialLegend,
+  Legend: ChartLegend,
   Tooltip: RadialTooltip,
 });

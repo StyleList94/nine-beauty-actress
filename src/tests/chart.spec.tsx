@@ -30,7 +30,7 @@ const testData = [
   { x: 'C', value1: 20, value2: 25 },
 ];
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
+const Wrapper = ({ children }: { children: ReactNode }) => (
   <div style={{ width: 400, height: 300 }}>{children}</div>
 );
 
@@ -655,7 +655,7 @@ describe('Sparkline', () => {
 });
 
 describe('animated prop', () => {
-  it('animated=false + LineChart 렌더링', async () => {
+  it('should render LineChart with animated=false', async () => {
     await render(
       <Wrapper>
         <ChartContainer
@@ -675,7 +675,7 @@ describe('animated prop', () => {
     await expect.element(page.getByRole('img').first()).toBeVisible();
   });
 
-  it('animated=false + BarChart 렌더링', async () => {
+  it('should render BarChart with animated=false', async () => {
     await render(
       <Wrapper>
         <ChartContainer
@@ -693,7 +693,7 @@ describe('animated prop', () => {
     await expect.element(page.getByRole('img').first()).toBeVisible();
   });
 
-  it('animated=false + AreaChart 렌더링', async () => {
+  it('should render AreaChart with animated=false', async () => {
     await render(
       <Wrapper>
         <ChartContainer
@@ -711,7 +711,7 @@ describe('animated prop', () => {
     await expect.element(page.getByRole('img').first()).toBeVisible();
   });
 
-  it('animated=false + AreaChart stacked 렌더링', async () => {
+  it('should render stacked AreaChart with animated=false', async () => {
     await render(
       <Wrapper>
         <ChartContainer

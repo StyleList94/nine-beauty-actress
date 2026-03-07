@@ -1,6 +1,4 @@
 import {
-  Children,
-  isValidElement,
   type ComponentProps,
   type ReactNode,
 } from 'react';
@@ -20,6 +18,7 @@ import {
   useXYChartTheme,
   xyChartMargin,
   xyChartMarginNoYAxis,
+  separateChildren,
   ChartGrid,
   ChartXAxis,
   ChartYAxis,
@@ -40,27 +39,6 @@ export type BarChartProps = {
   margin?: ComponentProps<typeof XYChart>['margin'];
   children?: ReactNode;
 };
-
-function separateChildren(children: ReactNode) {
-  const legends: ReactNode[] = [];
-  const xyChildren: ReactNode[] = [];
-  let hasYAxis = false;
-
-  Children.forEach(children, (child) => {
-    if (isValidElement(child) && typeof child.type === 'function') {
-      if ('__chartLegend' in child.type) {
-        legends.push(child);
-        return;
-      }
-      if ('__chartYAxis' in child.type) {
-        hasYAxis = true;
-      }
-    }
-    xyChildren.push(child);
-  });
-
-  return { legends, xyChildren, hasYAxis };
-}
 
 function BarChartRoot({
   data,
@@ -87,7 +65,7 @@ function BarChartRoot({
     ? { type: 'band', paddingInner: 0.3, paddingOuter: 0.15 }
     : { type: 'linear' };
 
-  const r = barRadius ?? 4;
+  const resolvedRadius = barRadius ?? 4;
   const lastKey = keys[keys.length - 1];
   const Series = animated ? AnimatedBarSeries : BarSeries;
   const Stack = animated ? AnimatedBarStack : BarStack;
@@ -106,7 +84,7 @@ function BarChartRoot({
         yAccessor={(d: Record<string, unknown>) =>
           horizontal ? d[xKey] : d[key]
         }
-        radius={isTop ? r : 0}
+        radius={isTop ? resolvedRadius : 0}
         radiusTop={isTop && !horizontal}
         radiusRight={isTop && horizontal}
       />
