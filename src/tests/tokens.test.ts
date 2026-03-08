@@ -8,6 +8,7 @@ import {
   motion,
 } from 'lib/core/tokens';
 
+
 describe('palette', () => {
   const colorScales = [
     'neutral',
@@ -182,3 +183,5 @@ describe('motion', () => {
     expect(motion.easing.spring).toContain('cubic-bezier');
   });
 });
+
+

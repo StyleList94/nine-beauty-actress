@@ -1,0 +1,193 @@
+import { type ReactNode } from 'react';
+
+import { Pie } from '@visx/shape';
+import { Group } from '@visx/group';
+import { useTooltip, TooltipWithBounds } from '@visx/tooltip';
+import { localPoint } from '@visx/event';
+
+import { useChartConfig } from './context';
+import { ChartLegend } from './xy-shared';
+import {
+  chartTooltipContainer,
+  chartTooltipRow,
+  chartTooltipIndicator,
+  chartTooltipLabel,
+  chartTooltipValue,
+} from './style.css';
+
+type PieTooltipData = {
+  name: string;
+  label: string;
+  color: string;
+  value: number;
+};
+
+export type PieChartProps = {
+  /** data 배열 */
+  data: Record<string, unknown>[];
+  /** 각 조각의 수치 값을 담은 data 필드명 */
+  dataKey: string;
+  /** 각 조각의 이름을 담은 data 필드명 (config 키와 매핑됩니다) */
+  nameKey: string;
+  /**
+   * 내부 반지름 비율 (0~1). 0이면 파이, 0.6이면 도넛
+   * @defaultValue 0.6
+   */
+  innerRadius?: number;
+  /**
+   * 조각 간 간격 (라디안)
+   * @defaultValue 0.02
+   */
+  padAngle?: number;
+  /**
+   * 조각 모서리 둥글기 (px)
+   * @defaultValue 4
+   */
+  cornerRadius?: number;
+  children?: ReactNode;
+};
+
+function PieChartRoot({
+  data,
+  dataKey,
+  nameKey,
+  innerRadius = 0.6,
+  padAngle = 0.02,
+  cornerRadius = 4,
+  children,
+}: PieChartProps) {
+  const { config, width, height } = useChartConfig();
+  const {
+    tooltipOpen,
+    tooltipLeft,
+    tooltipTop,
+    tooltipData,
+    showTooltip,
+    hideTooltip,
+  } = useTooltip<PieTooltipData>();
+
+  const radius = Math.min(width, height) / 2;
+  const innerRadiusPx = radius * innerRadius;
+  const cx = width / 2;
+  const cy = height / 2;
+
+  const configEntries = Object.entries(config);
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <svg width={width} height={height}>
+        <Group top={cy} left={cx}>
+          <Pie
+            data={data}
+            pieValue={(d) => Number(d[dataKey]) || 0}
+            outerRadius={radius - 8}
+            innerRadius={innerRadiusPx}
+            padAngle={padAngle}
+            cornerRadius={cornerRadius}
+          >
+            {(pie) =>
+              pie.arcs.map((arc, i) => {
+                const datum = arc.data;
+                const name = String(datum[nameKey]);
+                const configEntry =
+                  configEntries.find(([k]) => k === name)?.[1] ??
+                  configEntries[i % configEntries.length]?.[1];
+
+                return (
+                  <path
+                    key={name}
+                    d={pie.path(arc) ?? ''}
+                    fill={configEntry.color}
+                    style={{
+                      cursor: 'pointer',
+                      transition:
+                        'opacity 150ms ease, transform 150ms ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      const element = e.currentTarget;
+                      element.style.opacity = '0.8';
+                      element.style.filter = 'brightness(1.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      const element = e.currentTarget;
+                      element.style.opacity = '1';
+                      element.style.filter = 'none';
+                      hideTooltip();
+                    }}
+                    onMouseMove={(event) => {
+                      const svgElement =
+                        event.currentTarget.ownerSVGElement;
+                      if (!svgElement) return;
+                      const coords = localPoint(svgElement, event);
+                      if (coords) {
+                        showTooltip({
+                          tooltipLeft: coords.x,
+                          tooltipTop: coords.y,
+                          tooltipData: {
+                            name,
+                            label: configEntry.label,
+                            color: configEntry.color,
+                            value: Number(datum[dataKey]) || 0,
+                          },
+                        });
+                      }
+                    }}
+                  />
+                );
+              })
+            }
+          </Pie>
+        </Group>
+      </svg>
+
+      {tooltipOpen && tooltipData && (
+        <TooltipWithBounds
+          top={tooltipTop}
+          left={tooltipLeft}
+          unstyled
+          applyPositionStyle
+        >
+          <div className={chartTooltipContainer}>
+            <div className={chartTooltipRow}>
+              <span
+                className={chartTooltipIndicator}
+                style={{ background: tooltipData.color }}
+              />
+              <span className={chartTooltipLabel}>
+                {tooltipData.label}
+              </span>
+              <span className={chartTooltipValue}>
+                {tooltipData.value}
+              </span>
+            </div>
+          </div>
+        </TooltipWithBounds>
+      )}
+
+      {children}
+    </div>
+  );
+}
+
+/**
+ * 파이/도넛 차트
+ *
+ * @remarks
+ * - innerRadius: 0이면 파이, 0.6이면 도넛 (0~1 비율)
+ * - padAngle: 조각 간 간격
+ * - cornerRadius: 조각 모서리 둥글기
+ * - 툴팁은 마우스 호버 시 자동으로 표시됩니다 (별도 Tooltip 서브컴포넌트 불필요)
+ * - Compound: Legend
+ *
+ * @example
+ * ```tsx
+ * <ChartContainer config={appConfig}>
+ *   <PieChart data={data} dataKey="count" nameKey="app" innerRadius={0.6}>
+ *     <PieChart.Legend />
+ *   </PieChart>
+ * </ChartContainer>
+ * ```
+ */
+export const PieChart = Object.assign(PieChartRoot, {
+  Legend: ChartLegend,
+});
