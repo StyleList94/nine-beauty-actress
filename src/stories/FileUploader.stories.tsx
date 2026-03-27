@@ -78,8 +78,7 @@ const meta: Meta<typeof FileUploader> = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          '파일을 드래그 앤 드롭하거나 클릭해서 업로드합니다.',
+        component: '파일을 드래그 앤 드롭하거나 클릭해서 업로드합니다.',
       },
     },
   },
@@ -113,9 +112,7 @@ export const UploadImage: Story = {
 
     const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
-      if (file) {
-        updatePreview(file);
-      }
+      if (file) updatePreview(file);
     };
 
     return (

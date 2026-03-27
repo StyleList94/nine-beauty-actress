@@ -18,15 +18,11 @@ describe('Rendering and Props', () => {
       </Header>,
     );
 
-    await expect
-      .element(page.getByText('StyleList94'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('StyleList94')).toBeInTheDocument();
   });
 
   it('should apply custom wrapperStyle className', async () => {
-    await render(
-      <Header wrapperStyle="custom-wrapper">Content</Header>,
-    );
+    await render(<Header wrapperStyle="custom-wrapper">Content</Header>);
 
     const header = page.getByRole('banner');
     await expect.element(header).toHaveClass('custom-wrapper');
@@ -41,12 +37,9 @@ describe('Rendering and Props', () => {
     );
 
     const link = page.getByRole('link', { name: 'GitHub' });
-    await expect.element(link).toHaveAttribute(
-      'href',
-      'https://github.com/StyleList94',
-    );
     await expect
-      .element(page.getByText('My App'))
-      .toBeInTheDocument();
+      .element(link)
+      .toHaveAttribute('href', 'https://github.com/StyleList94');
+    await expect.element(page.getByText('My App')).toBeInTheDocument();
   });
 });

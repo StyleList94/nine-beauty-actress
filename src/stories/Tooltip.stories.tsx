@@ -15,8 +15,7 @@ const meta: Meta<typeof Tooltip> = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          '보조 정보를 표시하는 툴팁 컴포넌트입니다.',
+        component: '보조 정보를 표시하는 툴팁 컴포넌트입니다.',
       },
     },
   },
@@ -105,23 +104,17 @@ export const Default: StoryObj<DefaultArgs> = {
 };
 
 export const Positions: StoryObj = {
-  ...noControls(
-    'side 속성으로 top, right, bottom, left 4방향을 지원합니다.',
-  ),
+  ...noControls('side 속성으로 top, right, bottom, left 4방향을 지원합니다.'),
   render: () => (
     <div className="flex gap-4">
-      {(['top', 'right', 'bottom', 'left'] as const).map(
-        (side) => (
-          <Tooltip key={side}>
-            <TooltipTrigger asChild>
-              <Button variant="outline">{side}</Button>
-            </TooltipTrigger>
-            <TooltipContent side={side}>
-              {side} 방향 툴팁
-            </TooltipContent>
-          </Tooltip>
-        ),
-      )}
+      {(['top', 'right', 'bottom', 'left'] as const).map((side) => (
+        <Tooltip key={side}>
+          <TooltipTrigger asChild>
+            <Button variant="outline">{side}</Button>
+          </TooltipTrigger>
+          <TooltipContent side={side}>{side} 방향 툴팁</TooltipContent>
+        </Tooltip>
+      ))}
     </div>
   ),
 };

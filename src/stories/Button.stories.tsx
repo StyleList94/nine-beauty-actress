@@ -31,7 +31,16 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: 'select',
-      options: ['xs', 'sm', 'md', 'lg', 'icon-xs', 'icon-sm', 'icon', 'icon-lg'],
+      options: [
+        'xs',
+        'sm',
+        'md',
+        'lg',
+        'icon-xs',
+        'icon-sm',
+        'icon',
+        'icon-lg',
+      ],
       description: '버튼 크기를 지정합니다',
       table: {
         type: {
@@ -137,19 +146,27 @@ export const Sizes: Story = {
     <div className="flex flex-col items-start gap-3">
       <div className="flex flex-wrap items-center gap-2">
         <Button size="xs">Extra Small</Button>
-        <Button size="icon-xs"><Plus /></Button>
+        <Button size="icon-xs">
+          <Plus />
+        </Button>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <Button size="sm">Small</Button>
-        <Button size="icon-sm"><Plus /></Button>
+        <Button size="icon-sm">
+          <Plus />
+        </Button>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <Button size="md">Medium</Button>
-        <Button size="icon"><Plus /></Button>
+        <Button size="icon">
+          <Plus />
+        </Button>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <Button size="lg">Large</Button>
-        <Button size="icon-lg"><Plus /></Button>
+        <Button size="icon-lg">
+          <Plus />
+        </Button>
       </div>
     </div>
   ),

@@ -67,9 +67,7 @@ describe('Accessibility', () => {
       <FormControl>
         <FormControl.Label>이메일</FormControl.Label>
         <TextInput />
-        <FormControl.Caption>
-          이메일은 공개되지 않습니다.
-        </FormControl.Caption>
+        <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
       </FormControl>,
     );
 
@@ -134,10 +132,7 @@ describe('Accessibility', () => {
     );
 
     const validation = page.getByRole('alert');
-    await expect.element(validation).toHaveAttribute(
-      'aria-live',
-      'assertive',
-    );
+    await expect.element(validation).toHaveAttribute('aria-live', 'assertive');
     await expect.element(validation).toHaveTextContent('에러 메시지');
   });
 
@@ -153,9 +148,7 @@ describe('Accessibility', () => {
     );
 
     const validation = page.getByRole('alert');
-    await expect
-      .element(validation)
-      .toHaveAttribute('data-variant', 'success');
+    await expect.element(validation).toHaveAttribute('data-variant', 'success');
   });
 });
 
@@ -232,17 +225,9 @@ describe('Data Attributes', () => {
     );
 
     const fc = page.getByTestId('fc');
-    await expect
-      .element(fc)
-      .toHaveAttribute('data-disabled', 'true');
-    await expect
-      .element(fc)
-      .toHaveAttribute('data-required', 'true');
-    await expect
-      .element(fc)
-      .toHaveAttribute('data-validation', 'error');
-    await expect
-      .element(fc)
-      .toHaveAttribute('data-layout', 'horizontal');
+    await expect.element(fc).toHaveAttribute('data-disabled', 'true');
+    await expect.element(fc).toHaveAttribute('data-required', 'true');
+    await expect.element(fc).toHaveAttribute('data-validation', 'error');
+    await expect.element(fc).toHaveAttribute('data-layout', 'horizontal');
   });
 });

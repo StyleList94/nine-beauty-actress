@@ -50,9 +50,7 @@ describe('Sub-components', () => {
     );
 
     const header = page.getByText('Header');
-    await expect
-      .element(header)
-      .toHaveAttribute('data-slot', 'card-header');
+    await expect.element(header).toHaveAttribute('data-slot', 'card-header');
   });
 
   it('should render CardTitle with data-slot="card-title"', async () => {
@@ -65,9 +63,7 @@ describe('Sub-components', () => {
     );
 
     const title = page.getByText('Title');
-    await expect
-      .element(title)
-      .toHaveAttribute('data-slot', 'card-title');
+    await expect.element(title).toHaveAttribute('data-slot', 'card-title');
   });
 
   it('should render CardDescription with data-slot="card-description"', async () => {
@@ -95,9 +91,7 @@ describe('Sub-components', () => {
     );
 
     const action = page.getByText('Action');
-    await expect
-      .element(action)
-      .toHaveAttribute('data-slot', 'card-action');
+    await expect.element(action).toHaveAttribute('data-slot', 'card-action');
   });
 
   it('should render CardContent with data-slot="card-content"', async () => {
@@ -108,9 +102,7 @@ describe('Sub-components', () => {
     );
 
     const content = page.getByText('Body content');
-    await expect
-      .element(content)
-      .toHaveAttribute('data-slot', 'card-content');
+    await expect.element(content).toHaveAttribute('data-slot', 'card-content');
   });
 
   it('should render CardFooter with data-slot="card-footer"', async () => {
@@ -121,8 +113,6 @@ describe('Sub-components', () => {
     );
 
     const footer = page.getByText('Footer area');
-    await expect
-      .element(footer)
-      .toHaveAttribute('data-slot', 'card-footer');
+    await expect.element(footer).toHaveAttribute('data-slot', 'card-footer');
   });
 });

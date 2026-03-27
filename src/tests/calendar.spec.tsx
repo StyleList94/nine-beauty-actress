@@ -56,9 +56,7 @@ describe('Rendering and Props', () => {
     );
     const now = new Date();
     const monthName = now.toLocaleString('en-US', { month: 'long' });
-    await expect
-      .element(page.getByText(new RegExp(monthName)))
-      .toBeVisible();
+    await expect.element(page.getByText(new RegExp(monthName))).toBeVisible();
   });
 });
 
@@ -79,9 +77,7 @@ describe('Navigation', () => {
     const monthName = prevMonth.toLocaleString('en-US', {
       month: 'long',
     });
-    await expect
-      .element(page.getByText(new RegExp(monthName)))
-      .toBeVisible();
+    await expect.element(page.getByText(new RegExp(monthName))).toBeVisible();
   });
 
   it('should navigate to next month', async () => {
@@ -98,9 +94,7 @@ describe('Navigation', () => {
     const monthName = nextMonth.toLocaleString('en-US', {
       month: 'long',
     });
-    await expect
-      .element(page.getByText(new RegExp(monthName)))
-      .toBeVisible();
+    await expect.element(page.getByText(new RegExp(monthName))).toBeVisible();
   });
 });
 
@@ -136,10 +130,7 @@ describe('Dropdown Mode', () => {
   it('should accept custom classNames', async () => {
     await render(
       <CenteredWrapper>
-        <Calendar
-          mode="single"
-          classNames={{ root: 'custom-root' }}
-        />
+        <Calendar mode="single" classNames={{ root: 'custom-root' }} />
       </CenteredWrapper>,
     );
     const grid = page.getByRole('grid');
@@ -153,10 +144,7 @@ describe('Dropdown Mode', () => {
 
     await render(
       <CenteredWrapper>
-        <Calendar
-          mode="single"
-          components={{ DayButton: CustomDayButton }}
-        />
+        <Calendar mode="single" components={{ DayButton: CustomDayButton }} />
       </CenteredWrapper>,
     );
     const grid = page.getByRole('grid');
@@ -196,9 +184,7 @@ describe('Range Selection', () => {
     const day15 = page.getByRole('gridcell', { name: '15' });
     await day15.click();
 
-    const lastCall = handleSelect.mock.lastCall?.[0] as
-      | DateRange
-      | undefined;
+    const lastCall = handleSelect.mock.lastCall?.[0] as DateRange | undefined;
     expect(lastCall?.from).toBeDefined();
     expect(lastCall?.to).toBeDefined();
   });
@@ -214,12 +200,8 @@ describe('Range Selection', () => {
       </CenteredWrapper>,
     );
 
-    await expect
-      .element(page.getByText(/february/i))
-      .toBeVisible();
-    await expect
-      .element(page.getByText(/march/i))
-      .toBeVisible();
+    await expect.element(page.getByText(/february/i)).toBeVisible();
+    await expect.element(page.getByText(/march/i)).toBeVisible();
   });
 });
 
@@ -237,10 +219,7 @@ describe('Accessibility', () => {
   it('should support keyboard navigation', async () => {
     await render(
       <CenteredWrapper>
-        <Calendar
-          mode="single"
-          defaultMonth={new Date(2026, 1, 1)}
-        />
+        <Calendar mode="single" defaultMonth={new Date(2026, 1, 1)} />
       </CenteredWrapper>,
     );
 
@@ -249,8 +228,6 @@ describe('Accessibility', () => {
 
     await userEvent.keyboard('{ArrowRight}');
     const day16 = page.getByRole('gridcell', { name: '16' });
-    await expect
-      .element(day16.getByRole('button'))
-      .toHaveFocus();
+    await expect.element(day16.getByRole('button')).toHaveFocus();
   });
 });

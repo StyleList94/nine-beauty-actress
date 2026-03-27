@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import { cn } from 'lib/core/utils';
 import useVirtualScroll from 'lib/hooks/use-virtual-scroll';
 
-const items = new Array(1000).fill(0).map((_, i) => i);
+const items = Array.from({ length: 1000 }, (_, i) => i);
 
 const ITEMS_COUNT = items.length;
 const ITEM_HEIGHT = 32;

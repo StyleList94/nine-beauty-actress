@@ -15,15 +15,11 @@ describe('Rendering and Props', () => {
     await render(<Separator decorative={false} />);
 
     const separator = page.getByRole('separator');
-    await expect
-      .element(separator)
-      .toHaveAttribute('data-slot', 'separator');
+    await expect.element(separator).toHaveAttribute('data-slot', 'separator');
   });
 
   it('should apply custom className', async () => {
-    await render(
-      <Separator decorative={false} className="custom-separator" />,
-    );
+    await render(<Separator decorative={false} className="custom-separator" />);
 
     const separator = page.getByRole('separator');
     await expect.element(separator).toHaveClass('custom-separator');

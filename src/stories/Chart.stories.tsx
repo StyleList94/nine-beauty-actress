@@ -259,7 +259,12 @@ export const StackedArea: StoryObj = {
   render: () => (
     <div className="w-[600px]">
       <ChartContainer config={trafficConfig}>
-        <AreaChart data={trafficData} xKey="timestamp" stacked fillOpacity={0.4}>
+        <AreaChart
+          data={trafficData}
+          xKey="timestamp"
+          stacked
+          fillOpacity={0.4}
+        >
           <AreaChart.Grid />
           <AreaChart.XAxis />
           <AreaChart.Tooltip />
@@ -403,12 +408,7 @@ export const HeatmapStory: StoryObj = {
   render: () => (
     <div className="w-[600px]">
       <ChartContainer config={heatConfig}>
-        <Heatmap
-          data={heatmapData}
-          xKey="hour"
-          yKey="day"
-          valueKey="count"
-        />
+        <Heatmap data={heatmapData} xKey="hour" yKey="day" valueKey="count" />
       </ChartContainer>
     </div>
   ),
@@ -433,10 +433,7 @@ export const CustomColor: StoryObj = {
         };
     return (
       <div className="w-[600px]">
-        <ChartContainer
-          config={customConfig}
-          animated={false}
-        >
+        <ChartContainer config={customConfig} animated={false}>
           <LineChart data={latencyData} xKey="timestamp">
             <LineChart.Grid />
             <LineChart.XAxis />

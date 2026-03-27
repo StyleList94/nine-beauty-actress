@@ -45,8 +45,8 @@ export const InParagraph: Story = {
   render: () => (
     <p className="max-w-md text-sm leading-relaxed">
       패키지를 설치하려면 <Code>pnpm add @stylelist94/nine-beauty-actress</Code>
-      를 실행하세요. 설치 후 <Code>import</Code> 구문으로 컴포넌트를
-      불러올 수 있습니다.
+      를 실행하세요. 설치 후 <Code>import</Code> 구문으로 컴포넌트를 불러올 수
+      있습니다.
     </p>
   ),
 };

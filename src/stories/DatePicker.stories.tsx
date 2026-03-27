@@ -46,8 +46,7 @@ const meta: Meta<typeof DatePicker> = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          '날짜를 선택할 수 있는 팝업 캘린더 컴포넌트입니다.',
+        component: '날짜를 선택할 수 있는 팝업 캘린더 컴포넌트입니다.',
       },
     },
   },
@@ -295,9 +294,7 @@ export const WithTimePicker: Story = {
 };
 
 export const WithPresets: Story = {
-  ...noControls(
-    '좌측에 빠른 선택 프리셋 패널을 함께 표시합니다.',
-  ),
+  ...noControls('좌측에 빠른 선택 프리셋 패널을 함께 표시합니다.'),
   render: function Render() {
     const [date, setDate] = useState<Date | undefined>();
 
@@ -308,10 +305,7 @@ export const WithPresets: Story = {
           <DatePicker.Calendar>
             <DatePicker.Presets>
               <DatePicker.Preset label="오늘" value={new Date()} />
-              <DatePicker.Preset
-                label="어제"
-                value={subDays(new Date(), 1)}
-              />
+              <DatePicker.Preset label="어제" value={subDays(new Date(), 1)} />
               <DatePicker.Preset
                 label="일주일 전"
                 value={subDays(new Date(), 7)}
@@ -329,9 +323,7 @@ export const WithPresets: Story = {
 };
 
 export const RangeWithPresets: Story = {
-  ...noControls(
-    'Range 모드에서 프리셋을 함께 사용합니다.',
-  ),
+  ...noControls('Range 모드에서 프리셋을 함께 사용합니다.'),
   render: function Render() {
     const [range, setRange] = useState<DateRange | undefined>();
     const today = new Date();
@@ -387,9 +379,7 @@ export const WithFormControl: Story = {
 };
 
 export const WithFormControlError: Story = {
-  ...noControls(
-    'FormControl의 에러 상태와 연동됩니다.',
-  ),
+  ...noControls('FormControl의 에러 상태와 연동됩니다.'),
   render: function Render() {
     const [date, setDate] = useState<Date | undefined>();
 
@@ -425,19 +415,13 @@ export const Disabled: Story = {
 };
 
 export const CustomFormat: Story = {
-  ...noControls(
-    'date-fns 포맷 문자열로 날짜 표시 형식을 커스터마이징합니다.',
-  ),
+  ...noControls('date-fns 포맷 문자열로 날짜 표시 형식을 커스터마이징합니다.'),
   render: function Render() {
     const [date, setDate] = useState<Date | undefined>(new Date());
 
     return (
       <div className="w-[280px]">
-        <DatePicker
-          value={date}
-          onValueChange={setDate}
-          formatStr="yyyy/MM/dd"
-        >
+        <DatePicker value={date} onValueChange={setDate} formatStr="yyyy/MM/dd">
           <DatePicker.Input />
           <DatePicker.Calendar />
         </DatePicker>

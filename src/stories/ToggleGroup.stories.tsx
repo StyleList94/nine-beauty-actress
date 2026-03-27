@@ -139,7 +139,7 @@ export const Default: Story = {
     const [singleValue, setSingleValue] = useState('center');
     const [multiValue, setMultiValue] = useState<string[]>(['center']);
 
-    if (args.type === 'single') {
+    if (args.type === 'single')
       return (
         <ToggleGroup
           {...args}
@@ -161,7 +161,6 @@ export const Default: Story = {
           </ToggleGroupItem>
         </ToggleGroup>
       );
-    }
 
     return (
       <ToggleGroup

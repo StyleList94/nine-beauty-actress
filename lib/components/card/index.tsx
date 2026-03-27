@@ -40,7 +40,12 @@ export type CardProps = ComponentProps<'div'> & {
  * </Card>
  * ```
  */
-export function Card({ className, size = 'default', ref, ...props }: CardProps) {
+export function Card({
+  className,
+  size = 'default',
+  ref,
+  ...props
+}: CardProps) {
   return (
     <div
       ref={ref}
@@ -69,11 +74,7 @@ export function CardHeader({
 }
 
 /** 카드 제목 */
-export function CardTitle({
-  className,
-  ref,
-  ...props
-}: ComponentProps<'div'>) {
+export function CardTitle({ className, ref, ...props }: ComponentProps<'div'>) {
   return (
     <div
       ref={ref}

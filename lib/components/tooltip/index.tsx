@@ -59,9 +59,7 @@ export type TooltipTriggerProps = ComponentProps<
 
 /** 툴팁을 트리거하는 요소 */
 export function TooltipTrigger(props: TooltipTriggerProps) {
-  return (
-    <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
-  );
+  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
 }
 TooltipTrigger.displayName = 'TooltipTrigger';
 

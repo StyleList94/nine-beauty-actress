@@ -243,13 +243,12 @@ export const Default: Story = {
       to: addDays(new Date(), 7),
     });
 
-    if (args.mode === 'range') {
+    if (args.mode === 'range')
       return (
         <Calendar {...args} mode="range" selected={range} onSelect={setRange} />
       );
-    }
 
-    if (args.mode === 'multiple') {
+    if (args.mode === 'multiple')
       return (
         <Calendar
           {...args}
@@ -258,7 +257,6 @@ export const Default: Story = {
           onSelect={setDates}
         />
       );
-    }
 
     return (
       <Calendar {...args} mode="single" selected={date} onSelect={setDate} />
@@ -569,14 +567,14 @@ export const RangePicker: Story = {
           >
             <CalendarIcon size={16} />
             {(() => {
-              if (!dateRange?.from) {
+              if (!dateRange?.from)
                 return (
                   <span className="text-muted-foreground">Pick a date</span>
                 );
-              }
-              if (dateRange.to) {
+
+              if (dateRange.to)
                 return `${format(dateRange.from, 'LLL dd, y')} - ${format(dateRange.to, 'LLL dd, y')}`;
-              }
+
               return format(dateRange.from, 'LLL dd, y');
             })()}
           </Button>

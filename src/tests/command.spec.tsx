@@ -41,9 +41,7 @@ describe('Rendering and Props', () => {
       </Command>,
     );
     const command = page.getByTestId('cmd');
-    await expect
-      .element(command)
-      .toHaveAttribute('data-slot', 'command');
+    await expect.element(command).toHaveAttribute('data-slot', 'command');
   });
 
   it('should render CommandInput with data-slot', async () => {
@@ -56,9 +54,7 @@ describe('Rendering and Props', () => {
       </Command>,
     );
     const input = page.getByPlaceholder('Type here...');
-    await expect
-      .element(input)
-      .toHaveAttribute('data-slot', 'command-input');
+    await expect.element(input).toHaveAttribute('data-slot', 'command-input');
   });
 
   it('should render CommandInput with placeholder', async () => {
@@ -96,9 +92,7 @@ describe('Rendering and Props', () => {
       </Command>,
     );
     const item = page.getByRole('option', { name: 'My Item' });
-    await expect
-      .element(item)
-      .toHaveAttribute('data-slot', 'command-item');
+    await expect.element(item).toHaveAttribute('data-slot', 'command-item');
   });
 });
 
@@ -120,12 +114,8 @@ describe('User Interactions', () => {
     await input.fill('Apple');
 
     await expect.element(page.getByText('Apple')).toBeVisible();
-    await expect
-      .element(page.getByText('Banana'))
-      .not.toBeInTheDocument();
-    await expect
-      .element(page.getByText('Cherry'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('Banana')).not.toBeInTheDocument();
+    await expect.element(page.getByText('Cherry')).not.toBeInTheDocument();
   });
 
   it('should call onSelect when item is clicked', async () => {

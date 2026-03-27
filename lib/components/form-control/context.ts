@@ -15,8 +15,9 @@ export type FormControlContextValue = {
   setValidationMounted: (mounted: boolean) => void;
 };
 
-export const FormControlContext =
-  createContext<FormControlContextValue | null>(null);
+export const FormControlContext = createContext<FormControlContextValue | null>(
+  null,
+);
 
 export function useFormControlContext() {
   return use(FormControlContext);
@@ -50,8 +51,6 @@ export function useFormControlInputProps(
       (ctx.validation === 'error' ? true : undefined),
     'aria-describedby':
       externalProps?.['aria-describedby'] ??
-      (describedByParts.length > 0
-        ? describedByParts.join(' ')
-        : undefined),
+      (describedByParts.length > 0 ? describedByParts.join(' ') : undefined),
   };
 }

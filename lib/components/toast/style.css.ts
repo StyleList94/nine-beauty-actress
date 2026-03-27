@@ -2,7 +2,14 @@ import { style, globalStyle, keyframes } from '@vanilla-extract/css';
 import { recipe, type RecipeVariants } from '@vanilla-extract/recipes';
 
 import { vars } from 'lib/core/styles/theme.css';
-import { palette, spacing, radius, font, shadows, motion } from 'lib/core/styles/tokens';
+import {
+  palette,
+  spacing,
+  radius,
+  font,
+  shadows,
+  motion,
+} from 'lib/core/styles/tokens';
 
 const slideIn = keyframes({
   from: { transform: 'translateX(100%)' },

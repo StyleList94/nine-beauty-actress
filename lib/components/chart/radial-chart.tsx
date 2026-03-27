@@ -105,11 +105,10 @@ function RadialChartRoot({
                   element.style.filter = 'brightness(1.1)';
                 }}
                 onMouseMove={(event) => {
-                  const svgElement =
-                    event.currentTarget.ownerSVGElement;
+                  const svgElement = event.currentTarget.ownerSVGElement;
                   if (!svgElement) return;
                   const coords = localPoint(svgElement, event);
-                  if (coords) {
+                  if (coords)
                     showTooltip({
                       tooltipLeft: coords.x,
                       tooltipTop: coords.y,
@@ -120,7 +119,6 @@ function RadialChartRoot({
                         value,
                       },
                     });
-                  }
                 }}
                 onMouseLeave={(e) => {
                   const element = e.currentTarget;
@@ -166,12 +164,8 @@ function RadialChartRoot({
                 className={chartTooltipIndicator}
                 style={{ background: tooltipData.color }}
               />
-              <span className={chartTooltipLabel}>
-                {tooltipData.label}
-              </span>
-              <span className={chartTooltipValue}>
-                {tooltipData.value}
-              </span>
+              <span className={chartTooltipLabel}>{tooltipData.label}</span>
+              <span className={chartTooltipValue}>{tooltipData.value}</span>
             </div>
           </div>
         </TooltipWithBounds>

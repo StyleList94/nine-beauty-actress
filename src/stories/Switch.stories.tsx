@@ -98,9 +98,7 @@ export const Default: Story = {
   render: function Render(args) {
     const [checked, setChecked] = useState(args.checked ?? false);
 
-    return (
-      <Switch {...args} checked={checked} onCheckedChange={setChecked} />
-    );
+    return <Switch {...args} checked={checked} onCheckedChange={setChecked} />;
   },
 };
 
@@ -141,9 +139,7 @@ export const Disabled: Story = {
 };
 
 export const LightDarkTheme: Story = {
-  ...noControls(
-    '아이콘을 활용한 라이트/다크 테마 전환 스위치입니다.',
-  ),
+  ...noControls('아이콘을 활용한 라이트/다크 테마 전환 스위치입니다.'),
   render: function Render() {
     const [isDarkTheme, setIsDarkTheme] = useState(false);
 

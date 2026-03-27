@@ -10,9 +10,7 @@ describe('Rendering and Props', () => {
         <p>Scroll content</p>
       </ScrollArea>,
     );
-    await expect
-      .element(page.getByText('Scroll content'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('Scroll content')).toBeInTheDocument();
   });
 
   it('should have data-slot attribute', async () => {
@@ -33,9 +31,7 @@ describe('Rendering and Props', () => {
         <div style={{ height: 500, width: 200 }}>Tall content</div>
       </ScrollArea>,
     );
-    await expect
-      .element(page.getByText('Tall content'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('Tall content')).toBeInTheDocument();
   });
 
   it('should apply custom className', async () => {

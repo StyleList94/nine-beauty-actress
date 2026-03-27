@@ -54,11 +54,11 @@ const DatePickerContext = createContext<DatePickerContextValue | null>(null);
 /** DatePicker 컴파운드 컴포넌트 내부에서 컨텍스트를 가져오는 hook */
 function useDatePickerContext() {
   const context = use(DatePickerContext);
-  if (!context) {
+  if (!context)
     throw new Error(
       'DatePicker compound components must be used within <DatePicker>',
     );
-  }
+
   return context;
 }
 
@@ -154,7 +154,10 @@ export type DatePickerCalendarProps = {
    */
   align?: 'start' | 'center' | 'end';
   /** Calendar에 전달할 추가 props (mode, selected, onSelect 제외) */
-  calendarProps?: Omit<Partial<CalendarProps>, 'mode' | 'selected' | 'onSelect'>;
+  calendarProps?: Omit<
+    Partial<CalendarProps>,
+    'mode' | 'selected' | 'onSelect'
+  >;
   /** 프리셋 패널 등 추가 콘텐츠 (DatePicker.Presets) */
   children?: ReactNode;
   /** 추가 CSS 클래스 */
@@ -185,9 +188,9 @@ function getInitialTime(
   mode: 'single' | 'range',
   value: Date | DateRange | undefined,
 ): string {
-  if (showTimePicker && mode === 'single' && value instanceof Date) {
+  if (showTimePicker && mode === 'single' && value instanceof Date)
     return format(value, 'HH:mm');
-  }
+
   return '00:00';
 }
 
@@ -204,7 +207,7 @@ function buildCalendarProps(
     >;
   },
 ): CalendarProps {
-  if (mode === 'range') {
+  if (mode === 'range')
     return {
       ...options.calendarProps,
       mode: 'range' as const,
@@ -212,7 +215,6 @@ function buildCalendarProps(
       onSelect: options.onRangeSelect,
       numberOfMonths: options.calendarProps?.numberOfMonths ?? 2,
     } as CalendarProps;
-  }
 
   return {
     ...options.calendarProps,
@@ -263,9 +265,8 @@ function DatePickerRoot({
 
   const setOpen = useCallback(
     (nextOpen: boolean) => {
-      if (!isControlled) {
-        setInternalOpen(nextOpen);
-      }
+      if (!isControlled) setInternalOpen(nextOpen);
+
       onOpenChange?.(nextOpen);
     },
     [isControlled, onOpenChange],
@@ -276,15 +277,14 @@ function DatePickerRoot({
 
   const handleChange = useCallback(
     (nextValue: Date | DateRange | undefined) => {
-      if (mode === 'range') {
+      if (mode === 'range')
         (onValueChange as DatePickerRangeProps['onValueChange'])?.(
           nextValue as DateRange | undefined,
         );
-      } else {
+      else
         (onValueChange as DatePickerSingleProps['onValueChange'])?.(
           nextValue as Date | undefined,
         );
-      }
     },
     [mode, onValueChange],
   );
@@ -372,9 +372,7 @@ function Input({
           {displayText ? (
             <span>{displayText}</span>
           ) : (
-            <span className={styles.datePickerPlaceholder}>
-              {placeholder}
-            </span>
+            <span className={styles.datePickerPlaceholder}>{placeholder}</span>
           )}
         </Button>
       </PopoverTrigger>
@@ -425,9 +423,8 @@ function DatePickerCalendar({
   );
 
   useEffect(() => {
-    if (showTimePicker && context.mode === 'single') {
+    if (showTimePicker && context.mode === 'single')
       setTime(getInitialTime(showTimePicker, context.mode, context.value));
-    }
   }, [showTimePicker, context.mode, context.value]);
 
   const applyTime = (date: Date, timeStr: string): Date => {
@@ -442,9 +439,7 @@ function DatePickerCalendar({
       context.onValueChange(applyTime(date, time));
     } else {
       context.onValueChange(date);
-      if (date) {
-        context.setOpen(false);
-      }
+      if (date) context.setOpen(false);
     }
   };
 
@@ -472,19 +467,12 @@ function DatePickerCalendar({
     if (needsFreshStart.current) {
       needsFreshStart.current = false;
       let clickedDate: Date | undefined;
-      if (
-        range?.from &&
-        range.from.getTime() !== pendingRange?.from?.getTime()
-      ) {
+      if (range?.from && range.from.getTime() !== pendingRange?.from?.getTime())
         clickedDate = range.from;
-      } else if (
-        range?.to &&
-        range.to.getTime() !== pendingRange?.to?.getTime()
-      ) {
+      else if (range?.to && range.to.getTime() !== pendingRange?.to?.getTime())
         clickedDate = range.to;
-      } else {
-        clickedDate = range?.from ?? range?.to;
-      }
+      else clickedDate = range?.from ?? range?.to;
+
       setPendingRange(
         clickedDate ? { from: clickedDate, to: undefined } : undefined,
       );
@@ -505,9 +493,8 @@ function DatePickerCalendar({
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = event.target.value;
     setTime(newTime);
-    if (context.mode === 'single' && context.value instanceof Date) {
+    if (context.mode === 'single' && context.value instanceof Date)
       context.onValueChange(applyTime(context.value, newTime));
-    }
   };
 
   const baseCalendarProps = buildCalendarProps(context.mode, {

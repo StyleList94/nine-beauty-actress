@@ -103,12 +103,9 @@ function separateChildren(children: ReactNode) {
         props: child.props as ComposedSeriesProps,
       });
     } else {
-      if (
-        typeof child.type === 'function' &&
-        '__chartYAxis' in child.type
-      ) {
+      if (typeof child.type === 'function' && '__chartYAxis' in child.type)
         hasYAxis = true;
-      }
+
       xyChildren.push(child);
     }
   });
@@ -128,7 +125,8 @@ function ComposedChartRoot({
   const theme = useXYChartTheme(config);
   const { legends, seriesMarkers, xyChildren, hasYAxis } =
     separateChildren(children);
-  const resolvedMargin = margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
+  const resolvedMargin =
+    margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
 
   return (
     <>

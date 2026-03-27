@@ -55,7 +55,9 @@ describe('mergeRefs', () => {
 
   it('should handle null on unmount', () => {
     const callbackRef = vi.fn();
-    const objectRef = { current: document.createElement('div') as HTMLDivElement | null };
+    const objectRef = {
+      current: document.createElement('div') as HTMLDivElement | null,
+    };
     const merged = mergeRefs(callbackRef, objectRef);
 
     merged(null);

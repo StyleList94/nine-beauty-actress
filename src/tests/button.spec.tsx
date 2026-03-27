@@ -83,9 +83,9 @@ describe('Interactions', () => {
     );
 
     const button = page.getByRole('button', { name: /Cancel me/i });
-    button.element().dispatchEvent(
-      new PointerEvent('pointercancel', { bubbles: true }),
-    );
+    button
+      .element()
+      .dispatchEvent(new PointerEvent('pointercancel', { bubbles: true }));
 
     expect(handlePointerCancel).toHaveBeenCalled();
   });

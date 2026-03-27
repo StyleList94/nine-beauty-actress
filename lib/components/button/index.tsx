@@ -94,28 +94,25 @@ function ButtonWithRipple({
   const idRef = useRef(0);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const createRipple = useCallback(
-    (originX: number, originY: number): void => {
-      const button = buttonRef.current;
-      if (!button) return;
+  const createRipple = useCallback((originX: number, originY: number): void => {
+    const button = buttonRef.current;
+    if (!button) return;
 
-      const rect = button.getBoundingClientRect();
-      const localX = originX - rect.left;
-      const localY = originY - rect.top;
-      const dx = Math.max(localX, rect.width - localX);
-      const dy = Math.max(localY, rect.height - localY);
-      const radius = Math.sqrt(dx * dx + dy * dy);
-      const rippleSize = radius * 2;
+    const rect = button.getBoundingClientRect();
+    const localX = originX - rect.left;
+    const localY = originY - rect.top;
+    const dx = Math.max(localX, rect.width - localX);
+    const dy = Math.max(localY, rect.height - localY);
+    const radius = Math.sqrt(dx * dx + dy * dy);
+    const rippleSize = radius * 2;
 
-      idRef.current += 1;
-      const id = idRef.current;
-      setRipples((prev) => [
-        ...prev,
-        { id, x: localX, y: localY, size: rippleSize },
-      ]);
-    },
-    [],
-  );
+    idRef.current += 1;
+    const id = idRef.current;
+    setRipples((prev) => [
+      ...prev,
+      { id, x: localX, y: localY, size: rippleSize },
+    ]);
+  }, []);
 
   const removeFirstRipple = useCallback(() => {
     setRipples((prev) => (prev.length ? prev.slice(1) : prev));
@@ -127,9 +124,9 @@ function ButtonWithRipple({
         !disableRipple &&
         !disabled &&
         (event as { isPrimary?: boolean }).isPrimary
-      ) {
+      )
         createRipple(event.clientX, event.clientY);
-      }
+
       onPointerDown?.(event);
     },
     [disableRipple, disabled, createRipple, onPointerDown],
@@ -137,9 +134,8 @@ function ButtonWithRipple({
 
   const handlePointerUp = useCallback(
     (event: PointerEvent<HTMLButtonElement>) => {
-      if (!disableRipple) {
-        removeFirstRipple();
-      }
+      if (!disableRipple) removeFirstRipple();
+
       onPointerUp?.(event);
     },
     [disableRipple, removeFirstRipple, onPointerUp],
@@ -147,9 +143,8 @@ function ButtonWithRipple({
 
   const handlePointerCancel = useCallback(
     (event: PointerEvent<HTMLButtonElement>) => {
-      if (!disableRipple) {
-        removeFirstRipple();
-      }
+      if (!disableRipple) removeFirstRipple();
+
       onPointerCancel?.(event);
     },
     [disableRipple, removeFirstRipple, onPointerCancel],
@@ -157,9 +152,8 @@ function ButtonWithRipple({
 
   const handlePointerLeave = useCallback(
     (event: PointerEvent<HTMLButtonElement>) => {
-      if (!disableRipple) {
-        removeFirstRipple();
-      }
+      if (!disableRipple) removeFirstRipple();
+
       onPointerLeave?.(event);
     },
     [disableRipple, removeFirstRipple, onPointerLeave],
@@ -167,9 +161,8 @@ function ButtonWithRipple({
 
   const handleBlur = useCallback(
     (event: FocusEvent<HTMLButtonElement>) => {
-      if (!disableRipple) {
-        removeFirstRipple();
-      }
+      if (!disableRipple) removeFirstRipple();
+
       onBlur?.(event);
     },
     [disableRipple, removeFirstRipple, onBlur],
@@ -177,7 +170,7 @@ function ButtonWithRipple({
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLButtonElement>) => {
-      if (!disableRipple && !disabled && !event.repeat) {
+      if (!disableRipple && !disabled && !event.repeat)
         if (event.key === ' ' || event.key === 'Enter') {
           const button = buttonRef.current;
           if (button) {
@@ -188,7 +181,7 @@ function ButtonWithRipple({
             );
           }
         }
-      }
+
       onKeyDown?.(event);
     },
     [disableRipple, disabled, createRipple, onKeyDown],
@@ -196,9 +189,9 @@ function ButtonWithRipple({
 
   const handleKeyUp = useCallback(
     (event: KeyboardEvent<HTMLButtonElement>) => {
-      if (!disableRipple && (event.key === ' ' || event.key === 'Enter')) {
+      if (!disableRipple && (event.key === ' ' || event.key === 'Enter'))
         removeFirstRipple();
-      }
+
       onKeyUp?.(event);
     },
     [disableRipple, removeFirstRipple, onKeyUp],
@@ -288,7 +281,7 @@ export function Button({
   ref,
   ...props
 }: ButtonProps): ReactElement {
-  if (asChild) {
+  if (asChild)
     return (
       <Slot
         ref={ref}
@@ -301,7 +294,6 @@ export function Button({
         {children}
       </Slot>
     );
-  }
 
   return (
     <ButtonWithRipple

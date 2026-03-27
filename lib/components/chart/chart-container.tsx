@@ -11,11 +11,11 @@ import { chartContainer } from './style.css';
 
 const DEFAULT_CHART_COLORS = [
   'oklch(58% 0.215 258)', // blue    #0072f5
-  'oklch(58% 0.204 25)',  // red     #d93036
+  'oklch(58% 0.204 25)', // red     #d93036
   'oklch(78% 0.158 145)', // green
-  'oklch(82% 0.164 76)',  // amber   #ffb224
+  'oklch(82% 0.164 76)', // amber   #ffb224
   'oklch(70% 0.178 310)', // purple  #bf7af0
-  'oklch(69% 0.190 4)',   // pink    #f75f8f
+  'oklch(69% 0.190 4)', // pink    #f75f8f
   'oklch(75% 0.132 183)', // teal    #0ac7b4
   'oklch(72% 0.152 251)', // sky     #52a8ff
 ];
@@ -29,7 +29,8 @@ function resolveConfig(config: ChartConfig): ResolvedChartConfig {
     resolved[key] = {
       ...entry,
       color:
-        entry.color ?? DEFAULT_CHART_COLORS[index % DEFAULT_CHART_COLORS.length],
+        entry.color ??
+        DEFAULT_CHART_COLORS[index % DEFAULT_CHART_COLORS.length],
     };
   });
 
@@ -115,9 +116,7 @@ function ChartContainer({
             animated,
           };
 
-          return (
-            <ChartContext value={contextValue}>{children}</ChartContext>
-          );
+          return <ChartContext value={contextValue}>{children}</ChartContext>;
         }}
       </ParentSize>
     </div>

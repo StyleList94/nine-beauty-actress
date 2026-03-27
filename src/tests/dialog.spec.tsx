@@ -33,7 +33,9 @@ describe('Rendering and Props', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open Dialog</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open Dialog</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
           </DialogContent>
@@ -48,7 +50,9 @@ describe('Rendering and Props', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open Dialog</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open Dialog</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Hidden Title</DialogTitle>
           </DialogContent>
@@ -66,7 +70,9 @@ describe('Popup Open/Close', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Dialog Title</DialogTitle>
           </DialogContent>
@@ -83,7 +89,9 @@ describe('Popup Open/Close', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Escape Dialog</DialogTitle>
           </DialogContent>
@@ -103,7 +111,9 @@ describe('Popup Open/Close', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Close Button Dialog</DialogTitle>
           </DialogContent>
@@ -125,7 +135,9 @@ describe('Popup Open/Close', () => {
     await render(
       <CenteredWrapper>
         <Dialog onOpenChange={handleOpenChange}>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Callback Dialog</DialogTitle>
           </DialogContent>
@@ -142,7 +154,9 @@ describe('Props', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Default Close</DialogTitle>
           </DialogContent>
@@ -158,7 +172,9 @@ describe('Props', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent showCloseButton={false} aria-describedby={undefined}>
             <DialogTitle>No Close</DialogTitle>
           </DialogContent>
@@ -167,9 +183,7 @@ describe('Props', () => {
     );
     await page.getByRole('button', { name: /Open/i }).click();
     await expect.element(page.getByRole('dialog')).toBeVisible();
-    await expect
-      .element(page.getByText('No Close'))
-      .toBeVisible();
+    await expect.element(page.getByText('No Close')).toBeVisible();
     // Only the trigger button and no close button inside dialog
     const closeButtons = page.getByRole('button', { name: /Close/i });
     await expect.element(closeButtons).not.toBeInTheDocument();
@@ -179,7 +193,9 @@ describe('Props', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent showCloseButton={false} aria-describedby={undefined}>
             <DialogTitle>Footer Default</DialogTitle>
             <DialogFooter>
@@ -191,7 +207,9 @@ describe('Props', () => {
     );
     await page.getByRole('button', { name: /Open/i }).click();
     await expect.element(page.getByRole('dialog')).toBeVisible();
-    await expect.element(page.getByRole('button', { name: /Save/i })).toBeVisible();
+    await expect
+      .element(page.getByRole('button', { name: /Save/i }))
+      .toBeVisible();
     await expect
       .element(page.getByRole('button', { name: /Close/i }))
       .not.toBeInTheDocument();
@@ -201,7 +219,9 @@ describe('Props', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent showCloseButton={false} aria-describedby={undefined}>
             <DialogTitle>Footer Close</DialogTitle>
             <DialogFooter showCloseButton>
@@ -222,7 +242,9 @@ describe('Sub-components', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>My Title</DialogTitle>
@@ -257,16 +279,16 @@ describe('Sub-components', () => {
     await expect.element(page.getByRole('dialog')).toBeVisible();
 
     await page.getByRole('button', { name: /Close me/i }).click();
-    await expect
-      .element(page.getByText('Close Test'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('Close Test')).not.toBeInTheDocument();
   });
 
   it('should have data-slot on content', async () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Slot Dialog</DialogTitle>
           </DialogContent>
@@ -275,9 +297,7 @@ describe('Sub-components', () => {
     );
     await page.getByRole('button', { name: /Open/i }).click();
     const dialog = page.getByRole('dialog');
-    await expect
-      .element(dialog)
-      .toHaveAttribute('data-slot', 'dialog-content');
+    await expect.element(dialog).toHaveAttribute('data-slot', 'dialog-content');
   });
 });
 
@@ -286,7 +306,9 @@ describe('Accessibility', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Focus Trap</DialogTitle>
             <TextInput placeholder="First input" />
@@ -311,7 +333,9 @@ describe('Accessibility', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Role Dialog</DialogTitle>
           </DialogContent>
@@ -327,7 +351,9 @@ describe('Accessibility', () => {
     await render(
       <CenteredWrapper>
         <Dialog>
-          <DialogTrigger asChild><Button variant="outline">Open</Button></DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DialogTrigger>
           <DialogContent aria-describedby={undefined}>
             <DialogTitle>Overlay Dialog</DialogTitle>
           </DialogContent>

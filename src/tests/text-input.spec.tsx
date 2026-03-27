@@ -92,9 +92,7 @@ describe('FormControl Integration', () => {
       <FormControl validation="error">
         <FormControl.Label>Email</FormControl.Label>
         <TextInput />
-        <FormControl.Validation>
-          Email is required
-        </FormControl.Validation>
+        <FormControl.Validation>Email is required</FormControl.Validation>
       </FormControl>,
     );
 

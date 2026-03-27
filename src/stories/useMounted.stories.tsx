@@ -5,7 +5,11 @@ import useMounted from 'lib/hooks/use-mounted';
 const MountedDemo = () => {
   const isMounted = useMounted();
 
-  return <p className="text-sm">is component mounted?: {isMounted ? 'yes!' : 'no!'}</p>;
+  return (
+    <p className="text-sm">
+      is component mounted?: {isMounted ? 'yes!' : 'no!'}
+    </p>
+  );
 };
 
 const meta: Meta<typeof MountedDemo> = {
@@ -16,8 +20,7 @@ const meta: Meta<typeof MountedDemo> = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          '컴포넌트 마운트 여부를 반환하는 훅입니다.',
+        component: '컴포넌트 마운트 여부를 반환하는 훅입니다.',
       },
     },
   },

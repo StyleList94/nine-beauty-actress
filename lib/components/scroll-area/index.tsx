@@ -32,9 +32,7 @@ export function ScrollBar({
   );
 }
 
-export type ScrollAreaProps = ComponentProps<
-  typeof ScrollAreaPrimitive.Root
->;
+export type ScrollAreaProps = ComponentProps<typeof ScrollAreaPrimitive.Root>;
 
 /**
  * 콘텐츠가 영역을 초과할 때 스크롤바를 제공하는 스크롤 영역입니다.

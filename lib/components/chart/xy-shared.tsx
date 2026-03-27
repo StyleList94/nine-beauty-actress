@@ -31,10 +31,20 @@ import {
 } from './style.css';
 
 /** XY 차트 기본 마진 (YAxis 있을 때) */
-export const xyChartMargin = { top: 8, right: 16, bottom: 24, left: 36 } as const;
+export const xyChartMargin = {
+  top: 8,
+  right: 16,
+  bottom: 24,
+  left: 36,
+} as const;
 
 /** XY 차트 기본 마진 (YAxis 없을 때) */
-export const xyChartMarginNoYAxis = { top: 8, right: 16, bottom: 24, left: 8 } as const;
+export const xyChartMarginNoYAxis = {
+  top: 8,
+  right: 16,
+  bottom: 24,
+  left: 8,
+} as const;
 
 /** XY 차트 visx 테마 생성 */
 export function useXYChartTheme(config: ResolvedChartConfig) {
@@ -159,28 +169,24 @@ function ChartTooltip({ showGlyphs, render }: ChartTooltipInternalProps) {
 
         return (
           <div className={chartTooltipContainer}>
-            {Object.entries(tooltipData.datumByKey).map(
-              ([key, datumEntry]) => {
-                const entry = config[key];
-                const datum = datumEntry.datum as Record<string, unknown>;
-                return (
-                  <div key={key} className={chartTooltipRow}>
-                    <span
-                      className={chartTooltipIndicator}
-                      style={{
-                        background: entry.color,
-                      }}
-                    />
-                    <span className={chartTooltipLabel}>
-                      {entry.label}
-                    </span>
-                    <span className={chartTooltipValue}>
-                      {String(datum[key])}
-                    </span>
-                  </div>
-                );
-              },
-            )}
+            {Object.entries(tooltipData.datumByKey).map(([key, datumEntry]) => {
+              const entry = config[key];
+              const datum = datumEntry.datum as Record<string, unknown>;
+              return (
+                <div key={key} className={chartTooltipRow}>
+                  <span
+                    className={chartTooltipIndicator}
+                    style={{
+                      background: entry.color,
+                    }}
+                  />
+                  <span className={chartTooltipLabel}>{entry.label}</span>
+                  <span className={chartTooltipValue}>
+                    {String(datum[key])}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         );
       }}
@@ -223,9 +229,7 @@ export function separateChildren(children: ReactNode) {
         legends.push(child);
         return;
       }
-      if ('__chartYAxis' in child.type) {
-        hasYAxis = true;
-      }
+      if ('__chartYAxis' in child.type) hasYAxis = true;
     }
     xyChildren.push(child);
   });

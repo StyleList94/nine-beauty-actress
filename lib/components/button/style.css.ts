@@ -57,10 +57,13 @@ globalStyle(`${base} svg:not([class*="size-"])`, {
   height: '1rem',
 });
 
-globalStyle(`${base}[data-size="xs"] svg:not([class*="size-"]), ${base}[data-size="icon-xs"] svg:not([class*="size-"])`, {
-  width: '0.75rem',
-  height: '0.75rem',
-});
+globalStyle(
+  `${base}[data-size="xs"] svg:not([class*="size-"]), ${base}[data-size="icon-xs"] svg:not([class*="size-"])`,
+  {
+    width: '0.75rem',
+    height: '0.75rem',
+  },
+);
 
 export const button = recipe({
   base: [base],

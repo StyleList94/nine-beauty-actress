@@ -251,9 +251,7 @@ export const Range: StoryObj<RangeArgs> = {
 };
 
 export const WithSteps: StoryObj = {
-  ...noControls(
-    'step 속성으로 이동 단위를 지정합니다.',
-  ),
+  ...noControls('step 속성으로 이동 단위를 지정합니다.'),
   render: () => (
     <div className="flex w-60 flex-col gap-6">
       <div className="flex flex-col gap-2">
@@ -269,17 +267,10 @@ export const WithSteps: StoryObj = {
 };
 
 export const Vertical: StoryObj = {
-  ...noControls(
-    'orientation="vertical"로 세로 방향 슬라이더를 표시합니다.',
-  ),
+  ...noControls('orientation="vertical"로 세로 방향 슬라이더를 표시합니다.'),
   render: () => (
     <div className="flex h-48 gap-8">
-      <Slider
-        defaultValue={[50]}
-        max={100}
-        step={1}
-        orientation="vertical"
-      />
+      <Slider defaultValue={[50]} max={100} step={1} orientation="vertical" />
       <Slider
         defaultValue={[20, 80]}
         max={100}
@@ -291,17 +282,13 @@ export const Vertical: StoryObj = {
 };
 
 export const WithFormControl: StoryObj = {
-  ...noControls(
-    'FormControl과 조합하여 레이블을 연결합니다.',
-  ),
+  ...noControls('FormControl과 조합하여 레이블을 연결합니다.'),
   render: () => (
     <div className="flex w-60 flex-col gap-4">
       <FormControl>
         <FormControl.Label>볼륨</FormControl.Label>
         <Slider defaultValue={[70]} max={100} step={1} />
-        <FormControl.Caption>
-          현재 볼륨을 조절합니다.
-        </FormControl.Caption>
+        <FormControl.Caption>현재 볼륨을 조절합니다.</FormControl.Caption>
       </FormControl>
     </div>
   ),
@@ -312,12 +299,7 @@ export const Disabled: StoryObj = {
   render: () => (
     <div className="flex w-60 flex-col gap-4">
       <Slider defaultValue={[50]} max={100} step={1} disabled />
-      <Slider
-        defaultValue={[20, 80]}
-        max={100}
-        step={1}
-        disabled
-      />
+      <Slider defaultValue={[20, 80]} max={100} step={1} disabled />
     </div>
   ),
 };

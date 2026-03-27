@@ -29,10 +29,7 @@ describe('Rendering and Props', () => {
         <ToggleGroupItem value="italic" aria-label="Toggle italic">
           Italic
         </ToggleGroupItem>
-        <ToggleGroupItem
-          value="underline"
-          aria-label="Toggle underline"
-        >
+        <ToggleGroupItem value="underline" aria-label="Toggle underline">
           Underline
         </ToggleGroupItem>
       </ToggleGroup>,
@@ -51,11 +48,7 @@ describe('Rendering and Props', () => {
 
   it('should have initial on/off state', async () => {
     await render(
-      <ToggleGroup
-        type="single"
-        defaultValue="bold"
-        aria-label="Text style"
-      >
+      <ToggleGroup type="single" defaultValue="bold" aria-label="Text style">
         <ToggleGroupItem value="bold" aria-label="Toggle bold">
           Bold
         </ToggleGroupItem>
@@ -69,9 +62,7 @@ describe('Rendering and Props', () => {
     const italicItem = page.getByLabelText('Toggle italic');
 
     await expect.element(boldItem).toHaveAttribute('data-state', 'on');
-    await expect
-      .element(italicItem)
-      .toHaveAttribute('data-state', 'off');
+    await expect.element(italicItem).toHaveAttribute('data-state', 'off');
   });
 
   it('should support multiple selection initial state', async () => {
@@ -108,11 +99,7 @@ describe('Rendering and Props', () => {
 describe('Visual Properties', () => {
   it('should apply variant data attribute', async () => {
     await render(
-      <ToggleGroup
-        type="single"
-        variant="outline"
-        aria-label="Test group"
-      >
+      <ToggleGroup type="single" variant="outline" aria-label="Test group">
         <ToggleGroupItem value="a" aria-label="Option A">
           A
         </ToggleGroupItem>
@@ -120,18 +107,12 @@ describe('Visual Properties', () => {
     );
 
     const group = page.getByRole('group');
-    await expect
-      .element(group)
-      .toHaveAttribute('data-variant', 'outline');
+    await expect.element(group).toHaveAttribute('data-variant', 'outline');
   });
 
   it('should apply size data attribute', async () => {
     await render(
-      <ToggleGroup
-        type="single"
-        size="lg"
-        aria-label="Test group"
-      >
+      <ToggleGroup type="single" size="lg" aria-label="Test group">
         <ToggleGroupItem value="a" aria-label="Option A">
           A
         </ToggleGroupItem>
@@ -145,20 +126,12 @@ describe('Visual Properties', () => {
   it('should apply spacing data attribute', async () => {
     await render(
       <div>
-        <ToggleGroup
-          type="single"
-          spacing="none"
-          aria-label="Tight group"
-        >
+        <ToggleGroup type="single" spacing="none" aria-label="Tight group">
           <ToggleGroupItem value="a" aria-label="Tight A">
             A
           </ToggleGroupItem>
         </ToggleGroup>
-        <ToggleGroup
-          type="single"
-          spacing="md"
-          aria-label="Spaced group"
-        >
+        <ToggleGroup type="single" spacing="md" aria-label="Spaced group">
           <ToggleGroupItem value="a" aria-label="Spaced A">
             A
           </ToggleGroupItem>
@@ -178,20 +151,12 @@ describe('Visual Properties', () => {
   it('should apply numeric spacing', async () => {
     await render(
       <div>
-        <ToggleGroup
-          type="single"
-          spacing={12}
-          aria-label="Numeric spaced"
-        >
+        <ToggleGroup type="single" spacing={12} aria-label="Numeric spaced">
           <ToggleGroupItem value="a" aria-label="Option A">
             A
           </ToggleGroupItem>
         </ToggleGroup>
-        <ToggleGroup
-          type="single"
-          spacing={0}
-          aria-label="Zero spaced"
-        >
+        <ToggleGroup type="single" spacing={0} aria-label="Zero spaced">
           <ToggleGroupItem value="a" aria-label="Option B">
             B
           </ToggleGroupItem>
@@ -220,9 +185,7 @@ describe('Accessibility', () => {
     );
 
     const group = page.getByRole('group');
-    await expect
-      .element(group)
-      .toHaveAttribute('aria-label', 'Text style');
+    await expect.element(group).toHaveAttribute('aria-label', 'Text style');
   });
 
   it('should render disabled state', async () => {

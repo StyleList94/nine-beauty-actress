@@ -85,7 +85,10 @@ export function Combobox({
           {value
             ? options.find((option) => option.value === value)?.label
             : placeholder}
-          <ChevronsUpDownIcon size={16} className={styles.comboboxChevronIcon} />
+          <ChevronsUpDownIcon
+            size={16}
+            className={styles.comboboxChevronIcon}
+          />
         </Button>
       </PopoverTrigger>
       <PopoverContent className={styles.comboboxContent}>
@@ -99,9 +102,7 @@ export function Combobox({
                   key={option.value}
                   value={option.value}
                   onSelect={(currentValue) => {
-                    onValueChange(
-                      currentValue === value ? '' : currentValue,
-                    );
+                    onValueChange(currentValue === value ? '' : currentValue);
                     setOpen(false);
                   }}
                 >

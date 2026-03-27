@@ -14,9 +14,7 @@ describe('Rendering and Props', () => {
   it('should have data-slot attribute', async () => {
     await render(<Slider data-testid="slider-root" defaultValue={[50]} />);
     const sliderRoot = page.getByTestId('slider-root');
-    await expect
-      .element(sliderRoot)
-      .toHaveAttribute('data-slot', 'slider');
+    await expect.element(sliderRoot).toHaveAttribute('data-slot', 'slider');
   });
 
   it('should render without value or defaultValue', async () => {
@@ -37,9 +35,7 @@ describe('Rendering and Props', () => {
     await expect.element(slider).toBeInTheDocument();
     // Track and range render alongside thumb inside the root
     const sliderRoot = page.getByTestId('slider-root');
-    await expect
-      .element(sliderRoot)
-      .toHaveAttribute('data-slot', 'slider');
+    await expect.element(sliderRoot).toHaveAttribute('data-slot', 'slider');
   });
 });
 
@@ -103,8 +99,6 @@ describe('FormControl Integration', () => {
     );
     // aria-describedby is applied to SliderPrimitive.Root, not the thumb
     const sliderRoot = page.getByTestId('slider-root');
-    await expect
-      .element(sliderRoot)
-      .toHaveAttribute('aria-describedby');
+    await expect.element(sliderRoot).toHaveAttribute('aria-describedby');
   });
 });

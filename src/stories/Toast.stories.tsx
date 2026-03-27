@@ -13,8 +13,7 @@ const meta: Meta<typeof Toaster> = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          '토스트 알림을 화면에 렌더링하는 프로바이더 컴포넌트입니다.',
+        component: '토스트 알림을 화면에 렌더링하는 프로바이더 컴포넌트입니다.',
       },
       story: {
         inline: false,
@@ -89,7 +88,8 @@ export const Default: StoryObj<DefaultArgs> = {
     _duration: {
       name: 'duration',
       control: 'number',
-      description: '자동 닫힘 시간(ms)을 지정합니다. 0이면 자동으로 닫히지 않습니다.',
+      description:
+        '자동 닫힘 시간(ms)을 지정합니다. 0이면 자동으로 닫히지 않습니다.',
       table: {
         category: 'toast()',
         type: { summary: 'number' },
@@ -121,9 +121,7 @@ export const Default: StoryObj<DefaultArgs> = {
 };
 
 export const Destructive: StoryObj = {
-  ...noControls(
-    'variant="destructive"로 오류 알림을 표시합니다.',
-  ),
+  ...noControls('variant="destructive"로 오류 알림을 표시합니다.'),
   render: () => (
     <Button
       variant="outline"
@@ -141,9 +139,7 @@ export const Destructive: StoryObj = {
 };
 
 export const WithAction: StoryObj = {
-  ...noControls(
-    'ToastAction으로 액션 버튼을 포함한 토스트입니다.',
-  ),
+  ...noControls('ToastAction으로 액션 버튼을 포함한 토스트입니다.'),
   render: () => (
     <Button
       variant="outline"
@@ -151,9 +147,7 @@ export const WithAction: StoryObj = {
         toast({
           title: '일정 알림',
           description: '10분 후 미팅이 시작됩니다.',
-          action: (
-            <ToastAction altText="확인">확인</ToastAction>
-          ),
+          action: <ToastAction altText="확인">확인</ToastAction>,
         })
       }
     >

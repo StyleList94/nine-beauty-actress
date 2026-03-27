@@ -1,9 +1,6 @@
 import type { CurveType } from './types';
 
-import {
-  type ComponentProps,
-  type ReactNode,
-} from 'react';
+import { type ComponentProps, type ReactNode } from 'react';
 
 import { XYChart, AnimatedLineSeries, LineSeries } from '@visx/xychart';
 
@@ -55,7 +52,8 @@ function LineChartRoot({
   const { config, height, animated } = useChartConfig();
   const theme = useXYChartTheme(config);
   const { legends, xyChildren, hasYAxis } = separateChildren(children);
-  const resolvedMargin = margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
+  const resolvedMargin =
+    margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
   const keys = series ?? Object.keys(config);
   const curveFactory = getCurveFactory(curve);
   const Series = animated ? AnimatedLineSeries : LineSeries;

@@ -25,7 +25,12 @@ import {
 /** 그룹의 이름표를 달아줄게 */
 export type CheckboxGroupLabelProps = ComponentProps<'legend'>;
 
-function Label({ className, children, ref, ...props }: CheckboxGroupLabelProps) {
+function Label({
+  className,
+  children,
+  ref,
+  ...props
+}: CheckboxGroupLabelProps) {
   const ctx = useCheckboxGroupContext();
 
   return (
