@@ -31,7 +31,9 @@ describe('Rendering and Props', () => {
     await render(
       <CenteredWrapper>
         <Popover>
-          <PopoverTrigger asChild><Button variant="outline">Open</Button></PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
         </Popover>
       </CenteredWrapper>,
@@ -55,16 +57,16 @@ describe('Rendering and Props', () => {
       </CenteredWrapper>,
     );
     const anchor = page.getByTestId('anchor');
-    await expect
-      .element(anchor)
-      .toHaveAttribute('data-slot', 'popover-anchor');
+    await expect.element(anchor).toHaveAttribute('data-slot', 'popover-anchor');
   });
 
   it('should not show content initially', async () => {
     await render(
       <CenteredWrapper>
         <Popover>
-          <PopoverTrigger asChild><Button variant="outline">Open</Button></PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </PopoverTrigger>
           <PopoverContent>Hidden content</PopoverContent>
         </Popover>
       </CenteredWrapper>,
@@ -80,7 +82,9 @@ describe('Popup Open/Close', () => {
     await render(
       <CenteredWrapper>
         <Popover>
-          <PopoverTrigger asChild><Button variant="outline">Open</Button></PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </PopoverTrigger>
           <PopoverContent>Popover content</PopoverContent>
         </Popover>
       </CenteredWrapper>,
@@ -94,7 +98,9 @@ describe('Popup Open/Close', () => {
     await render(
       <CenteredWrapper>
         <Popover>
-          <PopoverTrigger asChild><Button variant="outline">Open</Button></PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </PopoverTrigger>
           <PopoverContent>Escape content</PopoverContent>
         </Popover>
       </CenteredWrapper>,
@@ -113,7 +119,9 @@ describe('Popup Open/Close', () => {
     await render(
       <CenteredWrapper>
         <Popover>
-          <PopoverTrigger asChild><Button variant="outline">Open</Button></PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </PopoverTrigger>
           <PopoverContent>Outside content</PopoverContent>
         </Popover>
       </CenteredWrapper>,
@@ -133,7 +141,9 @@ describe('Popup Open/Close', () => {
     await render(
       <CenteredWrapper>
         <Popover onOpenChange={handleOpenChange}>
-          <PopoverTrigger asChild><Button variant="outline">Open</Button></PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </PopoverTrigger>
           <PopoverContent>Callback content</PopoverContent>
         </Popover>
       </CenteredWrapper>,
@@ -149,7 +159,9 @@ describe('Data Attributes', () => {
     await render(
       <CenteredWrapper>
         <Popover>
-          <PopoverTrigger asChild><Button variant="outline">Open</Button></PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </PopoverTrigger>
           <PopoverContent>Slot content</PopoverContent>
         </Popover>
       </CenteredWrapper>,
@@ -168,7 +180,9 @@ describe('Sub-components', () => {
     await render(
       <CenteredWrapper>
         <Popover>
-          <PopoverTrigger asChild><Button variant="outline">Open</Button></PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </PopoverTrigger>
           <PopoverContent>
             <PopoverHeader>
               <PopoverTitle>Popover Title</PopoverTitle>
@@ -180,19 +194,17 @@ describe('Sub-components', () => {
     );
     const trigger = page.getByRole('button', { name: /Open/i });
     await trigger.click();
-    await expect
-      .element(page.getByText('Popover Title'))
-      .toBeVisible();
-    await expect
-      .element(page.getByText('Popover Description'))
-      .toBeVisible();
+    await expect.element(page.getByText('Popover Title')).toBeVisible();
+    await expect.element(page.getByText('Popover Description')).toBeVisible();
   });
 
   it('should have data-slot on sub-components', async () => {
     await render(
       <CenteredWrapper>
         <Popover>
-          <PopoverTrigger asChild><Button variant="outline">Open</Button></PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </PopoverTrigger>
           <PopoverContent>
             <PopoverHeader>
               <PopoverTitle>Title</PopoverTitle>
@@ -205,9 +217,7 @@ describe('Sub-components', () => {
     const trigger = page.getByRole('button', { name: /Open/i });
     await trigger.click();
     const title = page.getByText('Title');
-    await expect
-      .element(title)
-      .toHaveAttribute('data-slot', 'popover-title');
+    await expect.element(title).toHaveAttribute('data-slot', 'popover-title');
     const desc = page.getByText('Description');
     await expect
       .element(desc)
@@ -220,7 +230,9 @@ describe('Accessibility', () => {
     await render(
       <CenteredWrapper>
         <Popover>
-          <PopoverTrigger asChild><Button variant="outline">Open</Button></PopoverTrigger>
+          <PopoverTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
         </Popover>
       </CenteredWrapper>,

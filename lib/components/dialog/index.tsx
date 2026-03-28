@@ -36,18 +36,14 @@ export function Dialog(props: DialogProps) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
 
-export type DialogTriggerProps = ComponentProps<
-  typeof DialogPrimitive.Trigger
->;
+export type DialogTriggerProps = ComponentProps<typeof DialogPrimitive.Trigger>;
 
 /** 다이얼로그를 여는 트리거 요소 */
 export function DialogTrigger(props: DialogTriggerProps) {
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
 }
 
-export type DialogPortalProps = ComponentProps<
-  typeof DialogPrimitive.Portal
->;
+export type DialogPortalProps = ComponentProps<typeof DialogPrimitive.Portal>;
 
 /** 다이얼로그를 DOM 트리 외부에 렌더링하는 포탈 */
 export function DialogPortal(props: DialogPortalProps) {
@@ -61,9 +57,7 @@ export function DialogClose(props: DialogCloseProps) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
-export type DialogOverlayProps = ComponentProps<
-  typeof DialogPrimitive.Overlay
->;
+export type DialogOverlayProps = ComponentProps<typeof DialogPrimitive.Overlay>;
 
 /** 반투명 배경 오버레이 */
 export function DialogOverlay({
@@ -159,16 +153,10 @@ export function DialogFooter({
   );
 }
 
-export type DialogTitleProps = ComponentProps<
-  typeof DialogPrimitive.Title
->;
+export type DialogTitleProps = ComponentProps<typeof DialogPrimitive.Title>;
 
 /** 다이얼로그 제목 */
-export function DialogTitle({
-  className,
-  ref,
-  ...props
-}: DialogTitleProps) {
+export function DialogTitle({ className, ref, ...props }: DialogTitleProps) {
   return (
     <DialogPrimitive.Title
       ref={ref}

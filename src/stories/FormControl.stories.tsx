@@ -171,13 +171,10 @@ export const WithValidation: StoryObj = {
       const { value } = e.target;
       setEmail(value);
 
-      if (!value) {
-        setValidation(undefined);
-      } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      if (!value) setValidation(undefined);
+      else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
         setValidation('success');
-      } else {
-        setValidation('error');
-      }
+      else setValidation('error');
     };
 
     return (

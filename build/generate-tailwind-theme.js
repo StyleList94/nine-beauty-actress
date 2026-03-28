@@ -59,7 +59,7 @@ function easingKeyToTailwind(key) {
 function mapPalette(palette) {
   /** @type {string[]} */
   const lines = [];
-  for (const [colorName, value] of Object.entries(palette)) {
+  for (const [colorName, value] of Object.entries(palette))
     if (typeof value === 'string') {
       lines.push(`--color-${PREFIX}-${colorName}: ${value};`);
     } else {
@@ -68,7 +68,7 @@ function mapPalette(palette) {
         lines.push(`--color-${PREFIX}-${colorName}-${level}: ${colorValue};`);
       }
     }
-  }
+
   return lines.join('\n  ');
 }
 
@@ -176,7 +176,10 @@ function mapDuration(duration) {
  */
 function mapEasing(easing) {
   return Object.entries(easing)
-    .map(([name, value]) => `--ease-${PREFIX}-${easingKeyToTailwind(name)}: ${value};`)
+    .map(
+      ([name, value]) =>
+        `--ease-${PREFIX}-${easingKeyToTailwind(name)}: ${value};`,
+    )
     .join('\n  ');
 }
 
@@ -191,11 +194,11 @@ async function importToken(filename, exportName) {
   const fileUrl = pathToFileURL(filePath).href;
   const mod = await import(`${fileUrl}?t=${Date.now()}`);
   const value = mod[exportName];
-  if (value === undefined) {
+  if (value === undefined)
     throw new Error(
       `Expected export "${exportName}" from ${filename}, got: [${Object.keys(mod).join(', ')}]`,
     );
-  }
+
   return value;
 }
 

@@ -1,9 +1,7 @@
 import { type ComponentProps } from 'react';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
 
-export type CollapsibleProps = ComponentProps<
-  typeof CollapsiblePrimitive.Root
->;
+export type CollapsibleProps = ComponentProps<typeof CollapsiblePrimitive.Root>;
 
 /**
  * 컨텐츠를 접고 펼칠 수 있는 토글 패널입니다.

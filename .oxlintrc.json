@@ -1,0 +1,620 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "oxc",
+    "react",
+    "import",
+    "jsx-a11y",
+    "vitest"
+  ],
+  "jsPlugins": [
+    {
+      "name": "react-js",
+      "specifier": "eslint-plugin-react"
+    },
+    {
+      "name": "import-js",
+      "specifier": "eslint-plugin-import"
+    },
+    {
+      "name": "jsx-a11y-js",
+      "specifier": "eslint-plugin-jsx-a11y"
+    },
+    "eslint-plugin-testing-library",
+    "eslint-plugin-storybook"
+  ],
+  "categories": {
+    "correctness": "error"
+  },
+  "settings": {
+    "jsx-a11y": {
+      "components": {
+        "Link": "a"
+      }
+    },
+    "react": {
+      "version": "19"
+    }
+  },
+  "env": {
+    "builtin": true
+  },
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    "storybook-static",
+    "build",
+    "*.config.*"
+  ],
+  "rules": {
+    "array-callback-return": [
+      "error",
+      {
+        "allowImplicit": true
+      }
+    ],
+    "block-scoped-var": "error",
+    "class-methods-use-this": "error",
+    "curly": ["error", "multi", "consistent"],
+    "default-case": "error",
+    "default-case-last": "error",
+    "default-param-last": "error",
+    "eqeqeq": [
+      "error",
+      "always",
+      {
+        "null": "ignore"
+      }
+    ],
+    "grouped-accessor-pairs": "error",
+    "guard-for-in": "error",
+    "max-classes-per-file": ["error", 1],
+    "no-alert": "warn",
+    "no-array-constructor": "error",
+    "no-await-in-loop": "error",
+    "no-caller": "error",
+    "no-console": "warn",
+    "no-constructor-return": "error",
+    "no-div-regex": "error",
+    "no-else-return": [
+      "error",
+      {
+        "allowElseIf": false
+      }
+    ],
+    "no-eval": "error",
+    "no-extend-native": "error",
+    "no-extra-bind": "error",
+    "no-extra-label": "error",
+    "no-inner-declarations": "error",
+    "no-iterator": "error",
+    "no-label-var": "error",
+    "no-labels": "error",
+    "no-lone-blocks": "error",
+    "no-loop-func": "error",
+    "no-new": "error",
+    "no-new-func": "error",
+    "no-new-wrappers": "error",
+    "no-object-constructor": "error",
+    "no-param-reassign": "error",
+    "no-promise-executor-return": "error",
+    "no-proto": "error",
+    "no-redeclare": "error",
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "isFinite",
+        "message": "Please use Number.isFinite instead"
+      },
+      {
+        "name": "isNaN",
+        "message": "Please use Number.isNaN instead"
+      }
+    ],
+    "no-return-assign": ["error", "always"],
+    "no-script-url": "error",
+    "no-self-compare": "error",
+    // [!] Not yet supported by oxlint native
+    "no-sequences": "error",
+    "no-shadow": "error",
+    "no-template-curly-in-string": "error",
+    "no-throw-literal": "error",
+    "no-unused-expressions": "error",
+    "no-unused-labels": "error",
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "argsIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "no-use-before-define": "error",
+    "no-useless-constructor": "error",
+    "no-var": "error",
+    "no-void": [
+      "error",
+      {
+        "allowAsStatement": true
+      }
+    ],
+    "prefer-promise-reject-errors": [
+      "error",
+      {
+        "allowEmptyReject": true
+      }
+    ],
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "radix": "error",
+    "symbol-description": "error",
+    "valid-typeof": [
+      "error",
+      {
+        "requireStringLiterals": true
+      }
+    ],
+    "arrow-body-style": "error",
+    "dot-notation": "error",
+    "func-names": ["warn", "as-needed"],
+    "new-cap": [
+      "error",
+      {
+        "capIsNew": false,
+        "properties": false
+      }
+    ],
+    "no-continue": "error",
+    "no-empty-function": [
+      "error",
+      {
+        "allow": ["arrowFunctions", "functions", "methods"]
+      }
+    ],
+    "no-lonely-if": "error",
+    "no-multi-assign": "error",
+    "no-multi-str": "error",
+    "no-nested-ternary": "error",
+    "no-plusplus": [
+      "error",
+      {
+        "allowForLoopAfterthoughts": true
+      }
+    ],
+    "no-unneeded-ternary": [
+      "error",
+      {
+        "defaultAssignment": false
+      }
+    ],
+    "no-useless-computed-key": "error",
+    "no-useless-concat": "error",
+    "no-useless-rename": "error",
+    "no-useless-return": "error",
+    "operator-assignment": ["error", "always"],
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "any",
+        "ignoreReadBeforeAssign": true
+      }
+    ],
+    "prefer-destructuring": [
+      "error",
+      {
+        "VariableDeclarator": {
+          "array": false,
+          "object": true
+        },
+        "AssignmentExpression": {
+          "array": true,
+          "object": false
+        }
+      }
+    ],
+    "prefer-exponentiation-operator": "error",
+    "prefer-numeric-literals": "error",
+    "prefer-object-spread": "error",
+    "prefer-template": "error",
+    "unicode-bom": ["error", "never"],
+    "vars-on-top": "error",
+    "yoda": "error",
+    "consistent-return": "error",
+    // [!] Not yet supported by oxlint native
+    "no-implied-eval": "error",
+    // [!] Not yet supported by oxlint native
+    "no-octal-escape": "error",
+    // [!] Not yet supported by oxlint native
+    "no-restricted-exports": [
+      "error",
+      {
+        "restrictedNamedExports": ["default", "then"]
+      }
+    ],
+    // [!] Not yet supported by oxlint native
+    "no-restricted-properties": [
+      "error",
+      {
+        "object": "arguments",
+        "property": "callee",
+        "message": "arguments.callee is deprecated"
+      },
+      {
+        "property": "__defineGetter__",
+        "message": "Please use Object.defineProperty instead."
+      },
+      {
+        "property": "__defineSetter__",
+        "message": "Please use Object.defineProperty instead."
+      }
+    ],
+    // [!] Not yet supported by oxlint native
+    "no-restricted-syntax": ["error", "WithStatement", "LabeledStatement"],
+    // [!] Not yet supported by oxlint native
+    "no-undef-init": "error",
+    // [!] Not yet supported by oxlint native
+    "no-unreachable-loop": "error",
+    // [!] Not yet supported by oxlint native
+    "no-useless-assignment": "error",
+    // [!] Not yet supported by oxlint native
+    "camelcase": [
+      "error",
+      {
+        "properties": "never",
+        "ignoreDestructuring": false,
+        "ignoreImports": true,
+        "ignoreGlobals": true,
+        "allow": ["^unstable_", "^experimental_"]
+      }
+    ],
+    // [!] Not yet supported by oxlint native
+    "object-shorthand": [
+      "error",
+      "always",
+      {
+        "ignoreConstructors": false,
+        "avoidQuotes": true
+      }
+    ],
+    // [!] Not yet supported by oxlint native
+    "one-var": ["error", "never"],
+    // [!] Not yet supported by oxlint native
+    "prefer-arrow-callback": "error",
+    // [!] Not yet supported by oxlint native
+    "prefer-regex-literals": [
+      "error",
+      {
+        "disallowRedundantWrapping": true
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "pattern": {
+          "js": "never",
+          "jsx": "never",
+          "ts": "never",
+          "tsx": "never"
+        }
+      }
+    ],
+    "import/no-self-import": "error",
+    "import/prefer-default-export": "off",
+    "import-js/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "test/**",
+          "tests/**",
+          "spec/**",
+          "**/__tests__/**",
+          "**/__mocks__/**",
+          "test.{js,jsx}",
+          "test-*.{js,jsx}",
+          "**/*{.,_}{test,spec}.{js,jsx,ts,tsx}",
+          "**/test-utils.?(js|tsx)",
+          "**/jest.config.js",
+          "**/jest.setup.js",
+          "**/vitest.config.{js,ts,mjs,mts}",
+          "**/webpack.config.js",
+          "**/webpack.config.*.js",
+          "**/rollup.config.js",
+          "**/rollup.config.*.js",
+          "**/vite.config.*",
+          "**/vitest.setup.{js,ts,mjs,mts}",
+          "**/__mocks__/**",
+          "**/mocks/**"
+        ]
+      }
+    ],
+    "jsx-a11y/anchor-has-content": "error",
+    "jsx-a11y/aria-role": [
+      "error",
+      {
+        "ignoreNonDOM": false
+      }
+    ],
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        "labelComponents": ["Label"],
+        "labelAttributes": [],
+        "controlComponents": ["Input"],
+        "assert": "either",
+        "depth": 25
+      }
+    ],
+    "jsx-a11y/no-autofocus": [
+      "error",
+      {
+        "ignoreNonDOM": true
+      }
+    ],
+    "jsx-a11y-js/control-has-associated-label": [
+      "error",
+      {
+        "labelAttributes": ["label"],
+        "controlComponents": [],
+        "ignoreElements": [
+          "audio",
+          "canvas",
+          "embed",
+          "input",
+          "textarea",
+          "tr",
+          "video"
+        ],
+        "ignoreRoles": [
+          "grid",
+          "listbox",
+          "menu",
+          "menubar",
+          "radiogroup",
+          "row",
+          "tablist",
+          "toolbar",
+          "tree",
+          "treegrid"
+        ],
+        "depth": 5
+      }
+    ],
+    "import-js/order": [
+      "error",
+      {
+        "groups": [
+          "type",
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "lib/**",
+            "group": "internal",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["type"],
+        "newlines-between": "always-and-inside-groups"
+      }
+    ],
+    "import-js/newline-after-import": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.{ts,mts,cts,tsx}"],
+      "rules": {
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/consistent-return": "error",
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/no-base-to-string": [
+          "error",
+          {
+            "ignoredTypeNames": [
+              "Error",
+              "RegExp",
+              "URL",
+              "URLSearchParams",
+              "ReactNode",
+              "ArrayBuffer"
+            ]
+          }
+        ],
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/no-confusing-void-expression": [
+          "error",
+          {
+            "ignoreArrowShorthand": true
+          }
+        ],
+        "typescript/no-empty-object-type": [
+          "error",
+          {
+            "allowInterfaces": "with-single-extends"
+          }
+        ],
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/no-floating-promises": [
+          "error",
+          {
+            "ignoreVoid": true,
+            "ignoreIIFE": true
+          }
+        ],
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/no-misused-promises": [
+          "error",
+          {
+            "checksVoidReturn": false
+          }
+        ],
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/only-throw-error": "error",
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/prefer-promise-reject-errors": [
+          "error",
+          {
+            "allowThrowingUnknown": true,
+            "allowEmptyReject": true
+          }
+        ],
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/restrict-template-expressions": [
+          "error",
+          {
+            "allowNumber": true
+          }
+        ],
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/unbound-method": [
+          "error",
+          {
+            "ignoreStatic": true
+          }
+        ],
+        "typescript/adjacent-overload-signatures": "error",
+        "typescript/array-type": "error",
+        "typescript/ban-tslint-comment": "error",
+        "typescript/consistent-generic-constructors": "error",
+        "typescript/consistent-indexed-object-style": "error",
+        "typescript/consistent-type-assertions": "error",
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/dot-notation": "error",
+        "typescript/no-confusing-non-null-assertion": "error",
+        "typescript/no-inferrable-types": "error",
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/prefer-find": "error",
+        "typescript/prefer-for-of": "error",
+        "typescript/prefer-function-type": "error",
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/prefer-includes": "error",
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/prefer-nullish-coalescing": "error",
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/prefer-optional-chain": "error",
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/prefer-regexp-exec": "error",
+        // [!] Type-aware: not yet supported by oxlint (no type checker)
+        "typescript/prefer-string-starts-ends-with": "error",
+        "eslint/consistent-return": "off",
+        "eslint/dot-notation": "off"
+      }
+    },
+    {
+      "files": [
+        "**/__tests__/**/*.[jt]s?(x)",
+        "**/?(*.)+(spec|test).[jt]s?(x)"
+      ],
+      "rules": {}
+    },
+    {
+      "files": ["**/*.{js,jsx,tsx}"],
+      "rules": {
+        "react/button-has-type": [
+          "error",
+          {
+            "button": true,
+            "submit": true,
+            "reset": false
+          }
+        ],
+        "react/jsx-curly-brace-presence": [
+          "error",
+          {
+            "props": "never",
+            "children": "never"
+          }
+        ],
+        "react/jsx-filename-extension": [
+          "warn",
+          {
+            "extensions": [".js", ".jsx", ".tsx"]
+          }
+        ],
+        "react/jsx-fragments": ["error", "syntax"],
+        "react/jsx-no-constructed-context-values": "error",
+        "react/jsx-no-script-url": "error",
+        "react/jsx-no-target-blank": [
+          "error",
+          {
+            "enforceDynamicLinks": "always"
+          }
+        ],
+        "react/jsx-no-useless-fragment": "error",
+        "react/no-namespace": "error",
+        "react/no-this-in-sfc": "error",
+        "react/self-closing-comp": "error",
+        "react/style-prop-object": "error",
+        "react/void-dom-elements-no-children": "error",
+        "react-js/destructuring-assignment": ["error", "always"],
+        "react-js/function-component-definition": [
+          "error",
+          {
+            "namedComponents": ["arrow-function", "function-declaration"],
+            "unnamedComponents": "arrow-function"
+          }
+        ],
+        "react-js/no-invalid-html-attribute": "error",
+        "react-js/no-unstable-nested-components": "error",
+        "react-js/no-unused-prop-types": [
+          "error",
+          {
+            "customValidators": [],
+            "skipShapeProps": true
+          }
+        ],
+        "react/rules-of-hooks": "error",
+        "react/exhaustive-deps": "warn"
+      }
+    },
+    {
+      "files": ["**/use*.ts"],
+      "rules": {
+        "react/rules-of-hooks": "error",
+        "react/exhaustive-deps": "warn"
+      }
+    },
+    {
+      "files": ["**/*.stories.{ts,tsx,js,jsx,mjs,cjs}"],
+      "rules": {
+        "storybook/await-interactions": "error",
+        "storybook/context-in-play-function": "error",
+        "storybook/default-exports": "error",
+        "storybook/hierarchy-separator": "warn",
+        "storybook/no-redundant-story-name": "warn",
+        "storybook/prefer-pascal-case": "warn",
+        "storybook/story-exports": "error",
+        "storybook/use-storybook-expect": "error",
+        "storybook/use-storybook-testing-library": "error",
+        "import-js/no-extraneous-dependencies": "off"
+      }
+    },
+    {
+      "files": ["lib/components/combobox/**/*.tsx"],
+      "rules": {
+        "jsx-a11y/role-has-required-aria-props": "off"
+      }
+    },
+    {
+      "files": [".storybook/**/*.ts", "src/stories/**/*.tsx"],
+      "rules": {
+        "import-js/no-extraneous-dependencies": "off"
+      }
+    },
+    {
+      "files": [".storybook/main.{js,cjs,mjs,ts}"],
+      "rules": {
+        "storybook/no-uninstalled-addons": "error"
+      }
+    }
+  ]
+}

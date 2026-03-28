@@ -22,9 +22,7 @@ describe('Rendering and Props', () => {
       </MainContainer>,
     );
 
-    await expect
-      .element(page.getByText('Crazy Love'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('Crazy Love')).toBeInTheDocument();
   });
 
   it('should apply custom className', async () => {

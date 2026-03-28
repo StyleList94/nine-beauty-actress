@@ -132,7 +132,6 @@ export const commandDialogContent = style({
   padding: 0,
 });
 
-
 export const srOnly = style({
   position: 'absolute',
   width: '1px',

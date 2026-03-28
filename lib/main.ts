@@ -1,8 +1,19 @@
-import { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './components/button';
-import { FileUploader, type FileUploaderProps } from './components/file-uploader';
+import {
+  Button,
+  type ButtonProps,
+  type ButtonVariant,
+  type ButtonSize,
+} from './components/button';
+import {
+  FileUploader,
+  type FileUploaderProps,
+} from './components/file-uploader';
 import { Footer, type FooterProps } from './components/footer';
 import { Header, type HeaderProps } from './components/header';
-import { MainContainer, type MainContainerProps } from './components/main-container';
+import {
+  MainContainer,
+  type MainContainerProps,
+} from './components/main-container';
 import { Switch, type SwitchProps } from './components/switch';
 import {
   ToggleGroup,
@@ -121,7 +132,11 @@ import {
   type CommandShortcutProps,
   type CommandSeparatorProps,
 } from './components/command';
-import { Combobox, type ComboboxProps, type ComboboxOption } from './components/combobox';
+import {
+  Combobox,
+  type ComboboxProps,
+  type ComboboxOption,
+} from './components/combobox';
 import {
   Calendar,
   type CalendarProps,

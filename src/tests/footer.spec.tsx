@@ -18,9 +18,7 @@ describe('Rendering and Props', () => {
       </Footer>,
     );
 
-    await expect
-      .element(page.getByText('Copyright 2025'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('Copyright 2025')).toBeInTheDocument();
   });
 
   it('should apply custom className', async () => {
@@ -38,11 +36,7 @@ describe('Rendering and Props', () => {
       </Footer>,
     );
 
-    await expect
-      .element(page.getByText('Blog'))
-      .toBeInTheDocument();
-    await expect
-      .element(page.getByText('StyleList94'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('Blog')).toBeInTheDocument();
+    await expect.element(page.getByText('StyleList94')).toBeInTheDocument();
   });
 });

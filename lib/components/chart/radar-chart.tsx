@@ -84,11 +84,7 @@ function RadarChartRoot({
 
   const maxValue =
     maxValueProp ??
-    Math.max(
-      ...data.flatMap((d) =>
-        keys.map((k) => Number(d[k]) || 0),
-      ),
-    );
+    Math.max(...data.flatMap((d) => keys.map((k) => Number(d[k]) || 0)));
 
   const angleStep = 360 / sides;
 
@@ -175,15 +171,11 @@ function RadarChartRoot({
             const endAngle = angleStep * i + angleStep / 2;
             const outerR = radius + 20;
             const segments = 8;
-            const arcPoints = Array.from(
-              { length: segments + 1 },
-              (_, s) => {
-                const angle =
-                  startAngle +
-                  (endAngle - startAngle) * (s / segments);
-                return polarToCartesian(0, 0, outerR, angle);
-              },
-            );
+            const arcPoints = Array.from({ length: segments + 1 }, (_, s) => {
+              const angle =
+                startAngle + (endAngle - startAngle) * (s / segments);
+              return polarToCartesian(0, 0, outerR, angle);
+            });
             const sectorPath = `M 0 0 ${arcPoints.map((p) => `L ${p.x} ${p.y}`).join(' ')} Z`;
 
             return (
@@ -192,11 +184,10 @@ function RadarChartRoot({
                 d={sectorPath}
                 fill="transparent"
                 onMouseMove={(event) => {
-                  const svgEl =
-                    event.currentTarget.ownerSVGElement;
+                  const svgEl = event.currentTarget.ownerSVGElement;
                   if (!svgEl) return;
                   const coords = localPoint(svgEl, event);
-                  if (coords) {
+                  if (coords)
                     showTooltip({
                       tooltipLeft: coords.x,
                       tooltipTop: coords.y,
@@ -210,7 +201,6 @@ function RadarChartRoot({
                         })),
                       },
                     });
-                  }
                 }}
                 onMouseLeave={hideTooltip}
                 style={{ cursor: 'pointer' }}

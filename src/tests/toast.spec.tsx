@@ -43,9 +43,7 @@ describe('State Management', () => {
     await render(<Toaster />);
     toast({ title: 'Title Here', description: 'Description Here' });
     await expect.element(page.getByText('Title Here')).toBeVisible();
-    await expect
-      .element(page.getByText('Description Here'))
-      .toBeVisible();
+    await expect.element(page.getByText('Description Here')).toBeVisible();
   });
 
   it('should show toast with variant', async () => {
@@ -70,9 +68,7 @@ describe('User Interactions', () => {
     await expect.element(page.getByText('Closable')).toBeVisible();
 
     dismiss(id);
-    await expect
-      .element(page.getByText('Closable'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('Closable')).not.toBeInTheDocument();
   });
 
   it('should close toast when close button is clicked', async () => {
@@ -82,9 +78,7 @@ describe('User Interactions', () => {
 
     const closeButton = page.getByRole('button');
     await closeButton.click();
-    await expect
-      .element(page.getByText('Close Me'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('Close Me')).not.toBeInTheDocument();
   });
 });
 
@@ -95,9 +89,7 @@ describe('Dismissal API', () => {
     await expect.element(page.getByText('To Dismiss')).toBeVisible();
 
     dismiss(id);
-    await expect
-      .element(page.getByText('To Dismiss'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('To Dismiss')).not.toBeInTheDocument();
   });
 
   it('should only dismiss the targeted toast when multiple exist', async () => {
@@ -108,9 +100,7 @@ describe('Dismissal API', () => {
     await expect.element(page.getByText('Also Keep')).toBeVisible();
 
     dismiss(id1);
-    await expect
-      .element(page.getByText('Keep Me'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('Keep Me')).not.toBeInTheDocument();
     await expect.element(page.getByText('Also Keep')).toBeVisible();
   });
 
@@ -122,12 +112,8 @@ describe('Dismissal API', () => {
     await expect.element(page.getByText('Toast Two')).toBeVisible();
 
     dismissAll();
-    await expect
-      .element(page.getByText('Toast One'))
-      .not.toBeInTheDocument();
-    await expect
-      .element(page.getByText('Toast Two'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('Toast One')).not.toBeInTheDocument();
+    await expect.element(page.getByText('Toast Two')).not.toBeInTheDocument();
   });
 });
 
@@ -135,26 +121,20 @@ describe('Duration', () => {
   it('should not auto-dismiss when duration is 0', async () => {
     await render(<Toaster />);
     toast({ title: 'Persistent Toast', duration: 0 });
-    await expect
-      .element(page.getByText('Persistent Toast'))
-      .toBeVisible();
+    await expect.element(page.getByText('Persistent Toast')).toBeVisible();
 
     // Wait longer than the default 5s auto-dismiss
     await new Promise<void>((resolve) => {
       setTimeout(resolve, 6000);
     });
 
-    await expect
-      .element(page.getByText('Persistent Toast'))
-      .toBeVisible();
+    await expect.element(page.getByText('Persistent Toast')).toBeVisible();
   });
 
   it('should auto-dismiss when duration is set', async () => {
     await render(<Toaster />);
     toast({ title: 'Auto Dismiss', duration: 1000 });
-    await expect
-      .element(page.getByText('Auto Dismiss'))
-      .toBeVisible();
+    await expect.element(page.getByText('Auto Dismiss')).toBeVisible();
 
     // Wait for duration + animation buffer
     await new Promise<void>((resolve) => {
@@ -181,21 +161,15 @@ describe('Edge Cases', () => {
   it('should render toast with default variant', async () => {
     await render(<Toaster />);
     toast({ title: 'Default Variant', duration: Infinity });
-    await expect
-      .element(page.getByText('Default Variant'))
-      .toBeVisible();
+    await expect.element(page.getByText('Default Variant')).toBeVisible();
     const toastItem = page.getByRole('listitem');
-    await expect
-      .element(toastItem)
-      .toHaveAttribute('data-variant', 'default');
+    await expect.element(toastItem).toHaveAttribute('data-variant', 'default');
   });
 
   it('should render toast description only (no title)', async () => {
     await render(<Toaster />);
     toast({ description: 'Only description' });
-    await expect
-      .element(page.getByText('Only description'))
-      .toBeVisible();
+    await expect.element(page.getByText('Only description')).toBeVisible();
   });
 
   it('should render toast with action', async () => {

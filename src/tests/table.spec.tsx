@@ -62,9 +62,7 @@ describe('Sub-components', () => {
     );
 
     const header = page.getByRole('rowgroup').first();
-    await expect
-      .element(header)
-      .toHaveAttribute('data-slot', 'table-header');
+    await expect.element(header).toHaveAttribute('data-slot', 'table-header');
   });
 
   it('should render TableBody with data-slot="table-body"', async () => {
@@ -79,9 +77,7 @@ describe('Sub-components', () => {
     );
 
     const body = page.getByTestId('tbody');
-    await expect
-      .element(body)
-      .toHaveAttribute('data-slot', 'table-body');
+    await expect.element(body).toHaveAttribute('data-slot', 'table-body');
   });
 
   it('should render column headers', async () => {
@@ -106,9 +102,7 @@ describe('Sub-components', () => {
     const statusHeader = page.getByText('Status');
     await expect.element(nameHeader).toBeInTheDocument();
     await expect.element(statusHeader).toBeInTheDocument();
-    await expect
-      .element(nameHeader)
-      .toHaveAttribute('data-slot', 'table-head');
+    await expect.element(nameHeader).toHaveAttribute('data-slot', 'table-head');
     await expect
       .element(statusHeader)
       .toHaveAttribute('data-slot', 'table-head');
@@ -165,9 +159,7 @@ describe('Sub-components', () => {
 
     const caption = page.getByText('A list of users');
     await expect.element(caption).toBeInTheDocument();
-    await expect
-      .element(caption)
-      .toHaveAttribute('data-slot', 'table-caption');
+    await expect.element(caption).toHaveAttribute('data-slot', 'table-caption');
   });
 });
 
@@ -202,14 +194,10 @@ describe('Full Composition', () => {
     );
 
     await expect.element(page.getByRole('table')).toBeInTheDocument();
-    await expect
-      .element(page.getByText('Team Members'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('Team Members')).toBeInTheDocument();
     await expect.element(page.getByText('Name')).toBeInTheDocument();
     await expect.element(page.getByText('Alice')).toBeInTheDocument();
-    await expect
-      .element(page.getByText('Designer'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('Designer')).toBeInTheDocument();
     await expect.element(page.getByText('Total')).toBeInTheDocument();
   });
 });

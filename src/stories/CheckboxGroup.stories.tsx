@@ -151,17 +151,11 @@ export const Default: StoryObj<DefaultArgs> = {
             <FormControl.Label>이메일 알림</FormControl.Label>
           </FormControl>
           <FormControl layout="horizontal">
-            <Checkbox
-              checked={values.sms}
-              onCheckedChange={toggle('sms')}
-            />
+            <Checkbox checked={values.sms} onCheckedChange={toggle('sms')} />
             <FormControl.Label>SMS 알림</FormControl.Label>
           </FormControl>
           <FormControl layout="horizontal">
-            <Checkbox
-              checked={values.push}
-              onCheckedChange={toggle('push')}
-            />
+            <Checkbox checked={values.push} onCheckedChange={toggle('push')} />
             <FormControl.Label>푸시 알림</FormControl.Label>
           </FormControl>
           {args._validation === 'error' && (
@@ -197,10 +191,7 @@ export const WithValidation: StoryObj = {
 
     return (
       <div className="w-80">
-        <CheckboxGroup
-          required
-          validation={hasSelection ? undefined : 'error'}
-        >
+        <CheckboxGroup required validation={hasSelection ? undefined : 'error'}>
           <CheckboxGroup.Label>필수 동의 항목</CheckboxGroup.Label>
           <FormControl layout="horizontal">
             <Checkbox
@@ -228,9 +219,7 @@ export const WithValidation: StoryObj = {
 };
 
 export const Disabled: StoryObj = {
-  ...noControls(
-    'fieldset disabled로 하위 체크박스가 자동 비활성화됩니다.',
-  ),
+  ...noControls('fieldset disabled로 하위 체크박스가 자동 비활성화됩니다.'),
   render: () => (
     <div className="w-80">
       <CheckboxGroup disabled>

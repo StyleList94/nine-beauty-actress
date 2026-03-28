@@ -96,9 +96,7 @@ export const Overview: Story = {
 };
 
 export const Vertical: Story = {
-  ...noControls(
-    'orientation="vertical"로 세로 방향 구분선을 표시합니다.',
-  ),
+  ...noControls('orientation="vertical"로 세로 방향 구분선을 표시합니다.'),
   render: () => (
     <div className="flex flex-col gap-4">
       <div className="flex h-5 items-center gap-3 text-sm">

@@ -82,9 +82,7 @@ function HeatmapChartRoot({
   const { cells, xScale, yScale } = useMemo(() => {
     const xValues = [...new Set(data.map((d) => String(d[xKey])))];
     const yValues = [...new Set(data.map((d) => String(d[yKey])))];
-    const max = Math.max(
-      ...data.map((d) => Number(d[valueKey]) || 0),
-    );
+    const max = Math.max(...data.map((d) => Number(d[valueKey]) || 0));
 
     const xBandScale = scaleBand({
       domain: xValues,
@@ -139,7 +137,7 @@ function HeatmapChartRoot({
                 const svgEl = event.currentTarget.ownerSVGElement;
                 if (!svgEl) return;
                 const coords = localPoint(svgEl, event);
-                if (coords) {
+                if (coords)
                   showTooltip({
                     tooltipLeft: coords.x,
                     tooltipTop: coords.y,
@@ -149,7 +147,6 @@ function HeatmapChartRoot({
                       value: cell.value,
                     },
                   });
-                }
               }}
               onMouseLeave={hideTooltip}
               style={{
@@ -187,9 +184,7 @@ function HeatmapChartRoot({
               <span className={chartTooltipLabel}>
                 {tooltipData.y} {tooltipData.x}
               </span>
-              <span className={chartTooltipValue}>
-                {tooltipData.value}
-              </span>
+              <span className={chartTooltipValue}>{tooltipData.value}</span>
             </div>
           </div>
         </TooltipWithBounds>

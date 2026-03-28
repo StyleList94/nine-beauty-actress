@@ -122,9 +122,7 @@ function ToggleGroup({
       style={mergedStyle}
       {...props}
     >
-      <ToggleGroupContext value={contextValue}>
-        {children}
-      </ToggleGroupContext>
+      <ToggleGroupContext value={contextValue}>{children}</ToggleGroupContext>
     </ToggleGroupPrimitive.Root>
   );
 }
@@ -148,11 +146,7 @@ type ToggleGroupItemProps = ComponentProps<typeof ToggleGroupPrimitive.Item>;
  *
  * @see {@link ToggleGroup} - 부모 그룹 컴포넌트
  */
-function ToggleGroupItem({
-  className,
-  ref,
-  ...props
-}: ToggleGroupItemProps) {
+function ToggleGroupItem({ className, ref, ...props }: ToggleGroupItemProps) {
   const context = use(ToggleGroupContext);
 
   const resolvedVariant = context?.variant ?? 'default';

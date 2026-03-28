@@ -14,7 +14,10 @@ pnpm dev              # Start Storybook dev server (port 6006)
 pnpm build            # Type check + Vite build
 pnpm test             # Run Vitest once
 pnpm test:watch       # Run Vitest in watch mode
-pnpm lint             # ESLint check
+pnpm lint             # Oxlint check
+pnpm lint:fix         # Oxlint auto-fix
+pnpm format           # Oxfmt format all
+pnpm format:check     # Oxfmt check formatting
 pnpm build-storybook  # Build static Storybook
 ```
 
@@ -143,10 +146,12 @@ boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 20%, tr
 
 ### Key Technologies
 
+- **Build**: Vite 8 + Rolldown (Rust bundler)
 - **CSS**: Vanilla Extract + TailwindCSS v4
 - **Animation**: Motion library (Framer Motion successor)
 - **UI Primitives**: Radix UI (Checkbox, Collapsible, Dialog, Label, Popover, Scroll Area, Separator, Slider, Switch, ToggleGroup, Tooltip)
 - **Date**: react-day-picker v9, date-fns v4 (Calendar, DatePicker)
+- **Lint/Format**: Oxlint + Oxfmt (VoidZero/Oxc toolchain)
 - **Testing**: Vitest (globals enabled) — Browser tests via Playwright chromium (`*.spec.tsx`), Unit tests via jsdom (`*.test.ts`)
 - **Storybook**: React + Vite with autodocs
 
@@ -215,9 +220,9 @@ describe('cn', () => {
 
 ## Code Quality
 
-- ESLint flat config with TypeScript, React, Vitest, Testing Library, Storybook plugins
-- Prettier: 80 char width, single quotes, trailing commas
-- Pre-commit: Husky runs lint-staged (ESLint --fix, Prettier --write)
+- Oxlint with native plugins (eslint, typescript, unicorn, oxc, react, import, jsx-a11y, vitest) + JS plugins (react, import, jsx-a11y, testing-library, storybook)
+- Oxfmt: 80 char width, single quotes, trailing commas, Tailwind CSS class sorting
+- Pre-commit: Husky runs lint-staged (oxfmt --write, oxlint --fix)
 - TypeScript strict mode enabled
 - Prefer functional paradigm (`.filter()/.forEach()/.map()`) over imperative loops
 - React 19: `MutableRefObject` is deprecated — `RefObject` is mutable by default, no cast needed

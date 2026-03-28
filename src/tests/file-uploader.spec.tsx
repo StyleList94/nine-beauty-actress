@@ -38,9 +38,7 @@ describe('Rendering and Props', () => {
       </FileUploader>,
     );
 
-    await expect
-      .element(page.getByText('커스텀 콘텐츠'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('커스텀 콘텐츠')).toBeInTheDocument();
   });
 });
 
@@ -53,9 +51,11 @@ describe('User Interactions', () => {
     );
 
     const box = page.getByLabelText('nine-file-uploader');
-    box.element().dispatchEvent(
-      new DragEvent('dragover', { bubbles: true, cancelable: true }),
-    );
+    box
+      .element()
+      .dispatchEvent(
+        new DragEvent('dragover', { bubbles: true, cancelable: true }),
+      );
 
     await expect.element(box).toBeInTheDocument();
   });
@@ -68,12 +68,16 @@ describe('User Interactions', () => {
     );
 
     const box = page.getByLabelText('nine-file-uploader');
-    box.element().dispatchEvent(
-      new DragEvent('dragover', { bubbles: true, cancelable: true }),
-    );
-    box.element().dispatchEvent(
-      new DragEvent('dragleave', { bubbles: true, cancelable: true }),
-    );
+    box
+      .element()
+      .dispatchEvent(
+        new DragEvent('dragover', { bubbles: true, cancelable: true }),
+      );
+    box
+      .element()
+      .dispatchEvent(
+        new DragEvent('dragleave', { bubbles: true, cancelable: true }),
+      );
 
     await expect.element(box).toBeInTheDocument();
   });
@@ -88,9 +92,7 @@ describe('User Interactions', () => {
 
     const box = page.getByLabelText('nine-file-uploader');
     const dt = new DataTransfer();
-    dt.items.add(
-      new File(['content'], 'photo.png', { type: 'image/png' }),
-    );
+    dt.items.add(new File(['content'], 'photo.png', { type: 'image/png' }));
     box.element().dispatchEvent(
       new DragEvent('drop', {
         dataTransfer: dt,
@@ -112,9 +114,7 @@ describe('User Interactions', () => {
 
     const box = page.getByLabelText('nine-file-uploader');
     const dt = new DataTransfer();
-    dt.items.add(
-      new File(['text'], 'doc.txt', { type: 'text/plain' }),
-    );
+    dt.items.add(new File(['text'], 'doc.txt', { type: 'text/plain' }));
     box.element().dispatchEvent(
       new DragEvent('drop', {
         dataTransfer: dt,
@@ -163,15 +163,15 @@ describe('User Interactions', () => {
     const box = page.getByLabelText('nine-file-uploader');
 
     // 1. Drag over to activate dragging state
-    box.element().dispatchEvent(
-      new DragEvent('dragover', { bubbles: true, cancelable: true }),
-    );
+    box
+      .element()
+      .dispatchEvent(
+        new DragEvent('dragover', { bubbles: true, cancelable: true }),
+      );
 
     // 2. Drop invalid file
     const invalidDt = new DataTransfer();
-    invalidDt.items.add(
-      new File(['text'], 'doc.txt', { type: 'text/plain' }),
-    );
+    invalidDt.items.add(new File(['text'], 'doc.txt', { type: 'text/plain' }));
     box.element().dispatchEvent(
       new DragEvent('drop', {
         dataTransfer: invalidDt,
@@ -183,9 +183,7 @@ describe('User Interactions', () => {
 
     // 3. Drop valid file — should still work (not stuck in drag state)
     const validDt = new DataTransfer();
-    validDt.items.add(
-      new File(['img'], 'photo.png', { type: 'image/png' }),
-    );
+    validDt.items.add(new File(['img'], 'photo.png', { type: 'image/png' }));
     box.element().dispatchEvent(
       new DragEvent('drop', {
         dataTransfer: validDt,

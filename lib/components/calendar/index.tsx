@@ -61,12 +61,12 @@ const defaultClassNames = getDefaultClassNames();
 
 /** 월 네비게이션 및 드롭다운에 사용되는 화살표 아이콘 컴포넌트 */
 function Chevron({ className, orientation, ...rest }: ChevronProps) {
-  if (orientation === 'left') {
+  if (orientation === 'left')
     return <ChevronLeftIcon className={className} {...rest} />;
-  }
-  if (orientation === 'right') {
+
+  if (orientation === 'right')
     return <ChevronRightIcon className={className} {...rest} />;
-  }
+
   return <ChevronDownIcon className={className} {...rest} />;
 }
 
@@ -74,29 +74,17 @@ const baseClassNames: Record<string, string> = {
   [UI.Root]: cn(defaultClassNames.root),
   [UI.Months]: cn(styles.months, defaultClassNames.months),
   [UI.Month]: cn(styles.month, defaultClassNames.month),
-  [UI.MonthCaption]: cn(
-    styles.monthCaption,
-    defaultClassNames.month_caption,
-  ),
-  [UI.CaptionLabel]: cn(
-    styles.captionLabel,
-    defaultClassNames.caption_label,
-  ),
+  [UI.MonthCaption]: cn(styles.monthCaption, defaultClassNames.month_caption),
+  [UI.CaptionLabel]: cn(styles.captionLabel, defaultClassNames.caption_label),
   [UI.Dropdowns]: cn(styles.dropdowns, defaultClassNames.dropdowns),
-  [UI.DropdownRoot]: cn(
-    styles.dropdownRoot,
-    defaultClassNames.dropdown_root,
-  ),
+  [UI.DropdownRoot]: cn(styles.dropdownRoot, defaultClassNames.dropdown_root),
   [UI.Dropdown]: cn(styles.dropdown, defaultClassNames.dropdown),
   [UI.Nav]: cn(styles.nav, defaultClassNames.nav),
   [UI.PreviousMonthButton]: cn(
     styles.navButton,
     defaultClassNames.button_previous,
   ),
-  [UI.NextMonthButton]: cn(
-    styles.navButton,
-    defaultClassNames.button_next,
-  ),
+  [UI.NextMonthButton]: cn(styles.navButton, defaultClassNames.button_next),
   [UI.MonthGrid]: cn(styles.monthGrid),
   [UI.Weekdays]: cn(styles.weekdays, defaultClassNames.weekdays),
   [UI.Weekday]: cn(styles.weekday, defaultClassNames.weekday),
@@ -112,18 +100,12 @@ const baseClassNames: Record<string, string> = {
     styles.rangeMiddle,
     defaultClassNames.range_middle,
   ),
-  [SelectionState.range_end]: cn(
-    styles.rangeEnd,
-    defaultClassNames.range_end,
-  ),
+  [SelectionState.range_end]: cn(styles.rangeEnd, defaultClassNames.range_end),
   [DayFlag.today]: cn(styles.today, defaultClassNames.today),
   [DayFlag.outside]: cn(styles.outside, defaultClassNames.outside),
   [DayFlag.disabled]: cn(styles.disabled, defaultClassNames.disabled),
   [DayFlag.hidden]: cn(styles.hidden, defaultClassNames.hidden),
-  [UI.WeekNumber]: cn(
-    styles.weekNumber,
-    defaultClassNames.week_number,
-  ),
+  [UI.WeekNumber]: cn(styles.weekNumber, defaultClassNames.week_number),
   [UI.WeekNumberHeader]: cn(
     styles.weekNumberHeader,
     defaultClassNames.week_number_header,
@@ -161,9 +143,10 @@ export function Calendar({
     if (!classNames) return baseClassNames;
     const consumerClassNames = classNames as Record<string, string>;
     return Object.fromEntries(
-      Object.keys({ ...baseClassNames, ...consumerClassNames }).map(
-        (key) => [key, cn(baseClassNames[key], consumerClassNames[key])],
-      ),
+      Object.keys({ ...baseClassNames, ...consumerClassNames }).map((key) => [
+        key,
+        cn(baseClassNames[key], consumerClassNames[key]),
+      ]),
     );
   }, [classNames]);
 

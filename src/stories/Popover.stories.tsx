@@ -20,8 +20,7 @@ const meta: Meta<typeof Popover> = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          '트리거 요소 주변에 떠오르는 팝오버 컨테이너입니다.',
+        component: '트리거 요소 주변에 떠오르는 팝오버 컨테이너입니다.',
       },
     },
   },
@@ -171,9 +170,7 @@ export const Default: StoryObj<DefaultArgs> = {
 };
 
 export const CustomPosition: StoryObj = {
-  ...noControls(
-    'side와 align 속성으로 팝오버 위치를 조정합니다.',
-  ),
+  ...noControls('side와 align 속성으로 팝오버 위치를 조정합니다.'),
   render: () => (
     <div className="flex gap-4">
       <Popover>

@@ -39,10 +39,10 @@ export const isFileAccepted = (file: File, accept?: string) => {
   const fileExt = `.${file.name.split('.').pop()?.toLowerCase()}`;
 
   return acceptList.some((acceptItem) => {
-    if (acceptItem.startsWith('.')) {
+    if (acceptItem.startsWith('.'))
       // 확장자 비교
       return fileExt === acceptItem;
-    }
+
     if (acceptItem.endsWith('/*')) {
       // 와일드카드 MIME 타입 비교 (예: image/*)
       const baseType = acceptItem.replace('/*', '');

@@ -131,7 +131,7 @@ export default defineConfig({
       formats: ['es'],
       cssFileName: 'style',
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: [
         /^react/,
         /^motion/,

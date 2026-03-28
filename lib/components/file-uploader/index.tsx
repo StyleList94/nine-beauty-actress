@@ -103,10 +103,7 @@ export const FileUploader = ({
             scale: isDragging ? 1.02 : 1,
           }}
           onClick={handleClickBox}
-          className={cn(
-            fileUploaderBox({ state: borderState }),
-            className,
-          )}
+          className={cn(fileUploaderBox({ state: borderState }), className)}
           aria-label="nine-file-uploader"
         >
           {children}

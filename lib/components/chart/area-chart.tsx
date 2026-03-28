@@ -1,9 +1,6 @@
 import type { CurveType } from './types';
 
-import {
-  type ComponentProps,
-  type ReactNode,
-} from 'react';
+import { type ComponentProps, type ReactNode } from 'react';
 
 import {
   XYChart,
@@ -73,7 +70,8 @@ function AreaChartRoot({
   const { config, height, animated } = useChartConfig();
   const theme = useXYChartTheme(config);
   const { legends, xyChildren, hasYAxis } = separateChildren(children);
-  const resolvedMargin = margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
+  const resolvedMargin =
+    margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
   const keys = series ?? Object.keys(config);
   const curveFactory = getCurveFactory(curve);
   const Series = animated ? AnimatedAreaSeries : AreaSeries;
@@ -101,11 +99,7 @@ function AreaChartRoot({
         margin={resolvedMargin}
       >
         {xyChildren}
-        {stacked ? (
-          <Stack>{areaSeries}</Stack>
-        ) : (
-          areaSeries
-        )}
+        {stacked ? <Stack>{areaSeries}</Stack> : areaSeries}
       </XYChart>
       {legends}
     </>

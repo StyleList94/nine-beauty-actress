@@ -123,18 +123,13 @@ describe('Rendering and Props', () => {
     const testDate = new Date(2026, 0, 15);
     await render(
       <CenteredWrapper>
-        <DatePicker
-          value={testDate}
-          formatStr="yyyy/MM/dd"
-        >
+        <DatePicker value={testDate} formatStr="yyyy/MM/dd">
           <DatePicker.Input />
           <DatePicker.Calendar />
         </DatePicker>
       </CenteredWrapper>,
     );
-    await expect
-      .element(page.getByText('2026/01/15'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('2026/01/15')).toBeInTheDocument();
   });
 
   it('should render disabled state', async () => {
@@ -157,9 +152,7 @@ describe('Popup Open/Close', () => {
     );
     const trigger = page.getByRole('button', { name: /pick a date/i });
     await trigger.click();
-    await expect
-      .element(page.getByRole('grid'))
-      .toBeVisible();
+    await expect.element(page.getByRole('grid')).toBeVisible();
   });
 
   it('should close calendar when ESC is pressed', async () => {
@@ -170,14 +163,10 @@ describe('Popup Open/Close', () => {
     );
     const trigger = page.getByRole('button', { name: /pick a date/i });
     await trigger.click();
-    await expect
-      .element(page.getByRole('grid'))
-      .toBeVisible();
+    await expect.element(page.getByRole('grid')).toBeVisible();
 
     await userEvent.keyboard('{Escape}');
-    await expect
-      .element(page.getByRole('grid'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByRole('grid')).not.toBeInTheDocument();
   });
 
   it('should support controlled open state', async () => {
@@ -198,10 +187,13 @@ describe('Popup Open/Close', () => {
           >
             Toggle
           </button>
-          <DatePicker open={open} onOpenChange={(v) => {
-            setOpen(v);
-            handleOpenChange(v);
-          }}>
+          <DatePicker
+            open={open}
+            onOpenChange={(v) => {
+              setOpen(v);
+              handleOpenChange(v);
+            }}
+          >
             <DatePicker.Input />
             <DatePicker.Calendar />
           </DatePicker>
@@ -215,19 +207,13 @@ describe('Popup Open/Close', () => {
       </CenteredWrapper>,
     );
 
-    await expect
-      .element(page.getByRole('grid'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByRole('grid')).not.toBeInTheDocument();
 
     await page.getByTestId('external-toggle').click();
-    await expect
-      .element(page.getByRole('grid'))
-      .toBeVisible();
+    await expect.element(page.getByRole('grid')).toBeVisible();
 
     await userEvent.keyboard('{Escape}');
-    await expect
-      .element(page.getByRole('grid'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByRole('grid')).not.toBeInTheDocument();
     expect(handleOpenChange).toHaveBeenCalledWith(false);
   });
 
@@ -243,9 +229,7 @@ describe('Popup Open/Close', () => {
     const dayButton = page.getByRole('button', { name: /15/ }).first();
     await dayButton.click();
 
-    await expect
-      .element(page.getByRole('grid'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByRole('grid')).not.toBeInTheDocument();
   });
 });
 
@@ -262,9 +246,7 @@ describe('State Management', () => {
     const dayButton = page.getByRole('button', { name: /15/ }).first();
     await dayButton.click();
 
-    await expect
-      .element(page.getByText(/15/))
-      .toBeInTheDocument();
+    await expect.element(page.getByText(/15/)).toBeInTheDocument();
   });
 
   it('should call onValueChange when date is selected', async () => {
@@ -300,9 +282,7 @@ describe('State Management', () => {
     const clearBtn = page.getByLabelText('Clear date');
     await clearBtn.click();
 
-    await expect
-      .element(page.getByText('Pick a date'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('Pick a date')).toBeInTheDocument();
   });
 
   it('should not show clear button when clearable is false', async () => {
@@ -328,9 +308,7 @@ describe('Range Mode', () => {
         <ControlledRangePicker />
       </CenteredWrapper>,
     );
-    await expect
-      .element(page.getByText('Select range'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('Select range')).toBeInTheDocument();
   });
 
   it('should display range value when provided', async () => {
@@ -343,12 +321,8 @@ describe('Range Mode', () => {
         <ControlledRangePicker initialValue={range} />
       </CenteredWrapper>,
     );
-    await expect
-      .element(page.getByText(/Jan 10, 2026/))
-      .toBeInTheDocument();
-    await expect
-      .element(page.getByText(/Jan 20, 2026/))
-      .toBeInTheDocument();
+    await expect.element(page.getByText(/Jan 10, 2026/)).toBeInTheDocument();
+    await expect.element(page.getByText(/Jan 20, 2026/)).toBeInTheDocument();
   });
 
   it('should display partial range when only from is provided', async () => {
@@ -361,9 +335,7 @@ describe('Range Mode', () => {
         <ControlledRangePicker initialValue={range} />
       </CenteredWrapper>,
     );
-    await expect
-      .element(page.getByText(/Jan 10, 2026/))
-      .toBeInTheDocument();
+    await expect.element(page.getByText(/Jan 10, 2026/)).toBeInTheDocument();
   });
 
   it('should open calendar with two months in range mode', async () => {
@@ -393,15 +365,11 @@ describe('Range Mode', () => {
         />
       </CenteredWrapper>,
     );
-    await expect
-      .element(page.getByText(/Mar 05, 2026/))
-      .toBeInTheDocument();
+    await expect.element(page.getByText(/Mar 05, 2026/)).toBeInTheDocument();
 
     const trigger = page.getByRole('button', { name: /Mar 05/ });
     await trigger.click();
-    await expect
-      .element(trigger)
-      .toHaveAttribute('aria-expanded', 'true');
+    await expect.element(trigger).toHaveAttribute('aria-expanded', 'true');
     await expect.element(page.getByRole('grid').first()).toBeVisible();
 
     await page.getByRole('button', { name: /March 20/ }).click();
@@ -409,21 +377,15 @@ describe('Range Mode', () => {
     expect(handleChange).not.toHaveBeenCalled();
 
     await page.getByRole('button', { name: /March 25/ }).click();
-    await expect
-      .element(page.getByRole('grid'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByRole('grid')).not.toBeInTheDocument();
 
     expect(handleChange).toHaveBeenCalledOnce();
     const newRange = handleChange.mock.calls[0][0] as DateRange;
     expect(newRange.from?.getDate()).toBe(20);
     expect(newRange.to?.getDate()).toBe(25);
 
-    await expect
-      .element(page.getByText(/Mar 20, 2026/))
-      .toBeInTheDocument();
-    await expect
-      .element(page.getByText(/Mar 25, 2026/))
-      .toBeInTheDocument();
+    await expect.element(page.getByText(/Mar 20, 2026/)).toBeInTheDocument();
+    await expect.element(page.getByText(/Mar 25, 2026/)).toBeInTheDocument();
   });
 });
 
@@ -446,12 +408,8 @@ describe('Presets', () => {
     const trigger = page.getByRole('button', { name: /pick a date/i });
     await trigger.click();
 
-    await expect
-      .element(page.getByText('오늘'))
-      .toBeVisible();
-    await expect
-      .element(page.getByText('어제'))
-      .toBeVisible();
+    await expect.element(page.getByText('오늘')).toBeVisible();
+    await expect.element(page.getByText('어제')).toBeVisible();
   });
 
   it('should select date and close when preset is clicked', async () => {
@@ -490,9 +448,7 @@ describe('Presets', () => {
     await page.getByText('오늘').click();
 
     expect(handleChange).toHaveBeenCalled();
-    await expect
-      .element(page.getByRole('grid'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByRole('grid')).not.toBeInTheDocument();
   });
 });
 
@@ -509,9 +465,7 @@ describe('FormControl Integration', () => {
         </FormControl>
       </CenteredWrapper>,
     );
-    await expect
-      .element(page.getByText('예약일'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('예약일')).toBeInTheDocument();
   });
 
   it('should apply aria-invalid from FormControl', async () => {
@@ -530,9 +484,7 @@ describe('FormControl Integration', () => {
       </CenteredWrapper>,
     );
     const trigger = page.getByRole('button', { name: '예약일' });
-    await expect
-      .element(trigger)
-      .toHaveAttribute('aria-invalid', 'true');
+    await expect.element(trigger).toHaveAttribute('aria-invalid', 'true');
   });
 });
 
@@ -541,10 +493,7 @@ describe('Time Picker', () => {
     const testDate = new Date(2026, 0, 15, 14, 30);
     await render(
       <CenteredWrapper>
-        <ControlledDatePicker
-          initialValue={testDate}
-          showTimePicker
-        />
+        <ControlledDatePicker initialValue={testDate} showTimePicker />
       </CenteredWrapper>,
     );
     const trigger = page.getByRole('button', { name: /january 15/i });
@@ -589,13 +538,9 @@ describe('Time Picker', () => {
     await trigger.click();
     await expect.element(page.getByRole('grid')).toBeVisible();
 
-    await page
-      .getByRole('button', { name: /March 15/ })
-      .click();
+    await page.getByRole('button', { name: /March 15/ }).click();
 
-    await expect
-      .element(page.getByRole('grid'))
-      .toBeVisible();
+    await expect.element(page.getByRole('grid')).toBeVisible();
   });
 });
 
@@ -612,9 +557,8 @@ describe('Accessibility', () => {
       render() {
         const { error } = this.state;
         const { children } = this.props;
-        if (error) {
-          return <div data-testid="error">{error}</div>;
-        }
+        if (error) return <div data-testid="error">{error}</div>;
+
         return children;
       }
     }
@@ -653,8 +597,6 @@ describe('Accessibility', () => {
       </CenteredWrapper>,
     );
     const trigger = page.getByRole('button', { name: /pick a date/i });
-    await expect
-      .element(trigger)
-      .toHaveAttribute('type', 'button');
+    await expect.element(trigger).toHaveAttribute('type', 'button');
   });
 });

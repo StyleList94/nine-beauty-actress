@@ -1,7 +1,4 @@
-import {
-  type ComponentProps,
-  type ReactNode,
-} from 'react';
+import { type ComponentProps, type ReactNode } from 'react';
 
 import {
   XYChart,
@@ -72,7 +69,8 @@ function BarChartRoot({
   const { config, height, animated } = useChartConfig();
   const theme = useXYChartTheme(config);
   const { legends, xyChildren, hasYAxis } = separateChildren(children);
-  const resolvedMargin = margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
+  const resolvedMargin =
+    margin ?? (hasYAxis ? xyChartMargin : xyChartMarginNoYAxis);
   const keys = series ?? Object.keys(config);
 
   const defaultXScale: ComponentProps<typeof XYChart>['xScale'] = horizontal
@@ -118,11 +116,7 @@ function BarChartRoot({
         margin={resolvedMargin}
       >
         {xyChildren}
-        {stacked ? (
-          <Stack>{barSeries}</Stack>
-        ) : (
-          <Group>{barSeries}</Group>
-        )}
+        {stacked ? <Stack>{barSeries}</Stack> : <Group>{barSeries}</Group>}
       </XYChart>
       {legends}
     </>

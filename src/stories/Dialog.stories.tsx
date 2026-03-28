@@ -21,8 +21,7 @@ const meta: Meta<typeof Dialog> = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          '오버레이 위에 컨텐츠를 표시하는 모달 다이얼로그입니다.',
+        component: '오버레이 위에 컨텐츠를 표시하는 모달 다이얼로그입니다.',
       },
     },
   },
@@ -162,9 +161,7 @@ export const WithFooterClose: StoryObj = {
 };
 
 export const NoCloseButton: StoryObj = {
-  ...noControls(
-    'showCloseButton={false}로 우측 상단 닫기 버튼을 숨깁니다.',
-  ),
+  ...noControls('showCloseButton={false}로 우측 상단 닫기 버튼을 숨깁니다.'),
   render: () => (
     <Dialog>
       <DialogTrigger asChild>

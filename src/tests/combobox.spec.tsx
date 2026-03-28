@@ -55,9 +55,7 @@ describe('Rendering and Props', () => {
     );
     const trigger = page.getByRole('combobox');
     await expect.element(trigger).toBeInTheDocument();
-    await expect
-      .element(trigger)
-      .toHaveTextContent('Pick a framework');
+    await expect.element(trigger).toHaveTextContent('Pick a framework');
   });
 
   it('should have combobox role', async () => {
@@ -77,9 +75,7 @@ describe('Rendering and Props', () => {
       </CenteredWrapper>,
     );
     const trigger = page.getByRole('combobox');
-    await expect
-      .element(trigger)
-      .toHaveAttribute('aria-expanded', 'false');
+    await expect.element(trigger).toHaveAttribute('aria-expanded', 'false');
   });
 });
 
@@ -106,9 +102,7 @@ describe('Popup Open/Close', () => {
     const trigger = page.getByRole('combobox');
     await trigger.click();
     await page.getByText('Vite').click();
-    await expect
-      .element(trigger)
-      .toHaveAttribute('aria-expanded', 'false');
+    await expect.element(trigger).toHaveAttribute('aria-expanded', 'false');
   });
 });
 
@@ -142,10 +136,7 @@ describe('State Management', () => {
     const handleChange = vi.fn();
     await render(
       <CenteredWrapper>
-        <ControlledCombobox
-          initialValue="next"
-          onValueChange={handleChange}
-        />
+        <ControlledCombobox initialValue="next" onValueChange={handleChange} />
       </CenteredWrapper>,
     );
     const trigger = page.getByRole('combobox');
@@ -191,9 +182,7 @@ describe('User Interactions', () => {
 
     const searchInput = page.getByPlaceholder('Search...');
     await searchInput.fill('xyz');
-    await expect
-      .element(page.getByText('No option found.'))
-      .toBeVisible();
+    await expect.element(page.getByText('No option found.')).toBeVisible();
   });
 });
 

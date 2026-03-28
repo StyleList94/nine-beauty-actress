@@ -33,8 +33,7 @@ const meta: Meta<typeof MainContainer> = {
     layout: 'padded',
     docs: {
       description: {
-        component:
-          '페이지 레이아웃의 본문 컨텐츠 영역 컨테이너입니다.',
+        component: '페이지 레이아웃의 본문 컨텐츠 영역 컨테이너입니다.',
       },
     },
   },

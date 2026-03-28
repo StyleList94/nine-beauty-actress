@@ -130,7 +130,9 @@ export const Small: Story = {
     <Card className="w-80" size="sm">
       <CardHeader>
         <CardTitle>컴팩트 카드</CardTitle>
-        <CardDescription>sm 사이즈는 spacing을 줄여 밀도를 높입니다.</CardDescription>
+        <CardDescription>
+          sm 사이즈는 spacing을 줄여 밀도를 높입니다.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <p className="text-sm">컨텐츠 영역입니다.</p>
@@ -237,4 +239,3 @@ export const HeaderOnly: Story = {
     </Card>
   ),
 };
-

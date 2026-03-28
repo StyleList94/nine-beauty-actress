@@ -24,9 +24,7 @@ describe('Rendering and Props', () => {
       </CheckboxGroup>,
     );
 
-    await expect
-      .element(page.getByText('알림 설정'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('알림 설정')).toBeInTheDocument();
   });
 
   it('should show required indicator with data-slot', async () => {
@@ -65,14 +63,8 @@ describe('Rendering and Props', () => {
     const emailLabel = page.getByText('이메일 알림');
     const smsLabel = page.getByText('SMS 알림');
 
-    const firstCheckboxId = checkboxes
-      .nth(0)
-      .element()
-      .getAttribute('id');
-    const secondCheckboxId = checkboxes
-      .nth(1)
-      .element()
-      .getAttribute('id');
+    const firstCheckboxId = checkboxes.nth(0).element().getAttribute('id');
+    const secondCheckboxId = checkboxes.nth(1).element().getAttribute('id');
 
     await expect
       .element(emailLabel)
@@ -92,9 +84,7 @@ describe('Accessibility', () => {
     );
 
     const group = page.getByRole('group');
-    await expect
-      .element(group)
-      .toHaveAttribute('aria-required', 'true');
+    await expect.element(group).toHaveAttribute('aria-required', 'true');
   });
 
   it('should link caption via aria-describedby on fieldset', async () => {
@@ -160,10 +150,7 @@ describe('Accessibility', () => {
     );
 
     const validation = page.getByRole('alert');
-    await expect.element(validation).toHaveAttribute(
-      'aria-live',
-      'assertive',
-    );
+    await expect.element(validation).toHaveAttribute('aria-live', 'assertive');
     await expect.element(validation).toHaveTextContent('에러 메시지');
   });
 
@@ -178,9 +165,7 @@ describe('Accessibility', () => {
     );
 
     const validation = page.getByRole('alert');
-    await expect
-      .element(validation)
-      .toHaveAttribute('data-variant', 'success');
+    await expect.element(validation).toHaveAttribute('data-variant', 'success');
   });
 });
 
@@ -193,14 +178,8 @@ describe('Data Attributes', () => {
     );
 
     const group = page.getByRole('group');
-    await expect
-      .element(group)
-      .toHaveAttribute('data-disabled', 'true');
-    await expect
-      .element(group)
-      .toHaveAttribute('data-required', 'true');
-    await expect
-      .element(group)
-      .toHaveAttribute('data-validation', 'error');
+    await expect.element(group).toHaveAttribute('data-disabled', 'true');
+    await expect.element(group).toHaveAttribute('data-required', 'true');
+    await expect.element(group).toHaveAttribute('data-validation', 'error');
   });
 });

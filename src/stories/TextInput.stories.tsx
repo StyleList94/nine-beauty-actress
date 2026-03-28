@@ -125,17 +125,13 @@ export const Default: Story = {
 };
 
 export const WithFormControl: Story = {
-  ...noControls(
-    'FormControl과 조합하여 레이블, 캡션을 연결합니다.',
-  ),
+  ...noControls('FormControl과 조합하여 레이블, 캡션을 연결합니다.'),
   render: () => (
     <div className="w-80">
       <FormControl required>
         <FormControl.Label>이메일</FormControl.Label>
         <TextInput type="email" placeholder="you@example.com" />
-        <FormControl.Caption>
-          이메일은 공개되지 않습니다.
-        </FormControl.Caption>
+        <FormControl.Caption>이메일은 공개되지 않습니다.</FormControl.Caption>
       </FormControl>
     </div>
   ),

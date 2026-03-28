@@ -2,7 +2,6 @@ import type { CurveType } from './types';
 
 import { curveMonotoneX, curveLinear, curveStep } from '@visx/curve';
 
-
 export function getCurveFactory(curve: CurveType) {
   switch (curve) {
     case 'linear':
@@ -43,9 +42,7 @@ export function generatePolygonPoints(
 }
 
 /** 좌표 배열을 SVG path 문자열로 변환 */
-export function pointsToPath(
-  points: { x: number; y: number }[],
-): string {
+export function pointsToPath(points: { x: number; y: number }[]): string {
   return points
     .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`)
     .join(' ')

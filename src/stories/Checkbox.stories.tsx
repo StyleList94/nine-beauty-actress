@@ -106,19 +106,13 @@ export const Default: Story = {
     }, [args.checked]);
 
     return (
-      <Checkbox
-        {...args}
-        checked={checked}
-        onCheckedChange={setChecked}
-      />
+      <Checkbox {...args} checked={checked} onCheckedChange={setChecked} />
     );
   },
 };
 
 export const Indeterminate: Story = {
-  ...noControls(
-    '전체 선택/해제 패턴으로 indeterminate 상태를 보여줍니다.',
-  ),
+  ...noControls('전체 선택/해제 패턴으로 indeterminate 상태를 보여줍니다.'),
   render: function Render() {
     const [items, setItems] = useState([false, false, false]);
 
@@ -132,9 +126,12 @@ export const Indeterminate: Story = {
       setItems(allChecked ? [false, false, false] : [true, true, true]);
     };
 
-    const handleItemChange = (index: number) => (checked: boolean | 'indeterminate') => {
-      setItems((prev) => prev.map((v, i) => (i === index ? checked === true : v)));
-    };
+    const handleItemChange =
+      (index: number) => (checked: boolean | 'indeterminate') => {
+        setItems((prev) =>
+          prev.map((v, i) => (i === index ? checked === true : v)),
+        );
+      };
 
     return (
       <div className="flex flex-col gap-3">
@@ -162,9 +159,7 @@ export const Indeterminate: Story = {
 };
 
 export const WithFormControl: Story = {
-  ...noControls(
-    'FormControl horizontal 레이아웃으로 레이블을 연결합니다.',
-  ),
+  ...noControls('FormControl horizontal 레이아웃으로 레이블을 연결합니다.'),
   render: function Render() {
     const [checked, setChecked] = useState(false);
 

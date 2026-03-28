@@ -27,15 +27,11 @@ describe('Rendering and Props', () => {
 
   it('should show unchecked icon when not checked', async () => {
     await render(
-      <Switch>
-        {[<span key="off">OFF</span>, <span key="on">ON</span>]}
-      </Switch>,
+      <Switch>{[<span key="off">OFF</span>, <span key="on">ON</span>]}</Switch>,
     );
 
     await expect.element(page.getByText('OFF')).toBeInTheDocument();
-    await expect
-      .element(page.getByText('ON'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('ON')).not.toBeInTheDocument();
   });
 
   it('should show checked icon when checked', async () => {
@@ -46,9 +42,7 @@ describe('Rendering and Props', () => {
     );
 
     await expect.element(page.getByText('ON')).toBeInTheDocument();
-    await expect
-      .element(page.getByText('OFF'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('OFF')).not.toBeInTheDocument();
   });
 });
 

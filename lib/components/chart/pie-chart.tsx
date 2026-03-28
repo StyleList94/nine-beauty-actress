@@ -100,8 +100,7 @@ function PieChartRoot({
                     fill={configEntry.color}
                     style={{
                       cursor: 'pointer',
-                      transition:
-                        'opacity 150ms ease, transform 150ms ease',
+                      transition: 'opacity 150ms ease, transform 150ms ease',
                     }}
                     onMouseEnter={(e) => {
                       const element = e.currentTarget;
@@ -115,11 +114,10 @@ function PieChartRoot({
                       hideTooltip();
                     }}
                     onMouseMove={(event) => {
-                      const svgElement =
-                        event.currentTarget.ownerSVGElement;
+                      const svgElement = event.currentTarget.ownerSVGElement;
                       if (!svgElement) return;
                       const coords = localPoint(svgElement, event);
-                      if (coords) {
+                      if (coords)
                         showTooltip({
                           tooltipLeft: coords.x,
                           tooltipTop: coords.y,
@@ -130,7 +128,6 @@ function PieChartRoot({
                             value: Number(datum[dataKey]) || 0,
                           },
                         });
-                      }
                     }}
                   />
                 );
@@ -153,12 +150,8 @@ function PieChartRoot({
                 className={chartTooltipIndicator}
                 style={{ background: tooltipData.color }}
               />
-              <span className={chartTooltipLabel}>
-                {tooltipData.label}
-              </span>
-              <span className={chartTooltipValue}>
-                {tooltipData.value}
-              </span>
+              <span className={chartTooltipLabel}>{tooltipData.label}</span>
+              <span className={chartTooltipValue}>{tooltipData.value}</span>
             </div>
           </div>
         </TooltipWithBounds>

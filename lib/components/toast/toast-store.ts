@@ -36,9 +36,7 @@ function remove(id: string): void {
 }
 
 export function dismiss(id: string): void {
-  toasts = toasts.map((t) =>
-    t.id === id ? { ...t, open: false } : t,
-  );
+  toasts = toasts.map((t) => (t.id === id ? { ...t, open: false } : t));
   notify();
 
   setTimeout(() => remove(id), ANIMATION_DURATION);
