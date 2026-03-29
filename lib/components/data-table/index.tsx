@@ -4,6 +4,15 @@ import {
   flexRender,
   type Table as TanstackTable,
   type Header,
+  type ColumnDef,
+  type SortingState,
+  type PaginationState,
+  type ColumnFiltersState,
+  type RowSelectionState,
+  type VisibilityState,
+  type ExpandedState,
+  type ColumnPinningState,
+  type OnChangeFn,
 } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 
@@ -17,6 +26,7 @@ import {
   TableCell,
 } from 'lib/components/table';
 import { Button } from 'lib/components/button';
+import useDataTable from 'lib/hooks/use-data-table';
 
 import * as styles from './style.css';
 
@@ -24,27 +34,67 @@ import * as styles from './style.css';
 
 type DataTableContextValue<TData = unknown> = {
   table: TanstackTable<TData>;
+  /** state 변경 시 context 재생성을 트리거하기 위한 값 (table 참조는 불변) */
+  tableState: ReturnType<TanstackTable<TData>['getState']>;
 };
 
 const DataTableContext = createContext<DataTableContextValue | null>(null);
 
 function useDataTableContext() {
   const context = use(DataTableContext);
-  if (!context) {
+  if (!context)
     throw new Error(
       'DataTable 서브컴포넌트는 <DataTable> 안에서 사용해야 합니다.',
     );
-  }
+
   return context;
 }
 
 // ─── Types ───────────────────────────────────────────────
 
 export type DataTableProps<TData> = {
-  /** useDataTable hook이 반환한 table instance */
-  table: TanstackTable<TData>;
-  children: ReactNode;
+  /** 테이블 데이터 배열 */
+  data: TData[];
+  /** 컬럼 정의 배열 */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columns: ColumnDef<TData, any>[];
+  /** 서브컴포넌트 또는 render props (table 인스턴스 접근) */
+  children: ReactNode | ((table: TanstackTable<TData>) => ReactNode);
   className?: string;
+
+  // ─── 정렬 ───────────────────────────────────────────
+  sorting?: boolean | SortingState;
+  onSortingChange?: OnChangeFn<SortingState>;
+  manualSorting?: boolean;
+
+  // ─── 페이지네이션 ──────────────────────────────────
+  pagination?: boolean | { pageSize: number };
+  onPaginationChange?: OnChangeFn<PaginationState>;
+  manualPagination?: boolean;
+  rowCount?: number;
+
+  // ─── 필터링 ─────────────────────────────────────────
+  filtering?: boolean;
+  columnFilters?: ColumnFiltersState;
+  onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
+  globalFilter?: string;
+  onGlobalFilterChange?: OnChangeFn<string>;
+
+  // ─── 행 선택 ────────────────────────────────────────
+  rowSelection?: boolean;
+  onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+
+  // ─── 컬럼 가시성 ───────────────────────────────────
+  columnVisibility?: boolean | VisibilityState;
+  onColumnVisibilityChange?: OnChangeFn<VisibilityState>;
+
+  // ─── 행 확장 ────────────────────────────────────────
+  expanding?: boolean;
+  onExpandedChange?: OnChangeFn<ExpandedState>;
+
+  // ─── 컬럼 피닝 ─────────────────────────────────────
+  columnPinning?: ColumnPinningState;
+  onColumnPinningChange?: OnChangeFn<ColumnPinningState>;
 };
 
 export type DataTableContentProps = {
@@ -70,19 +120,13 @@ function getAriaSort(sorted: false | 'asc' | 'desc') {
   return undefined;
 }
 
-function SortIndicator<TData>({
-  header,
-}: {
-  header: Header<TData, unknown>;
-}) {
+function SortIndicator<TData>({ header }: { header: Header<TData, unknown> }) {
   const sorted = header.column.getIsSorted();
 
-  if (sorted === 'asc') {
-    return <ArrowUp className={styles.sortIcon} />;
-  }
-  if (sorted === 'desc') {
-    return <ArrowDown className={styles.sortIcon} />;
-  }
+  if (sorted === 'asc') return <ArrowUp className={styles.sortIcon} />;
+
+  if (sorted === 'desc') return <ArrowDown className={styles.sortIcon} />;
+
   return null;
 }
 
@@ -97,23 +141,16 @@ function renderHeaderContent<TData>(header: Header<TData, unknown>) {
   if (!header.column.getCanSort()) return rendered;
 
   return (
-    <div
+    <button
+      type="button"
       data-slot="data-table-sort-header"
       className={styles.sortableHeader}
       onClick={header.column.getToggleSortingHandler()}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          header.column.toggleSorting();
-        }
-      }}
-      tabIndex={0}
-      role="button"
       aria-label={`${typeof header.column.columnDef.header === 'string' ? header.column.columnDef.header : header.column.id} 정렬`}
     >
       {rendered}
       <SortIndicator header={header} />
-    </div>
+    </button>
   );
 }
 
@@ -123,37 +160,73 @@ function renderHeaderContent<TData>(header: Header<TData, unknown>) {
  * 데이터 바인딩, 정렬, 페이지네이션을 지원하는 테이블 컴포넌트입니다.
  *
  * @remarks
- * - useDataTable hook과 함께 사용
+ * - data와 columns를 직접 전달하면 내부에서 테이블 인스턴스를 생성합니다
  * - DataTableContent, DataTablePagination 서브컴포넌트 조합으로 구성
- * - 내부에서 기존 Table 컴포넌트를 렌더링에 활용
- *
- * @example
- * ```tsx
- * const table = useDataTable({ data, columns, sorting: true });
- *
- * <DataTable table={table}>
- *   <DataTableContent />
- *   <DataTablePagination />
- * </DataTable>
- * ```
+ * - children function으로 테이블 인스턴스에 접근 가능 (고급 사용)
  */
 export function DataTable<TData>({
-  table,
+  data,
+  columns,
   children,
   className,
+  sorting,
+  onSortingChange,
+  manualSorting,
+  pagination,
+  onPaginationChange,
+  manualPagination,
+  rowCount,
+  filtering,
+  columnFilters,
+  onColumnFiltersChange,
+  globalFilter,
+  onGlobalFilterChange,
+  rowSelection,
+  onRowSelectionChange,
+  columnVisibility,
+  onColumnVisibilityChange,
+  expanding,
+  onExpandedChange,
+  columnPinning,
+  onColumnPinningChange,
 }: DataTableProps<TData>) {
+  const table = useDataTable({
+    data,
+    columns,
+    sorting,
+    onSortingChange,
+    manualSorting,
+    pagination,
+    onPaginationChange,
+    manualPagination,
+    rowCount,
+    filtering,
+    columnFilters,
+    onColumnFiltersChange,
+    globalFilter,
+    onGlobalFilterChange,
+    rowSelection,
+    onRowSelectionChange,
+    columnVisibility,
+    onColumnVisibilityChange,
+    expanding,
+    onExpandedChange,
+    columnPinning,
+    onColumnPinningChange,
+  });
+
+  const tableState = table.getState();
   const contextValue = useMemo(
-    () => ({ table }) as DataTableContextValue,
-    [table],
+    () => ({ table, tableState }) as DataTableContextValue,
+    [table, tableState],
   );
+
+  const content = typeof children === 'function' ? children(table) : children;
 
   return (
     <DataTableContext value={contextValue}>
-      <div
-        data-slot="data-table"
-        className={cn(styles.container, className)}
-      >
-        {children}
+      <div data-slot="data-table" className={cn(styles.container, className)}>
+        {content}
       </div>
     </DataTableContext>
   );
@@ -168,7 +241,7 @@ export function DataTableContent({
   children,
 }: DataTableContentProps) {
   const { table } = useDataTableContext();
-  const {rows} = table.getRowModel();
+  const { rows } = table.getRowModel();
   const columnCount = table.getAllColumns().length;
 
   const emptyContent = children ?? (
@@ -202,10 +275,7 @@ export function DataTableContent({
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
-                  {flexRender(
-                    cell.column.columnDef.cell,
-                    cell.getContext(),
-                  )}
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
             </TableRow>
@@ -223,9 +293,7 @@ export function DataTableContent({
 // ─── DataTablePagination ─────────────────────────────────
 
 /** 페이지네이션 컨트롤을 렌더링합니다. */
-export function DataTablePagination({
-  className,
-}: DataTablePaginationProps) {
+export function DataTablePagination({ className }: DataTablePaginationProps) {
   const { table } = useDataTableContext();
   const { pageIndex, pageSize } = table.getState().pagination;
   const totalRows = table.getRowCount();

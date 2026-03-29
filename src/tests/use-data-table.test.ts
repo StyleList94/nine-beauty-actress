@@ -61,9 +61,7 @@ describe('useDataTable', () => {
     );
 
     expect(result.current.getState().pagination.pageSize).toBe(10);
-    expect(result.current.getRowModel().rows.length).toBeLessThanOrEqual(
-      10,
-    );
+    expect(result.current.getRowModel().rows.length).toBeLessThanOrEqual(10);
   });
 
   it('should set custom pageSize', () => {
@@ -82,9 +80,7 @@ describe('useDataTable', () => {
     );
 
     expect(result.current.getState().pagination.pageSize).toBe(5);
-    expect(result.current.getRowModel().rows.length).toBeLessThanOrEqual(
-      5,
-    );
+    expect(result.current.getRowModel().rows.length).toBeLessThanOrEqual(5);
   });
 
   it('should pass through tanstack options', () => {
@@ -97,5 +93,61 @@ describe('useDataTable', () => {
     );
 
     expect(result.current).toBeDefined();
+  });
+
+  it('should enable filtering when filtering is true', () => {
+    const { result } = renderHook(() =>
+      useDataTable({ data, columns, filtering: true }),
+    );
+
+    expect(result.current.getState().columnFilters).toEqual([]);
+    expect(result.current.getState().globalFilter).toBe('');
+  });
+
+  it('should enable row selection when rowSelection is true', () => {
+    const { result } = renderHook(() =>
+      useDataTable({ data, columns, rowSelection: true }),
+    );
+
+    expect(result.current.getState().rowSelection).toEqual({});
+    const row = result.current.getRowModel().rows[0];
+    expect(row.getCanSelect()).toBe(true);
+  });
+
+  it('should set initial column visibility state', () => {
+    const { result } = renderHook(() =>
+      useDataTable({
+        data,
+        columns,
+        columnVisibility: { age: false },
+      }),
+    );
+
+    expect(result.current.getState().columnVisibility).toEqual({
+      age: false,
+    });
+    expect(result.current.getColumn('age')?.getIsVisible()).toBe(false);
+  });
+
+  it('should enable expanding when expanding is true', () => {
+    const { result } = renderHook(() =>
+      useDataTable({ data, columns, expanding: true }),
+    );
+
+    expect(result.current.getState().expanded).toEqual({});
+  });
+
+  it('should set initial column pinning state', () => {
+    const { result } = renderHook(() =>
+      useDataTable({
+        data,
+        columns,
+        columnPinning: { left: ['id'] },
+      }),
+    );
+
+    expect(result.current.getState().columnPinning).toEqual({
+      left: ['id'],
+    });
   });
 });

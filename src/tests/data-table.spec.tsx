@@ -3,7 +3,6 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { render } from 'vitest-browser-react';
 import { page, userEvent } from 'vitest/browser';
 
-import useDataTable from 'lib/hooks/use-data-table';
 import {
   DataTable,
   DataTableContent,
@@ -28,15 +27,13 @@ const columns: ColumnDef<TestData>[] = [
 ];
 
 function BasicTable({ data = testData }: { data?: TestData[] }) {
-  const table = useDataTable({
-    data,
-    columns,
-    sorting: true,
-    pagination: { pageSize: 3 },
-  });
-
   return (
-    <DataTable table={table}>
+    <DataTable
+      data={data}
+      columns={columns}
+      sorting
+      pagination={{ pageSize: 3 }}
+    >
       <DataTableContent />
       <DataTablePagination />
     </DataTable>
@@ -44,20 +41,16 @@ function BasicTable({ data = testData }: { data?: TestData[] }) {
 }
 
 function EmptyTable() {
-  const table = useDataTable({ data: [], columns });
-
   return (
-    <DataTable table={table}>
+    <DataTable data={[]} columns={columns}>
       <DataTableContent />
     </DataTable>
   );
 }
 
 function CustomEmptyTable() {
-  const table = useDataTable({ data: [], columns });
-
   return (
-    <DataTable table={table}>
+    <DataTable data={[]} columns={columns}>
       <DataTableContent>
         <DataTableEmpty>
           <p>커스텀 빈 상태</p>
@@ -68,14 +61,8 @@ function CustomEmptyTable() {
 }
 
 function NoPaginationTable() {
-  const table = useDataTable({
-    data: testData,
-    columns,
-    sorting: true,
-  });
-
   return (
-    <DataTable table={table}>
+    <DataTable data={testData} columns={columns} sorting>
       <DataTableContent />
     </DataTable>
   );
@@ -110,9 +97,7 @@ describe('Rendering and Props', () => {
   it('should show custom empty state', async () => {
     await render(<CustomEmptyTable />);
 
-    await expect
-      .element(page.getByText('커스텀 빈 상태'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('커스텀 빈 상태')).toBeInTheDocument();
   });
 });
 
@@ -123,11 +108,8 @@ describe('Sorting', () => {
     const nameSort = page.getByRole('button', { name: /Name 정렬/i });
     await nameSort.click();
 
-    // Name 컬럼 th에 aria-sort 속성 확인
     const nameTh = page.getByTestId('data-table-head-name');
-    await expect
-      .element(nameTh)
-      .toHaveAttribute('aria-sort', 'ascending');
+    await expect.element(nameTh).toHaveAttribute('aria-sort', 'ascending');
   });
 
   it('should toggle sort direction on repeated clicks', async () => {
@@ -138,14 +120,10 @@ describe('Sorting', () => {
     const ageTh = page.getByTestId('data-table-head-age');
 
     await ageSort.click();
-    await expect
-      .element(ageTh)
-      .toHaveAttribute('aria-sort', 'descending');
+    await expect.element(ageTh).toHaveAttribute('aria-sort', 'descending');
 
     await ageSort.click();
-    await expect
-      .element(ageTh)
-      .toHaveAttribute('aria-sort', 'ascending');
+    await expect.element(ageTh).toHaveAttribute('aria-sort', 'ascending');
   });
 
   it('should not sort columns with enableSorting: false', async () => {
@@ -154,20 +132,11 @@ describe('Sorting', () => {
       { accessorKey: 'name', header: 'Name' },
     ];
 
-    function NoSortTable() {
-      const table = useDataTable({
-        data: testData,
-        columns: noSortColumns,
-        sorting: true,
-      });
-      return (
-        <DataTable table={table}>
-          <DataTableContent />
-        </DataTable>
-      );
-    }
-
-    await render(<NoSortTable />);
+    await render(
+      <DataTable data={testData} columns={noSortColumns} sorting>
+        <DataTableContent />
+      </DataTable>,
+    );
 
     const nameSort = page.getByRole('button', { name: /Name 정렬/i });
     await expect.element(nameSort).toBeInTheDocument();
@@ -196,9 +165,7 @@ describe('Pagination', () => {
   it('should show pagination info', async () => {
     await render(<BasicTable />);
 
-    await expect
-      .element(page.getByText('1-3 / 5'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('1-3 / 5')).toBeInTheDocument();
   });
 
   it('should navigate to next page', async () => {
@@ -207,9 +174,7 @@ describe('Pagination', () => {
     const nextBtn = page.getByRole('button', { name: '다음 페이지' });
     await nextBtn.click();
 
-    await expect
-      .element(page.getByText('4-5 / 5'))
-      .toBeInTheDocument();
+    await expect.element(page.getByText('4-5 / 5')).toBeInTheDocument();
     await expect.element(page.getByText('Diana')).toBeInTheDocument();
   });
 
@@ -220,6 +185,19 @@ describe('Pagination', () => {
     await expect.element(prevBtn).toBeDisabled();
   });
 
+  it('should navigate to previous page', async () => {
+    await render(<BasicTable />);
+
+    const nextBtn = page.getByRole('button', { name: '다음 페이지' });
+    const prevBtn = page.getByRole('button', { name: '이전 페이지' });
+
+    await nextBtn.click();
+    await expect.element(page.getByText('4-5 / 5')).toBeInTheDocument();
+
+    await prevBtn.click();
+    await expect.element(page.getByText('1-3 / 5')).toBeInTheDocument();
+  });
+
   it('should disable next button on last page', async () => {
     await render(<BasicTable />);
 
@@ -227,6 +205,204 @@ describe('Pagination', () => {
     await nextBtn.click();
 
     await expect.element(nextBtn).toBeDisabled();
+  });
+});
+
+describe('Children Function (Render Props)', () => {
+  it('should pass table instance to children function', async () => {
+    await render(
+      <DataTable data={testData} columns={columns} sorting rowSelection>
+        {(table) => (
+          <>
+            <DataTableContent />
+            <p data-testid="selected-count">
+              {table.getFilteredSelectedRowModel().rows.length}건
+            </p>
+          </>
+        )}
+      </DataTable>,
+    );
+
+    await expect.element(page.getByRole('table')).toBeInTheDocument();
+    await expect
+      .element(page.getByTestId('selected-count'))
+      .toHaveTextContent('0건');
+  });
+});
+
+describe('Filtering', () => {
+  it('should filter rows when filtering is enabled', async () => {
+    await render(
+      <DataTable
+        data={testData}
+        columns={columns}
+        filtering
+        columnFilters={[{ id: 'name', value: 'Alice' }]}
+      >
+        <DataTableContent />
+      </DataTable>,
+    );
+
+    await expect.element(page.getByText('Alice')).toBeInTheDocument();
+    await expect.element(page.getByText('Bob')).not.toBeInTheDocument();
+  });
+});
+
+describe('Row Selection', () => {
+  it('should enable row selection', async () => {
+    const selectionColumns: ColumnDef<TestData>[] = [
+      {
+        id: 'select',
+        cell: ({ row }) => (
+          <input
+            type="checkbox"
+            checked={row.getIsSelected()}
+            onChange={row.getToggleSelectedHandler()}
+            data-testid={`select-${row.original.id}`}
+          />
+        ),
+      },
+      ...columns,
+    ];
+
+    await render(
+      <DataTable
+        data={testData.slice(0, 3)}
+        columns={selectionColumns}
+        rowSelection
+      >
+        {(table) => (
+          <>
+            <DataTableContent />
+            <p data-testid="selection-info">
+              {table.getFilteredSelectedRowModel().rows.length}건 선택
+            </p>
+          </>
+        )}
+      </DataTable>,
+    );
+
+    await expect
+      .element(page.getByTestId('selection-info'))
+      .toHaveTextContent('0건 선택');
+
+    await page.getByTestId('select-1').click();
+
+    await expect
+      .element(page.getByTestId('selection-info'))
+      .toHaveTextContent('1건 선택');
+  });
+});
+
+describe('Column Visibility', () => {
+  it('should hide columns when columnVisibility is set', async () => {
+    await render(
+      <DataTable
+        data={testData.slice(0, 3)}
+        columns={columns}
+        columnVisibility={{ age: false }}
+      >
+        <DataTableContent />
+      </DataTable>,
+    );
+
+    await expect.element(page.getByText('Name')).toBeInTheDocument();
+    await expect.element(page.getByText('Age')).not.toBeInTheDocument();
+  });
+});
+
+describe('Expanding', () => {
+  it('should enable expanding', async () => {
+    const expandColumns: ColumnDef<TestData>[] = [
+      {
+        id: 'expand',
+        cell: ({ row }) => (
+          <button
+            type="button"
+            onClick={() => row.toggleExpanded()}
+            data-testid={`expand-${row.original.id}`}
+          >
+            {row.getIsExpanded() ? '접기' : '펼치기'}
+          </button>
+        ),
+      },
+      ...columns,
+    ];
+
+    await render(
+      <DataTable data={testData.slice(0, 3)} columns={expandColumns} expanding>
+        <DataTableContent />
+      </DataTable>,
+    );
+
+    const expandBtn = page.getByTestId('expand-1');
+    await expect.element(expandBtn).toHaveTextContent('펼치기');
+
+    await expandBtn.click();
+    await expect.element(expandBtn).toHaveTextContent('접기');
+  });
+});
+
+describe('Column Pinning', () => {
+  it('should accept columnPinning state', async () => {
+    await render(
+      <DataTable
+        data={testData.slice(0, 3)}
+        columns={columns}
+        columnPinning={{ left: ['id'] }}
+      >
+        <DataTableContent />
+      </DataTable>,
+    );
+
+    await expect.element(page.getByRole('table')).toBeInTheDocument();
+    await expect.element(page.getByText('ID')).toBeInTheDocument();
+  });
+});
+
+describe('Edge Cases', () => {
+  it('should show "0 결과" when pagination is enabled with empty data', async () => {
+    await render(
+      <DataTable
+        data={[] as TestData[]}
+        columns={columns}
+        pagination={{ pageSize: 3 }}
+      >
+        <DataTableContent />
+        <DataTablePagination />
+      </DataTable>,
+    );
+
+    await expect.element(page.getByText('0 결과')).toBeInTheDocument();
+  });
+
+  it('should handle function header in column def', async () => {
+    const fnHeaderColumns: ColumnDef<TestData>[] = [
+      { accessorKey: 'id', header: () => 'Custom ID' },
+      { accessorKey: 'name', header: 'Name' },
+    ];
+
+    await render(
+      <DataTable data={testData.slice(0, 2)} columns={fnHeaderColumns} sorting>
+        <DataTableContent />
+      </DataTable>,
+    );
+
+    await expect.element(page.getByText('Custom ID')).toBeInTheDocument();
+  });
+});
+
+describe('Error Handling', () => {
+  it('should throw when sub-component is used outside DataTable', async () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await expect(async () => {
+      await render(<DataTableContent />);
+    }).rejects.toThrow(
+      'DataTable 서브컴포넌트는 <DataTable> 안에서 사용해야 합니다.',
+    );
+
+    spy.mockRestore();
   });
 });
 
@@ -244,9 +420,7 @@ describe('Accessibility', () => {
     await nameSort.click();
 
     const nameTh = page.getByTestId('data-table-head-name');
-    await expect
-      .element(nameTh)
-      .toHaveAttribute('aria-sort', 'ascending');
+    await expect.element(nameTh).toHaveAttribute('aria-sort', 'ascending');
   });
 
   it('should have aria-label on pagination buttons', async () => {
@@ -270,8 +444,6 @@ describe('Accessibility', () => {
     await userEvent.keyboard('{Enter}');
 
     const nameTh = page.getByTestId('data-table-head-name');
-    await expect
-      .element(nameTh)
-      .toHaveAttribute('aria-sort', 'descending');
+    await expect.element(nameTh).toHaveAttribute('aria-sort', 'descending');
   });
 });
