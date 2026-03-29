@@ -20,7 +20,6 @@ import {
   type OnChangeFn,
 } from '@tanstack/react-table';
 
-// 모듈 레벨에서 한 번만 생성 (렌더 안에서 호출하면 무한 재계산)
 const coreRowModel = getCoreRowModel();
 const sortedRowModel = getSortedRowModel();
 const paginationRowModel = getPaginationRowModel();
@@ -106,6 +105,11 @@ type UseDataTableOptions<TData> = {
   | 'onExpandedChange'
   | 'onColumnPinningChange'
   | 'enableRowSelection'
+  | 'enableSorting'
+  | 'enableColumnFilters'
+  | 'enableGlobalFilter'
+  | 'enableExpanding'
+  | 'enableColumnPinning'
 >;
 
 export type { UseDataTableOptions };
@@ -118,31 +122,24 @@ export type { UseDataTableOptions };
 export default function useDataTable<TData>({
   data,
   columns,
-  // sorting
   sorting,
   onSortingChange,
   manualSorting,
-  // pagination
   pagination,
   onPaginationChange,
   manualPagination,
   rowCount,
-  // filtering
   filtering,
   columnFilters,
   onColumnFiltersChange,
   globalFilter,
   onGlobalFilterChange,
-  // row selection
   rowSelection,
   onRowSelectionChange,
-  // column visibility
   columnVisibility,
   onColumnVisibilityChange,
-  // expanding
   expanding,
   onExpandedChange,
-  // column pinning
   columnPinning,
   onColumnPinningChange,
   ...rest
@@ -156,7 +153,6 @@ export default function useDataTable<TData>({
   const expandingEnabled = expanding === true;
   const columnPinningEnabled = columnPinning !== undefined;
 
-  // ─── 내부 상태 ─────────────────────────────────────
   const initialSorting: SortingState = Array.isArray(sorting) ? sorting : [];
   const initialPageSize =
     typeof pagination === 'object' ? pagination.pageSize : 10;
@@ -188,67 +184,93 @@ export default function useDataTable<TData>({
     columns,
     getCoreRowModel: coreRowModel,
     autoResetPageIndex: false,
-
-    // sorting
+    enableSorting: sortingEnabled,
     ...(sortingEnabled && !manualSorting
       ? { getSortedRowModel: sortedRowModel }
       : {}),
     ...(sortingEnabled
       ? {
-          onSortingChange: onSortingChange ?? setSortingState,
+          onSortingChange: onSortingChange
+            ? (((updater) => {
+                setSortingState(updater);
+                onSortingChange(updater);
+              }) as OnChangeFn<SortingState>)
+            : setSortingState,
           manualSorting,
         }
       : {}),
-
-    // pagination
     ...(paginationEnabled && !manualPagination
       ? { getPaginationRowModel: paginationRowModel }
       : {}),
     ...(paginationEnabled
       ? {
-          onPaginationChange: onPaginationChange ?? setPaginationState,
+          onPaginationChange: onPaginationChange
+            ? (((updater) => {
+                setPaginationState(updater);
+                onPaginationChange(updater);
+              }) as OnChangeFn<PaginationState>)
+            : setPaginationState,
           manualPagination,
           rowCount,
         }
       : {}),
-
-    // filtering
     ...(filteringEnabled
       ? {
           getFilteredRowModel: filteredRowModel,
-          onColumnFiltersChange: onColumnFiltersChange ?? setColumnFiltersState,
-          onGlobalFilterChange: onGlobalFilterChange ?? setGlobalFilterState,
+          onColumnFiltersChange: onColumnFiltersChange
+            ? (((updater) => {
+                setColumnFiltersState(updater);
+                onColumnFiltersChange(updater);
+              }) as OnChangeFn<ColumnFiltersState>)
+            : setColumnFiltersState,
+          onGlobalFilterChange: onGlobalFilterChange
+            ? (((updater) => {
+                setGlobalFilterState(updater);
+                onGlobalFilterChange(updater);
+              }) as OnChangeFn<string>)
+            : setGlobalFilterState,
         }
       : {}),
-
-    // row selection
     ...(rowSelectionEnabled
       ? {
           enableRowSelection: true,
-          onRowSelectionChange: onRowSelectionChange ?? setRowSelectionState,
+          onRowSelectionChange: onRowSelectionChange
+            ? (((updater) => {
+                setRowSelectionState(updater);
+                onRowSelectionChange(updater);
+              }) as OnChangeFn<RowSelectionState>)
+            : setRowSelectionState,
         }
       : {}),
-
-    // column visibility
     ...(columnVisibilityEnabled
       ? {
-          onColumnVisibilityChange:
-            onColumnVisibilityChange ?? setVisibilityState,
+          onColumnVisibilityChange: onColumnVisibilityChange
+            ? (((updater) => {
+                setVisibilityState(updater);
+                onColumnVisibilityChange(updater);
+              }) as OnChangeFn<VisibilityState>)
+            : setVisibilityState,
         }
       : {}),
-
-    // expanding
     ...(expandingEnabled
       ? {
           getExpandedRowModel: expandedRowModel,
-          onExpandedChange: onExpandedChange ?? setExpandedState,
+          onExpandedChange: onExpandedChange
+            ? (((updater) => {
+                setExpandedState(updater);
+                onExpandedChange(updater);
+              }) as OnChangeFn<ExpandedState>)
+            : setExpandedState,
         }
       : {}),
-
-    // column pinning
     ...(columnPinningEnabled
       ? {
-          onColumnPinningChange: onColumnPinningChange ?? setColumnPinningState,
+          onColumnPinningChange: onColumnPinningChange
+            ? (((updater) => {
+                setColumnPinningState(updater);
+                onColumnPinningChange(updater);
+              }) as OnChangeFn<ColumnPinningState>)
+            : setColumnPinningState,
         }
       : {}),
 

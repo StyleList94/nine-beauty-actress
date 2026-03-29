@@ -1,6 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table';
 
-import { renderHook } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 
 import useDataTable from 'lib/hooks/use-data-table';
 
@@ -149,5 +149,86 @@ describe('useDataTable', () => {
     expect(result.current.getState().columnPinning).toEqual({
       left: ['id'],
     });
+  });
+
+  it('should call onSortingChange and sync internal state', () => {
+    const onSortingChange = vi.fn();
+    const { result } = renderHook(() =>
+      useDataTable({
+        data,
+        columns,
+        sorting: true,
+        onSortingChange,
+      }),
+    );
+
+    const nameColumn = result.current.getColumn('name');
+    act(() => nameColumn?.toggleSorting(false));
+
+    expect(onSortingChange).toHaveBeenCalled();
+    expect(result.current.getState().sorting).toEqual([
+      { id: 'name', desc: false },
+    ]);
+  });
+
+  it('should call onPaginationChange and sync internal state', () => {
+    const largeData = Array.from({ length: 25 }, (_, i) => ({
+      id: i,
+      name: `User ${i}`,
+      age: 20 + i,
+    }));
+    const onPaginationChange = vi.fn();
+    const { result } = renderHook(() =>
+      useDataTable({
+        data: largeData,
+        columns,
+        pagination: { pageSize: 5 },
+        onPaginationChange,
+      }),
+    );
+
+    act(() => result.current.nextPage());
+
+    expect(onPaginationChange).toHaveBeenCalled();
+    expect(result.current.getState().pagination.pageIndex).toBe(1);
+  });
+
+  it('should not client-sort when manualSorting is true', () => {
+    const unsorted = [
+      { id: 3, name: 'Charlie', age: 35 },
+      { id: 1, name: 'Alice', age: 30 },
+      { id: 2, name: 'Bob', age: 25 },
+    ];
+
+    const { result } = renderHook(() =>
+      useDataTable({
+        data: unsorted,
+        columns,
+        sorting: [{ id: 'name', desc: false }],
+        manualSorting: true,
+      }),
+    );
+
+    // 데이터 순서가 원본 그대로 유지 (클라이언트 정렬 안 함)
+    const { rows } = result.current.getRowModel();
+    expect(rows[0].original.name).toBe('Charlie');
+    expect(rows[1].original.name).toBe('Alice');
+    expect(rows[2].original.name).toBe('Bob');
+  });
+
+  it('should not client-paginate when manualPagination is true', () => {
+    const { result } = renderHook(() =>
+      useDataTable({
+        data,
+        columns,
+        pagination: { pageSize: 2 },
+        manualPagination: true,
+        rowCount: 100,
+      }),
+    );
+
+    // manualPagination이면 전체 데이터 반환 (서버가 이미 슬라이스)
+    expect(result.current.getRowModel().rows).toHaveLength(3);
+    expect(result.current.getPageCount()).toBe(50); // rowCount / pageSize
   });
 });

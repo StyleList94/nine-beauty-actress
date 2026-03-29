@@ -155,9 +155,8 @@ describe('Pagination', () => {
     await expect.element(page.getByText('Alice')).toBeInTheDocument();
     await expect.element(page.getByText('Charlie')).toBeInTheDocument();
 
-    // tbody 내 행 수로 검증 (locator timeout 방지)
-    const rows = page.getByRole('row');
     // 헤더 1행 + 데이터 3행 = 4행
+    const rows = page.getByRole('row');
     await expect.element(rows.nth(3)).toBeInTheDocument();
     await expect.element(rows.nth(4)).not.toBeInTheDocument();
   });
