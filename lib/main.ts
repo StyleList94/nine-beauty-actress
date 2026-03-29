@@ -48,6 +48,16 @@ import {
   TableCaption,
   type TableProps,
 } from './components/table';
+import {
+  DataTable,
+  DataTableContent,
+  DataTablePagination,
+  DataTableEmpty,
+  type DataTableProps,
+  type DataTableContentProps,
+  type DataTablePaginationProps,
+  type DataTableEmptyProps,
+} from './components/data-table';
 import { Checkbox, type CheckboxProps } from './components/checkbox';
 import {
   Collapsible,
@@ -251,6 +261,10 @@ export {
   TableHead,
   TableCell,
   TableCaption,
+  DataTable,
+  DataTableContent,
+  DataTablePagination,
+  DataTableEmpty,
   Checkbox,
   Collapsible,
   CollapsibleTrigger,
@@ -340,6 +354,10 @@ export type {
   CodeProps,
   CardProps,
   TableProps,
+  DataTableProps,
+  DataTableContentProps,
+  DataTablePaginationProps,
+  DataTableEmptyProps,
   CheckboxProps,
   CollapsibleProps,
   CollapsibleTriggerProps,
@@ -420,3 +438,17 @@ export type {
   SparklineProps,
   HeatmapChartProps,
 };
+
+export type {
+  ColumnDef,
+  Table as TableInstance,
+  SortingState,
+  PaginationState,
+  ColumnFiltersState,
+  RowSelectionState,
+  VisibilityState,
+  ExpandedState,
+  ColumnPinningState,
+  Row,
+  OnChangeFn,
+} from '@tanstack/react-table';
