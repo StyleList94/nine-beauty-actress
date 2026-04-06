@@ -7,6 +7,16 @@ import { page, userEvent } from 'vitest/browser';
 import { DatePicker } from 'lib/components/date-picker';
 import { FormControl } from 'lib/components/form-control';
 
+// Fix date to March 24, 2026 to prevent calendar month drift
+beforeAll(() => {
+  vi.useFakeTimers({ toFake: ['Date'] });
+  vi.setSystemTime(new Date(2026, 2, 24));
+});
+
+afterAll(() => {
+  vi.useRealTimers();
+});
+
 const CenteredWrapper = ({ children }: { children: React.ReactNode }) => (
   <div
     style={{
