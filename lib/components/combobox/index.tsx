@@ -77,7 +77,7 @@ export function Combobox({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          role="combobox"
+          aria-haspopup="listbox"
           aria-expanded={open}
           className={cn(styles.comboboxTrigger, className)}
           disableRipple
