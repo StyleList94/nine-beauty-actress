@@ -159,7 +159,6 @@
       }
     ],
     "arrow-body-style": "error",
-    "dot-notation": "error",
     "func-names": ["warn", "as-needed"],
     "new-cap": [
       "error",
@@ -223,11 +222,8 @@
     "unicode-bom": ["error", "never"],
     "vars-on-top": "error",
     "yoda": "error",
-    "consistent-return": "error",
     // [!] Not yet supported by oxlint native
     "no-implied-eval": "error",
-    // [!] Not yet supported by oxlint native
-    "no-octal-escape": "error",
     // [!] Not yet supported by oxlint native
     "no-restricted-exports": [
       "error",
@@ -253,24 +249,7 @@
       }
     ],
     // [!] Not yet supported by oxlint native
-    "no-restricted-syntax": ["error", "WithStatement", "LabeledStatement"],
-    // [!] Not yet supported by oxlint native
-    "no-undef-init": "error",
-    // [!] Not yet supported by oxlint native
-    "no-unreachable-loop": "error",
-    // [!] Not yet supported by oxlint native
     "no-useless-assignment": "error",
-    // [!] Not yet supported by oxlint native
-    "camelcase": [
-      "error",
-      {
-        "properties": "never",
-        "ignoreDestructuring": false,
-        "ignoreImports": true,
-        "ignoreGlobals": true,
-        "allow": ["^unstable_", "^experimental_"]
-      }
-    ],
     // [!] Not yet supported by oxlint native
     "object-shorthand": [
       "error",
@@ -278,17 +257,6 @@
       {
         "ignoreConstructors": false,
         "avoidQuotes": true
-      }
-    ],
-    // [!] Not yet supported by oxlint native
-    "one-var": ["error", "never"],
-    // [!] Not yet supported by oxlint native
-    "prefer-arrow-callback": "error",
-    // [!] Not yet supported by oxlint native
-    "prefer-regex-literals": [
-      "error",
-      {
-        "disallowRedundantWrapping": true
       }
     ],
     "import/extensions": [
@@ -504,9 +472,7 @@
         // [!] Type-aware: not yet supported by oxlint (no type checker)
         "typescript/prefer-regexp-exec": "error",
         // [!] Type-aware: not yet supported by oxlint (no type checker)
-        "typescript/prefer-string-starts-ends-with": "error",
-        "eslint/consistent-return": "off",
-        "eslint/dot-notation": "off"
+        "typescript/prefer-string-starts-ends-with": "error"
       }
     },
     {
