@@ -152,7 +152,7 @@ describe('useDataTable', () => {
   });
 
   it('should call onSortingChange and sync internal state', () => {
-    const onSortingChange = vi.fn();
+    const onSortingChange = vi.fn<() => void>();
     const { result } = renderHook(() =>
       useDataTable({
         data,
@@ -177,7 +177,7 @@ describe('useDataTable', () => {
       name: `User ${i}`,
       age: 20 + i,
     }));
-    const onPaginationChange = vi.fn();
+    const onPaginationChange = vi.fn<() => void>();
     const { result } = renderHook(() =>
       useDataTable({
         data: largeData,

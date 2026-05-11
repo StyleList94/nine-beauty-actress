@@ -53,19 +53,19 @@ describe('Rendering and Props', () => {
         <ControlledCombobox placeholder="Pick a framework" />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
+    const trigger = page.getByRole('button');
     await expect.element(trigger).toBeInTheDocument();
     await expect.element(trigger).toHaveTextContent('Pick a framework');
   });
 
-  it('should have combobox role', async () => {
+  it('should advertise a listbox popup on the trigger', async () => {
     await render(
       <CenteredWrapper>
         <ControlledCombobox />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
-    await expect.element(trigger).toBeInTheDocument();
+    const trigger = page.getByRole('button');
+    await expect.element(trigger).toHaveAttribute('aria-haspopup', 'listbox');
   });
 
   it('should have aria-expanded false when closed', async () => {
@@ -74,7 +74,7 @@ describe('Rendering and Props', () => {
         <ControlledCombobox />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
+    const trigger = page.getByRole('button');
     await expect.element(trigger).toHaveAttribute('aria-expanded', 'false');
   });
 });
@@ -86,7 +86,7 @@ describe('Popup Open/Close', () => {
         <ControlledCombobox />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
+    const trigger = page.getByRole('button');
     await trigger.click();
     await expect
       .element(page.getByRole('option', { name: 'Next.js' }))
@@ -99,7 +99,7 @@ describe('Popup Open/Close', () => {
         <ControlledCombobox />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
+    const trigger = page.getByRole('button');
     await trigger.click();
     await page.getByText('Vite').click();
     await expect.element(trigger).toHaveAttribute('aria-expanded', 'false');
@@ -113,33 +113,33 @@ describe('State Management', () => {
         <ControlledCombobox />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
+    const trigger = page.getByRole('button');
     await trigger.click();
     await page.getByText('Vite').click();
     await expect.element(trigger).toHaveTextContent('Vite');
   });
 
   it('should call onValueChange when option is selected', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<(value: string) => void>();
     await render(
       <CenteredWrapper>
         <ControlledCombobox onValueChange={handleChange} />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
+    const trigger = page.getByRole('button');
     await trigger.click();
     await page.getByText('Remix').click();
     expect(handleChange).toHaveBeenCalledWith('remix');
   });
 
   it('should toggle deselect when same option is selected again', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<(value: string) => void>();
     await render(
       <CenteredWrapper>
         <ControlledCombobox initialValue="next" onValueChange={handleChange} />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
+    const trigger = page.getByRole('button');
     await expect.element(trigger).toHaveTextContent('Next.js');
 
     await trigger.click();
@@ -158,7 +158,7 @@ describe('User Interactions', () => {
         <ControlledCombobox queryPlaceholder="Search..." />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
+    const trigger = page.getByRole('button');
     await trigger.click();
 
     const searchInput = page.getByPlaceholder('Search...');
@@ -177,7 +177,7 @@ describe('User Interactions', () => {
         <ControlledCombobox queryPlaceholder="Search..." />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
+    const trigger = page.getByRole('button');
     await trigger.click();
 
     const searchInput = page.getByPlaceholder('Search...');
@@ -196,7 +196,7 @@ describe('Accessibility', () => {
         />
       </CenteredWrapper>,
     );
-    const trigger = page.getByRole('combobox');
+    const trigger = page.getByRole('button');
     await expect.element(trigger).toHaveTextContent('Choose...');
 
     await trigger.click();

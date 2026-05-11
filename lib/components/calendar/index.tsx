@@ -6,7 +6,7 @@ import {
   DayFlag,
   SelectionState,
   type ChevronProps,
-} from 'react-day-picker';
+} from '@daypicker/react';
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -55,7 +55,7 @@ export type {
   DateRange,
   /** 커스텀 날짜 버튼 컴포넌트의 props */
   DayButtonProps,
-} from 'react-day-picker';
+} from '@daypicker/react';
 
 const defaultClassNames = getDefaultClassNames();
 

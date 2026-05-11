@@ -52,7 +52,7 @@ describe('User Interaction', () => {
   });
 
   it('should call onChange handler', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<() => void>();
     await render(<TextInput onChange={handleChange} />);
 
     const input = page.getByRole('textbox');

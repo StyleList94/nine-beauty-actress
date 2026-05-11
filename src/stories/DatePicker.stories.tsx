@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { DateRange } from 'react-day-picker';
+import type { DateRange } from '@daypicker/react';
 
 import { useState } from 'react';
 import { addDays, subDays } from 'date-fns';

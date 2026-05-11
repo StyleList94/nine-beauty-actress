@@ -32,7 +32,7 @@ describe('State', () => {
   });
 
   it('should toggle on click', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<(checked: boolean | 'indeterminate') => void>();
     await render(<Checkbox onCheckedChange={handleChange} />);
     const checkbox = page.getByRole('checkbox');
 
@@ -41,7 +41,7 @@ describe('State', () => {
   });
 
   it('should call onCheckedChange callback', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<(checked: boolean | 'indeterminate') => void>();
     await render(<Checkbox checked onCheckedChange={handleChange} />);
     const checkbox = page.getByRole('checkbox');
 

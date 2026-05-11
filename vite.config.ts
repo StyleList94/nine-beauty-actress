@@ -6,8 +6,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
-import sexyDeclareType from 'vite-plugin-sexy-declare-type';
-import clientDirective from 'rollup-plugin-im-client-component';
+import declareType from '@stylelish/vite-plugin-declare-type';
+import clientDirective from '@stylelish/rollup-plugin-im-client-component';
 import { playwright } from '@vitest/browser-playwright';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -16,14 +16,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [
     react(),
-    sexyDeclareType(),
+    declareType(),
     clientDirective({
       extraPatterns: [
         { source: /^@radix-ui\/react-/ },
         { source: /^motion\// },
         { source: 'cmdk' },
         { source: /^lucide-react/ },
-        { source: /^react-day-picker/ },
+        { source: /^@daypicker\/react/ },
         { source: /^@visx/ },
       ],
     }),
@@ -89,7 +89,7 @@ export default defineConfig({
             '@radix-ui/react-toast',
             '@radix-ui/react-toggle-group',
             '@radix-ui/react-tooltip',
-            'react-day-picker',
+            '@daypicker/react',
             'date-fns',
             '@visx/xychart',
             '@visx/shape',
@@ -140,7 +140,7 @@ export default defineConfig({
         /^lucide-react/,
         'clsx',
         'cmdk',
-        /^react-day-picker/,
+        /^@daypicker\/react/,
         /^date-fns/,
         /^@visx/,
       ],

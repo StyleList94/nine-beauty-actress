@@ -100,7 +100,7 @@ describe('Navigation', () => {
 
 describe('Selection', () => {
   it('should call onSelect when a date is clicked', async () => {
-    const handleSelect = vi.fn();
+    const handleSelect = vi.fn<(date: Date | undefined) => void>();
     await render(
       <CenteredWrapper>
         <ControlledCalendar onSelect={handleSelect} />
@@ -154,7 +154,7 @@ describe('Dropdown Mode', () => {
 
 describe('Range Selection', () => {
   it('should select a date range', async () => {
-    const handleSelect = vi.fn();
+    const handleSelect = vi.fn<(range: DateRange | undefined) => void>();
 
     function RangeCalendar() {
       const [range, setRange] = useState<DateRange | undefined>();

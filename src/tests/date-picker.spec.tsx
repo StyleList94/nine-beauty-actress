@@ -1,4 +1,4 @@
-import type { DateRange } from 'react-day-picker';
+import type { DateRange } from '@daypicker/react';
 
 import { Component, useState, type ReactNode } from 'react';
 import { render } from 'vitest-browser-react';
@@ -180,7 +180,7 @@ describe('Popup Open/Close', () => {
   });
 
   it('should support controlled open state', async () => {
-    const handleOpenChange = vi.fn();
+    const handleOpenChange = vi.fn<(open: boolean) => void>();
 
     function ControlledOpenPicker() {
       const [open, setOpen] = useState(false);
@@ -260,7 +260,7 @@ describe('State Management', () => {
   });
 
   it('should call onValueChange when date is selected', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<(date: Date | undefined) => void>();
     await render(
       <CenteredWrapper>
         <ControlledDatePicker onValueChange={handleChange} />
@@ -362,7 +362,7 @@ describe('Range Mode', () => {
   });
 
   it('should fresh-start from on re-open with complete range and update display', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<(range: DateRange | undefined) => void>();
     const initialRange: DateRange = {
       from: new Date(2026, 2, 5),
       to: new Date(2026, 2, 10),
@@ -423,7 +423,7 @@ describe('Presets', () => {
   });
 
   it('should select date and close when preset is clicked', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<(date: Date | undefined) => void>();
     const today = new Date();
 
     function PresetPicker() {
@@ -515,7 +515,7 @@ describe('Time Picker', () => {
   });
 
   it('should update time when time input changes', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<(date: Date | undefined) => void>();
     const testDate = new Date(2026, 0, 15, 10, 0);
     await render(
       <CenteredWrapper>
