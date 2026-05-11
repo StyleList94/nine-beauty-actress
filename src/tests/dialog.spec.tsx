@@ -131,7 +131,7 @@ describe('Popup Open/Close', () => {
   });
 
   it('should call onOpenChange callback', async () => {
-    const handleOpenChange = vi.fn();
+    const handleOpenChange = vi.fn<(open: boolean) => void>();
     await render(
       <CenteredWrapper>
         <Dialog onOpenChange={handleOpenChange}>

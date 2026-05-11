@@ -57,8 +57,8 @@ describe('useVirtualScroll', () => {
       current: {
         scrollTop: 0,
         clientHeight: 500,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
+        addEventListener: vi.fn<() => void>(),
+        removeEventListener: vi.fn<() => void>(),
       } as unknown as HTMLDivElement,
     };
 
@@ -105,8 +105,8 @@ describe('useVirtualScroll', () => {
       current: {
         scrollTop: 0,
         clientHeight: 500,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
+        addEventListener: vi.fn<() => void>(),
+        removeEventListener: vi.fn<() => void>(),
       } as unknown as HTMLDivElement,
     };
 
@@ -127,8 +127,8 @@ describe('useVirtualScroll', () => {
       current: {
         scrollTop: 0,
         clientHeight: 500,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
+        addEventListener: vi.fn<() => void>(),
+        removeEventListener: vi.fn<() => void>(),
       } as unknown as HTMLDivElement,
     };
 

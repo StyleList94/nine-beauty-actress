@@ -16,7 +16,7 @@ describe('cn', () => {
 
 describe('mergeRefs', () => {
   it('should assign node to callback ref', () => {
-    const callbackRef = vi.fn();
+    const callbackRef = vi.fn<(node: HTMLDivElement | null) => void>();
     const merged = mergeRefs(callbackRef);
     const node = document.createElement('div');
 
@@ -34,7 +34,7 @@ describe('mergeRefs', () => {
   });
 
   it('should assign node to multiple refs', () => {
-    const callbackRef = vi.fn();
+    const callbackRef = vi.fn<(node: HTMLDivElement | null) => void>();
     const objectRef = { current: null as HTMLDivElement | null };
     const merged = mergeRefs(callbackRef, objectRef);
     const node = document.createElement('div');
@@ -45,7 +45,7 @@ describe('mergeRefs', () => {
   });
 
   it('should skip undefined refs', () => {
-    const callbackRef = vi.fn();
+    const callbackRef = vi.fn<(node: HTMLDivElement | null) => void>();
     const merged = mergeRefs(undefined, callbackRef, undefined);
     const node = document.createElement('div');
 
@@ -54,7 +54,7 @@ describe('mergeRefs', () => {
   });
 
   it('should handle null on unmount', () => {
-    const callbackRef = vi.fn();
+    const callbackRef = vi.fn<(node: HTMLDivElement | null) => void>();
     const objectRef = {
       current: document.createElement('div') as HTMLDivElement | null,
     };
@@ -122,7 +122,7 @@ describe('debounce', () => {
   });
 
   it('should call function after delay', () => {
-    const fn = vi.fn();
+    const fn = vi.fn<() => void>();
     const debounced = debounce(fn, 300);
 
     debounced();
@@ -133,7 +133,7 @@ describe('debounce', () => {
   });
 
   it('should only execute the last call within delay', () => {
-    const fn = vi.fn();
+    const fn = vi.fn<() => void>();
     const debounced = debounce(fn, 300);
 
     debounced();
@@ -145,7 +145,7 @@ describe('debounce', () => {
   });
 
   it('should pass arguments correctly', () => {
-    const fn = vi.fn();
+    const fn = vi.fn<(a: string, b: string) => void>();
     const debounced = debounce(fn, 300);
 
     debounced('hello', 'world');
@@ -155,7 +155,7 @@ describe('debounce', () => {
   });
 
   it('should reset timer on subsequent calls', () => {
-    const fn = vi.fn();
+    const fn = vi.fn<() => void>();
     const debounced = debounce(fn, 300);
 
     debounced();
@@ -171,7 +171,7 @@ describe('debounce', () => {
   });
 
   it('should use the last arguments when called multiple times', () => {
-    const fn = vi.fn();
+    const fn = vi.fn<(arg: string) => void>();
     const debounced = debounce(fn, 300);
 
     debounced('first');

@@ -119,7 +119,7 @@ describe('User Interactions', () => {
   });
 
   it('should call onSelect when item is clicked', async () => {
-    const handleSelect = vi.fn();
+    const handleSelect = vi.fn<(value: string) => void>();
     await render(
       <Command>
         <CommandList>
@@ -236,7 +236,7 @@ describe('CommandDialog', () => {
   });
 
   it('should close on Escape', async () => {
-    const handleOpenChange = vi.fn();
+    const handleOpenChange = vi.fn<(open: boolean) => void>();
     await render(
       <CenteredWrapper>
         <CommandDialog open onOpenChange={handleOpenChange}>

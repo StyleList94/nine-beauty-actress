@@ -83,7 +83,7 @@ describe('User Interactions', () => {
   });
 
   it('should call onChange when a valid file is dropped', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<() => void>();
     await render(
       <FileUploader onChange={handleChange}>
         <p>Drop here</p>
@@ -105,7 +105,7 @@ describe('User Interactions', () => {
   });
 
   it('should call onDropError when an invalid file is dropped', async () => {
-    const handleDropError = vi.fn();
+    const handleDropError = vi.fn<() => void>();
     await render(
       <FileUploader accept="image/*" onDropError={handleDropError}>
         <p>Drop here</p>
@@ -127,7 +127,7 @@ describe('User Interactions', () => {
   });
 
   it('should not trigger onChange when drop has no files', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<() => void>();
     await render(
       <FileUploader onChange={handleChange}>
         <p>Drop here</p>
@@ -148,8 +148,8 @@ describe('User Interactions', () => {
   });
 
   it('should reset drag state after invalid file drop', async () => {
-    const handleDropError = vi.fn();
-    const handleChange = vi.fn();
+    const handleDropError = vi.fn<() => void>();
+    const handleChange = vi.fn<() => void>();
     await render(
       <FileUploader
         accept="image/*"

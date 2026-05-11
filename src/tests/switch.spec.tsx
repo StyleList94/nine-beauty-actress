@@ -61,7 +61,7 @@ describe('Interactions', () => {
   });
 
   it('should call onCheckedChange', async () => {
-    const handleChange = vi.fn();
+    const handleChange = vi.fn<(checked: boolean) => void>();
     await render(<Switch onCheckedChange={handleChange} />);
 
     const switchEl = page.getByRole('switch');

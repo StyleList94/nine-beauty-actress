@@ -12,7 +12,7 @@ describe('Rendering and Props', () => {
   });
 
   it('should be clickable', async () => {
-    const handleClick = vi.fn();
+    const handleClick = vi.fn<() => void>();
     await render(<Button onClick={handleClick}>Click me</Button>);
 
     const button = page.getByRole('button', { name: /Click me/i });
@@ -44,8 +44,8 @@ describe('Rendering and Props', () => {
 
 describe('Interactions', () => {
   it('should handle keyboard Enter interaction', async () => {
-    const handleKeyDown = vi.fn();
-    const handleKeyUp = vi.fn();
+    const handleKeyDown = vi.fn<() => void>();
+    const handleKeyUp = vi.fn<() => void>();
     await render(
       <Button onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
         Press me
@@ -61,7 +61,7 @@ describe('Interactions', () => {
   });
 
   it('should handle blur event', async () => {
-    const handleBlur = vi.fn();
+    const handleBlur = vi.fn<() => void>();
     await render(
       <div>
         <Button onBlur={handleBlur}>First</Button>
@@ -77,7 +77,7 @@ describe('Interactions', () => {
   });
 
   it('should handle pointercancel event', async () => {
-    const handlePointerCancel = vi.fn();
+    const handlePointerCancel = vi.fn<() => void>();
     await render(
       <Button onPointerCancel={handlePointerCancel}>Cancel me</Button>,
     );
