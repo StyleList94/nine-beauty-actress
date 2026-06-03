@@ -255,6 +255,7 @@ describe('Row Selection', () => {
         cell: ({ row }) => (
           <input
             type="checkbox"
+            aria-label={`Select row ${row.original.id}`}
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
             data-testid={`select-${row.original.id}`}
