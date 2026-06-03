@@ -301,6 +301,7 @@
       }
     ],
     "jsx-a11y/anchor-has-content": "error",
+    "jsx-a11y/prefer-tag-over-role": "off",
     "jsx-a11y/aria-role": [
       "error",
       {
