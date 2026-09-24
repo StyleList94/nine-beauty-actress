@@ -16,7 +16,7 @@ describe('Rendering and Props', () => {
       </ToggleGroup>,
     );
 
-    const group = page.getByRole('group');
+    const group = page.getByRole('radiogroup');
     await expect.element(group).toBeInTheDocument();
   });
 
@@ -106,7 +106,7 @@ describe('Visual Properties', () => {
       </ToggleGroup>,
     );
 
-    const group = page.getByRole('group');
+    const group = page.getByRole('radiogroup');
     await expect.element(group).toHaveAttribute('data-variant', 'outline');
   });
 
@@ -119,7 +119,7 @@ describe('Visual Properties', () => {
       </ToggleGroup>,
     );
 
-    const group = page.getByRole('group');
+    const group = page.getByRole('radiogroup');
     await expect.element(group).toHaveAttribute('data-size', 'lg');
   });
 
@@ -139,7 +139,7 @@ describe('Visual Properties', () => {
       </div>,
     );
 
-    const groups = page.getByRole('group');
+    const groups = page.getByRole('radiogroup');
     await expect
       .element(groups.nth(0))
       .toHaveAttribute('data-spacing', 'tight');
@@ -164,7 +164,7 @@ describe('Visual Properties', () => {
       </div>,
     );
 
-    const groups = page.getByRole('group');
+    const groups = page.getByRole('radiogroup');
     await expect
       .element(groups.nth(0))
       .toHaveAttribute('data-spacing', 'spaced');
@@ -184,7 +184,7 @@ describe('Accessibility', () => {
       </ToggleGroup>,
     );
 
-    const group = page.getByRole('group');
+    const group = page.getByRole('radiogroup');
     await expect.element(group).toHaveAttribute('aria-label', 'Text style');
   });
 

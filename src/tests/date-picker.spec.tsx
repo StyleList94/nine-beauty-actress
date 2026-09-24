@@ -289,6 +289,7 @@ describe('State Management', () => {
       .element(page.getByText('January 15th, 2026'))
       .toBeInTheDocument();
 
+    await page.getByText('January 15th, 2026').hover();
     const clearBtn = page.getByLabelText('Clear date');
     await clearBtn.click();
 

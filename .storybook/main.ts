@@ -8,6 +8,7 @@ const config: StorybookConfig = {
     '@storybook/addon-onboarding',
     '@storybook/addon-themes',
     '@storybook/addon-docs',
+    '@storybook/addon-mcp',
   ],
 
   framework: {

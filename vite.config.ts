@@ -46,6 +46,7 @@ export default defineConfig({
     },
     projects: [
       {
+        extends: false,
         plugins: [react(), vanillaExtractPlugin()],
         resolve: {
           alias: [
@@ -62,6 +63,7 @@ export default defineConfig({
         },
       },
       {
+        extends: false,
         plugins: [react(), vanillaExtractPlugin()],
         resolve: {
           alias: [
@@ -113,6 +115,7 @@ export default defineConfig({
           browser: {
             enabled: true,
             provider: playwright(),
+            locators: { exact: false },
             testerHtmlPath: './src/tests/browser.html',
             instances: [{ browser: 'chromium' }],
             screenshotFailures: false,
