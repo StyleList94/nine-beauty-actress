@@ -1,37 +1,69 @@
 import { useState } from 'react';
 
 import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  getPaginationRowModel,
-  getFilteredRowModel,
-  getExpandedRowModel,
+  useTable,
+  tableFeatures,
+  stockFeatures,
+  createSortedRowModel,
+  createPaginatedRowModel,
+  createFilteredRowModel,
+  createExpandedRowModel,
+  createGroupedRowModel,
+  createFacetedRowModel,
+  createFacetedUniqueValues,
+  createFacetedMinMaxValues,
+  aggregationFns,
+  filterFns,
+  sortFns,
   type TableOptions,
-  type Table,
+  type ReactTable,
   type ColumnDef,
   type SortingState,
   type PaginationState,
   type ColumnFiltersState,
   type RowSelectionState,
-  type VisibilityState,
+  type ColumnVisibilityState,
   type ExpandedState,
   type ColumnPinningState,
+  type RowData,
+  type Row,
   type OnChangeFn,
 } from '@tanstack/react-table';
 
-const coreRowModel = getCoreRowModel();
-const sortedRowModel = getSortedRowModel();
-const paginationRowModel = getPaginationRowModel();
-const filteredRowModel = getFilteredRowModel();
-const expandedRowModel = getExpandedRowModel();
+// Keep the full standard API available to passthrough options and consumers.
+const dataTableFeatures = tableFeatures({
+  ...stockFeatures,
+  sortedRowModel: createSortedRowModel(),
+  paginatedRowModel: createPaginatedRowModel(),
+  filteredRowModel: createFilteredRowModel(),
+  expandedRowModel: createExpandedRowModel(),
+  groupedRowModel: createGroupedRowModel(),
+  facetedRowModel: createFacetedRowModel(),
+  facetedUniqueValues: createFacetedUniqueValues(),
+  facetedMinMaxValues: createFacetedMinMaxValues(),
+  aggregationFns,
+  filterFns,
+  sortFns,
+});
 
-type UseDataTableOptions<TData> = {
+/** Features registered by useDataTable, for native TanStack V9 types. */
+export type DataTableFeatures = typeof dataTableFeatures;
+export type DataTableInstance<TData extends RowData> = ReactTable<
+  DataTableFeatures,
+  TData
+>;
+export type DataTableRow<TData extends RowData> = Row<DataTableFeatures, TData>;
+export type DataTableColumnDef<
+  TData extends RowData,
+  TValue = unknown,
+> = ColumnDef<DataTableFeatures, TData, TValue>;
+
+type UseDataTableOptions<TData extends RowData> = {
   /** 테이블 데이터 배열 */
   data: TData[];
   /** 컬럼 정의 배열 */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columns: ColumnDef<TData, any>[];
+  columns: DataTableColumnDef<TData, any>[];
 
   // ─── 정렬 ───────────────────────────────────────────
   /** 정렬 활성화. true면 클라이언트 정렬, SortingState면 초기 상태 지정 */
@@ -40,6 +72,8 @@ type UseDataTableOptions<TData> = {
   onSortingChange?: OnChangeFn<SortingState>;
   /** 서버사이드 정렬 여부 */
   manualSorting?: boolean;
+  /** 기본값 true. false면 grouping 상태에 따라 클라이언트에서 행을 그룹화 */
+  manualGrouping?: boolean;
 
   // ─── 페이지네이션 ──────────────────────────────────
   /** 페이지네이션 활성화. true면 기본 pageSize(10), 객체면 커스텀 pageSize */
@@ -52,7 +86,7 @@ type UseDataTableOptions<TData> = {
   rowCount?: number;
 
   // ─── 필터링 ─────────────────────────────────────────
-  /** 필터링 활성화 (getFilteredRowModel 주입) */
+  /** 필터링 활성화 (클라이언트 필터링 사용) */
   filtering?: boolean;
   /** 컬럼 필터 상태 (controlled mode) */
   columnFilters?: ColumnFiltersState;
@@ -70,13 +104,13 @@ type UseDataTableOptions<TData> = {
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
 
   // ─── 컬럼 가시성 ───────────────────────────────────
-  /** 컬럼 가시성 활성화. true면 모든 컬럼 표시, VisibilityState면 초기 상태 */
-  columnVisibility?: boolean | VisibilityState;
+  /** 컬럼 가시성 활성화. true면 모든 컬럼 표시, ColumnVisibilityState면 초기 상태 */
+  columnVisibility?: boolean | ColumnVisibilityState;
   /** 컬럼 가시성 변경 핸들러 (controlled mode) */
-  onColumnVisibilityChange?: OnChangeFn<VisibilityState>;
+  onColumnVisibilityChange?: OnChangeFn<ColumnVisibilityState>;
 
   // ─── 행 확장 ────────────────────────────────────────
-  /** 행 확장 활성화 (getExpandedRowModel 주입) */
+  /** 행 확장 활성화 (상세 행 토글 사용) */
   expanding?: boolean;
   /** 행 확장 상태 변경 핸들러 (controlled mode) */
   onExpandedChange?: OnChangeFn<ExpandedState>;
@@ -87,14 +121,10 @@ type UseDataTableOptions<TData> = {
   /** 컬럼 피닝 변경 핸들러 (controlled mode) */
   onColumnPinningChange?: OnChangeFn<ColumnPinningState>;
 } & Omit<
-  TableOptions<TData>,
+  TableOptions<DataTableFeatures, TData>,
   | 'data'
   | 'columns'
-  | 'getCoreRowModel'
-  | 'getSortedRowModel'
-  | 'getPaginationRowModel'
-  | 'getFilteredRowModel'
-  | 'getExpandedRowModel'
+  | 'features'
   | 'state'
   | 'onSortingChange'
   | 'onPaginationChange'
@@ -116,15 +146,25 @@ export type { UseDataTableOptions };
 
 /**
  * @tanstack/react-table을 래핑하여 데이터 테이블 기능을 간편하게 설정하는 hook입니다.
+ * @remarks
+ * - TanStack Table V9의 네이티브 useTable과 React 상태 구독을 사용합니다.
+ * - 표준 grouping/faceting row model을 내장합니다. 클라이언트 그룹화는
+ *   manualGrouping: false로 활성화하고 grouping 상태로 그룹 컬럼을 지정합니다.
+ * - 상태는 table.state로 읽으며 컬럼 피닝은 { start: [], end: [] }를 사용합니다.
+ * - memo/React Compiler로 최적화된 커스텀 셀에서 row/column 상태를 읽는 경우,
+ *   해당 셀 내부에서 TanStack Subscribe로 상태를 구독해야 합니다.
+ * - ColumnDef는 DataTableColumnDef<TData> 또는
+ *   ColumnDef<DataTableFeatures, TData>로 정의합니다.
  * @param options - 데이터 테이블 설정 옵션
  * @returns 테이블 인스턴스 (DataTable 컴포넌트에 전달)
  */
-export default function useDataTable<TData>({
+export default function useDataTable<TData extends RowData>({
   data,
   columns,
   sorting,
   onSortingChange,
   manualSorting,
+  manualGrouping = true,
   pagination,
   onPaginationChange,
   manualPagination,
@@ -143,7 +183,7 @@ export default function useDataTable<TData>({
   columnPinning,
   onColumnPinningChange,
   ...rest
-}: UseDataTableOptions<TData>): Table<TData> {
+}: UseDataTableOptions<TData>): DataTableInstance<TData> {
   const sortingEnabled = sorting !== undefined && sorting !== false;
   const paginationEnabled = pagination !== undefined && pagination !== false;
   const filteringEnabled = filtering === true;
@@ -156,7 +196,7 @@ export default function useDataTable<TData>({
   const initialSorting: SortingState = Array.isArray(sorting) ? sorting : [];
   const initialPageSize =
     typeof pagination === 'object' ? pagination.pageSize : 10;
-  const initialVisibility: VisibilityState =
+  const initialVisibility: ColumnVisibilityState =
     typeof columnVisibility === 'object' ? columnVisibility : {};
 
   const [sortingState, setSortingState] =
@@ -173,21 +213,23 @@ export default function useDataTable<TData>({
   const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>(
     {},
   );
-  const [visibilityState, setVisibilityState] =
-    useState<VisibilityState>(initialVisibility);
+  const [visibilityState, setColumnVisibilityState] =
+    useState<ColumnVisibilityState>(initialVisibility);
   const [expandedState, setExpandedState] = useState<ExpandedState>({});
   const [columnPinningState, setColumnPinningState] =
-    useState<ColumnPinningState>(columnPinning ?? {});
+    useState<ColumnPinningState>(columnPinning ?? { start: [], end: [] });
 
-  return useReactTable({
+  return useTable({
+    features: dataTableFeatures,
     data,
     columns,
-    getCoreRowModel: coreRowModel,
     autoResetPageIndex: false,
     enableSorting: sortingEnabled,
-    ...(sortingEnabled && !manualSorting
-      ? { getSortedRowModel: sortedRowModel }
-      : {}),
+    manualSorting: !sortingEnabled || manualSorting,
+    manualGrouping,
+    manualPagination: !paginationEnabled || manualPagination,
+    manualFiltering: !filteringEnabled,
+    manualExpanding: !expandingEnabled,
     ...(sortingEnabled
       ? {
           onSortingChange: onSortingChange
@@ -196,11 +238,7 @@ export default function useDataTable<TData>({
                 onSortingChange(updater);
               }) as OnChangeFn<SortingState>)
             : setSortingState,
-          manualSorting,
         }
-      : {}),
-    ...(paginationEnabled && !manualPagination
-      ? { getPaginationRowModel: paginationRowModel }
       : {}),
     ...(paginationEnabled
       ? {
@@ -210,13 +248,11 @@ export default function useDataTable<TData>({
                 onPaginationChange(updater);
               }) as OnChangeFn<PaginationState>)
             : setPaginationState,
-          manualPagination,
           rowCount,
         }
       : {}),
     ...(filteringEnabled
       ? {
-          getFilteredRowModel: filteredRowModel,
           onColumnFiltersChange: onColumnFiltersChange
             ? (((updater) => {
                 setColumnFiltersState(updater);
@@ -246,15 +282,15 @@ export default function useDataTable<TData>({
       ? {
           onColumnVisibilityChange: onColumnVisibilityChange
             ? (((updater) => {
-                setVisibilityState(updater);
+                setColumnVisibilityState(updater);
                 onColumnVisibilityChange(updater);
-              }) as OnChangeFn<VisibilityState>)
-            : setVisibilityState,
+              }) as OnChangeFn<ColumnVisibilityState>)
+            : setColumnVisibilityState,
         }
       : {}),
     ...(expandingEnabled
       ? {
-          getExpandedRowModel: expandedRowModel,
+          getRowCanExpand: () => true,
           onExpandedChange: onExpandedChange
             ? (((updater) => {
                 setExpandedState(updater);

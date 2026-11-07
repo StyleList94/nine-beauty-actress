@@ -362,6 +362,184 @@ describe('Range Mode', () => {
     await expect.element(grids.first()).toBeVisible();
   });
 
+  it('should preserve pending selection across equivalent controlled range objects', async () => {
+    const handleChange = vi.fn<(range: DateRange | undefined) => void>();
+    function EquivalentRangePicker() {
+      const [revision, setRevision] = useState(0);
+      return (
+        <DatePicker
+          mode="range"
+          open
+          value={{ from: new Date(2026, 2, 5), to: new Date(2026, 2, 10) }}
+          onValueChange={handleChange}
+        >
+          <DatePicker.Input />
+          <DatePicker.Calendar>
+            <button type="button" onClick={() => setRevision(revision + 1)}>
+              Rerender {revision}
+            </button>
+          </DatePicker.Calendar>
+        </DatePicker>
+      );
+    }
+    await render(
+      <CenteredWrapper>
+        <EquivalentRangePicker />
+      </CenteredWrapper>,
+    );
+    await page.getByRole('button', { name: /March 20/ }).click();
+    await page.getByRole('button', { name: 'Rerender 0' }).click();
+    await page.getByRole('button', { name: /March 25/ }).click();
+    expect(handleChange).toHaveBeenCalledOnce();
+    expect(handleChange.mock.calls[0][0]?.from?.getDate()).toBe(20);
+    expect(handleChange.mock.calls[0][0]?.to?.getDate()).toBe(25);
+  });
+
+  it('should reset pending selection when changing modes without a value', async () => {
+    const handleChange = vi.fn<(value: Date | DateRange | undefined) => void>();
+    function ChangingModePicker() {
+      const [mode, setMode] = useState<'single' | 'range'>('range');
+      return (
+        <DatePicker
+          {...(mode === 'range' ? { mode: 'range' } : { mode: 'single' })}
+          open
+          onValueChange={handleChange}
+        >
+          <DatePicker.Input />
+          <DatePicker.Calendar>
+            <button
+              type="button"
+              onClick={() => setMode(mode === 'range' ? 'single' : 'range')}
+            >
+              Switch mode
+            </button>
+          </DatePicker.Calendar>
+        </DatePicker>
+      );
+    }
+    await render(
+      <CenteredWrapper>
+        <ChangingModePicker />
+      </CenteredWrapper>,
+    );
+    await page.getByRole('button', { name: /March 20/ }).click();
+    await page.getByRole('button', { name: 'Switch mode' }).click();
+    await page.getByRole('button', { name: 'Switch mode' }).click();
+    await page.getByRole('button', { name: /March 25/ }).click();
+    expect(handleChange).not.toHaveBeenCalled();
+    await page.getByRole('button', { name: /March 26/ }).click();
+    expect(handleChange).toHaveBeenCalledOnce();
+    expect((handleChange.mock.calls[0][0] as DateRange).from?.getDate()).toBe(
+      25,
+    );
+  });
+
+  it('should reset an unfinished range when controlled open closes and reopens', async () => {
+    const handleChange = vi.fn<(range: DateRange | undefined) => void>();
+    function ReopenedRangePicker() {
+      const [open, setOpen] = useState(true);
+      return (
+        <>
+          <button type="button" onClick={() => setOpen(!open)}>
+            Toggle range
+          </button>
+          <DatePicker
+            mode="range"
+            open={open}
+            onOpenChange={setOpen}
+            onValueChange={handleChange}
+          >
+            <DatePicker.Input />
+            <DatePicker.Calendar calendarProps={{ numberOfMonths: 1 }} />
+          </DatePicker>
+        </>
+      );
+    }
+    await render(
+      <CenteredWrapper>
+        <ReopenedRangePicker />
+      </CenteredWrapper>,
+    );
+    await page.getByRole('button', { name: /March 20/ }).click();
+    await userEvent.keyboard('{Escape}');
+    await expect
+      .element(page.getByRole('button', { name: /Pick a date/ }))
+      .toHaveAttribute('aria-expanded', 'false');
+    await page.getByRole('button', { name: 'Toggle range' }).click();
+    await expect.element(page.getByRole('grid')).toBeVisible();
+    await page.getByRole('button', { name: /March 25/ }).click();
+    expect(handleChange).not.toHaveBeenCalled();
+    await page.getByRole('button', { name: /March 26/ }).click();
+    expect(handleChange).toHaveBeenCalledOnce();
+    expect(handleChange.mock.calls[0][0]?.from?.getDate()).toBe(25);
+    expect(handleChange.mock.calls[0][0]?.to?.getDate()).toBe(26);
+  });
+
+  it('should restart pending selection when controlled range changes while open', async () => {
+    const handleChange = vi.fn<(range: DateRange | undefined) => void>();
+    function ExternalRangePicker() {
+      const [range, setRange] = useState<DateRange>();
+      return (
+        <DatePicker
+          mode="range"
+          open
+          value={range}
+          onValueChange={handleChange}
+        >
+          <DatePicker.Input />
+          <DatePicker.Calendar>
+            <button
+              type="button"
+              onClick={() =>
+                setRange({
+                  from: new Date(2026, 2, 15),
+                  to: new Date(2026, 2, 18),
+                })
+              }
+            >
+              Replace range
+            </button>
+          </DatePicker.Calendar>
+        </DatePicker>
+      );
+    }
+    await render(
+      <CenteredWrapper>
+        <ExternalRangePicker />
+      </CenteredWrapper>,
+    );
+    await page.getByRole('button', { name: /March 20/ }).click();
+    await page.getByRole('button', { name: 'Replace range' }).click();
+    await page.getByRole('button', { name: /March 25/ }).click();
+    expect(handleChange).not.toHaveBeenCalled();
+    await page.getByRole('button', { name: /March 26/ }).click();
+    expect(handleChange).toHaveBeenCalledOnce();
+    expect(handleChange.mock.calls[0][0]?.from?.getDate()).toBe(25);
+    expect(handleChange.mock.calls[0][0]?.to?.getDate()).toBe(26);
+  });
+
+  it('should start a fresh range from the clicked existing endpoint', async () => {
+    const handleChange = vi.fn<(range: DateRange | undefined) => void>();
+    await render(
+      <CenteredWrapper>
+        <ControlledRangePicker
+          initialValue={{
+            from: new Date(2026, 2, 5),
+            to: new Date(2026, 2, 10),
+          }}
+          onValueChange={handleChange}
+        />
+      </CenteredWrapper>,
+    );
+    await page.getByRole('button', { name: /Mar 05/ }).click();
+    await page.getByRole('button', { name: /March 5/ }).click();
+    expect(handleChange).not.toHaveBeenCalled();
+    await page.getByRole('button', { name: /March 15/ }).click();
+    expect(handleChange).toHaveBeenCalledOnce();
+    expect(handleChange.mock.calls[0][0]?.from?.getDate()).toBe(5);
+    expect(handleChange.mock.calls[0][0]?.to?.getDate()).toBe(15);
+  });
+
   it('should fresh-start from on re-open with complete range and update display', async () => {
     const handleChange = vi.fn<(range: DateRange | undefined) => void>();
     const initialRange: DateRange = {
@@ -537,6 +715,91 @@ describe('Time Picker', () => {
     const updatedDate = handleChange.mock.lastCall?.[0] as Date;
     expect(updatedDate.getHours()).toBe(18);
     expect(updatedDate.getMinutes()).toBe(30);
+  });
+
+  it('should preserve edited time across equivalent controlled Date objects', async () => {
+    function EquivalentDatePicker() {
+      const [revision, setRevision] = useState(0);
+      return (
+        <DatePicker open value={new Date(2026, 2, 15, 10, 0)}>
+          <DatePicker.Input />
+          <DatePicker.Calendar showTimePicker>
+            <button type="button" onClick={() => setRevision(revision + 1)}>
+              Rerender {revision}
+            </button>
+          </DatePicker.Calendar>
+        </DatePicker>
+      );
+    }
+    await render(
+      <CenteredWrapper>
+        <EquivalentDatePicker />
+      </CenteredWrapper>,
+    );
+    await page.getByRole('textbox').fill('18:45');
+    await page.getByRole('button', { name: 'Rerender 0' }).click();
+    await expect.element(page.getByRole('textbox')).toHaveValue('18:45');
+  });
+
+  it('should apply time edited before selecting the first date', async () => {
+    const handleChange = vi.fn<(date: Date | undefined) => void>();
+    await render(
+      <CenteredWrapper>
+        <ControlledDatePicker showTimePicker onValueChange={handleChange} />
+      </CenteredWrapper>,
+    );
+    await page.getByRole('button', { name: /pick a date/i }).click();
+    await page.getByRole('textbox').fill('18:45');
+    expect(handleChange).not.toHaveBeenCalled();
+    await page.getByRole('button', { name: /March 15/ }).click();
+    expect(handleChange).toHaveBeenCalledOnce();
+    expect(handleChange.mock.calls[0][0]?.getHours()).toBe(18);
+    expect(handleChange.mock.calls[0][0]?.getMinutes()).toBe(45);
+    await expect.element(page.getByRole('textbox')).toHaveValue('18:45');
+  });
+
+  it('should replace edited time when the controlled date changes while open', async () => {
+    function ExternalDatePicker() {
+      const [date, setDate] = useState(new Date(2026, 2, 15, 10, 0));
+      const [showTimePicker, setShowTimePicker] = useState(true);
+      return (
+        <DatePicker
+          open
+          value={date}
+          onValueChange={(nextDate) => {
+            if (nextDate) setDate(nextDate);
+          }}
+        >
+          <DatePicker.Input />
+          <DatePicker.Calendar showTimePicker={showTimePicker}>
+            <button
+              type="button"
+              onClick={() => setDate(new Date(2026, 2, 20, 9, 15))}
+            >
+              Replace date
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowTimePicker(!showTimePicker)}
+            >
+              Toggle time
+            </button>
+          </DatePicker.Calendar>
+        </DatePicker>
+      );
+    }
+    await render(
+      <CenteredWrapper>
+        <ExternalDatePicker />
+      </CenteredWrapper>,
+    );
+    await page.getByRole('textbox').fill('18:45');
+    await page.getByRole('button', { name: 'Replace date' }).click();
+    await expect.element(page.getByRole('textbox')).toHaveValue('09:15');
+    await page.getByRole('button', { name: 'Toggle time' }).click();
+    await expect.element(page.getByRole('textbox')).not.toBeInTheDocument();
+    await page.getByRole('button', { name: 'Toggle time' }).click();
+    await expect.element(page.getByRole('textbox')).toHaveValue('09:15');
   });
 
   it('should not auto-close when date is selected with showTimePicker', async () => {

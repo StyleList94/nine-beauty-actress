@@ -2,16 +2,15 @@ import { type ReactNode, createContext, use, useMemo } from 'react';
 
 import {
   flexRender,
-  type Table as TanstackTable,
   type Header,
-  type ColumnDef,
   type SortingState,
   type PaginationState,
   type ColumnFiltersState,
   type RowSelectionState,
-  type VisibilityState,
+  type ColumnVisibilityState,
   type ExpandedState,
   type ColumnPinningState,
+  type RowData,
   type OnChangeFn,
 } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp } from 'lucide-react';
@@ -26,16 +25,20 @@ import {
   TableCell,
 } from 'lib/components/table';
 import { Button } from 'lib/components/button';
-import useDataTable from 'lib/hooks/use-data-table';
+import useDataTable, {
+  type DataTableInstance as TanstackTable,
+  type DataTableColumnDef as ColumnDef,
+  type DataTableFeatures,
+} from 'lib/hooks/use-data-table';
 
 import * as styles from './style.css';
 
 // ─── Context ─────────────────────────────────────────────
 
-type DataTableContextValue<TData = unknown> = {
+type DataTableContextValue<TData extends RowData = RowData> = {
   table: TanstackTable<TData>;
-  /** state 변경 시 context 재생성을 트리거하기 위한 값 (table 참조는 불변) */
-  tableState: ReturnType<TanstackTable<TData>['getState']>;
+  /** React 구독 상태 스냅샷 */
+  tableState: TanstackTable<TData>['state'];
 };
 
 const DataTableContext = createContext<DataTableContextValue | null>(null);
@@ -52,7 +55,7 @@ function useDataTableContext() {
 
 // ─── Types ───────────────────────────────────────────────
 
-export type DataTableProps<TData> = {
+export type DataTableProps<TData extends RowData> = {
   /** 테이블 데이터 배열 */
   data: TData[];
   /** 컬럼 정의 배열 */
@@ -85,8 +88,8 @@ export type DataTableProps<TData> = {
   onRowSelectionChange?: OnChangeFn<RowSelectionState>;
 
   // ─── 컬럼 가시성 ───────────────────────────────────
-  columnVisibility?: boolean | VisibilityState;
-  onColumnVisibilityChange?: OnChangeFn<VisibilityState>;
+  columnVisibility?: boolean | ColumnVisibilityState;
+  onColumnVisibilityChange?: OnChangeFn<ColumnVisibilityState>;
 
   // ─── 행 확장 ────────────────────────────────────────
   expanding?: boolean;
@@ -120,9 +123,7 @@ function getAriaSort(sorted: false | 'asc' | 'desc') {
   return undefined;
 }
 
-function SortIndicator<TData>({ header }: { header: Header<TData, unknown> }) {
-  const sorted = header.column.getIsSorted();
-
+function SortIndicator({ sorted }: { sorted: false | 'asc' | 'desc' }) {
   if (sorted === 'asc') return <ArrowUp className={styles.sortIcon} />;
 
   if (sorted === 'desc') return <ArrowDown className={styles.sortIcon} />;
@@ -130,7 +131,9 @@ function SortIndicator<TData>({ header }: { header: Header<TData, unknown> }) {
   return null;
 }
 
-function renderHeaderContent<TData>(header: Header<TData, unknown>) {
+function renderHeaderContent<TData extends RowData>(
+  header: Header<DataTableFeatures, TData, unknown>,
+) {
   if (header.isPlaceholder) return null;
 
   const rendered = flexRender(
@@ -149,7 +152,7 @@ function renderHeaderContent<TData>(header: Header<TData, unknown>) {
       aria-label={`${typeof header.column.columnDef.header === 'string' ? header.column.columnDef.header : header.column.id} 정렬`}
     >
       {rendered}
-      <SortIndicator header={header} />
+      <SortIndicator sorted={header.column.getIsSorted()} />
     </button>
   );
 }
@@ -164,7 +167,7 @@ function renderHeaderContent<TData>(header: Header<TData, unknown>) {
  * - DataTableContent, DataTablePagination 서브컴포넌트 조합으로 구성
  * - children function으로 테이블 인스턴스에 접근 가능 (고급 사용)
  */
-export function DataTable<TData>({
+export function DataTable<TData extends RowData>({
   data,
   columns,
   children,
@@ -215,7 +218,7 @@ export function DataTable<TData>({
     onColumnPinningChange,
   });
 
-  const tableState = table.getState();
+  const tableState = table.state;
   const contextValue = useMemo(
     () => ({ table, tableState }) as DataTableContextValue,
     [table, tableState],
@@ -295,7 +298,7 @@ export function DataTableContent({
 /** 페이지네이션 컨트롤을 렌더링합니다. */
 export function DataTablePagination({ className }: DataTablePaginationProps) {
   const { table } = useDataTableContext();
-  const { pageIndex, pageSize } = table.getState().pagination;
+  const { pageIndex, pageSize } = table.state.pagination;
   const totalRows = table.getRowCount();
 
   const from = pageIndex * pageSize + 1;

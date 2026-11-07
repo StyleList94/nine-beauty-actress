@@ -11,20 +11,38 @@ import * as useMountedStories from './useMounted.stories';
 
 # useMounted
 
-컴포넌트가 클라이언트에 완전히 마운트 되는 상태를 추적합니다.
+React 19.3부터 브라우저 전용 렌더링에는 `use(browser())`를 직접 사용합니다.
+
+`useMounted`는 기존 import를 위한 deprecated 호환 훅이며, 더 이상 마운트 완료 여부를 추적하지 않습니다.
+
+이전 버전과 달리 서버에서 `false`를 반환하지 않고 가장 가까운 `Suspense` 경계를 중단합니다.
+
+호출 컴포넌트 위에 `Suspense`가 필요하며, 브라우저에서는 첫 렌더부터 `true`를 반환합니다.
+
+DOM 측정이나 DOM 커밋 이후 초기화에는 여전히 effect나 ref 콜백을 사용합니다.
 
 ## Return
 
-`mounted`: `true`면 컴포넌트가 마운트 된 상태임을 의미합니다. `boolean`
+`true`: 브라우저에서 렌더링할 수 있음을 의미하며, DOM 마운트 완료를 보장하지 않습니다.
 
 ## Example
 
 <Story of={useMountedStories.Default} />
 
 ```tsx
-const TargetComponent = () => {
-  const isMounted = useMounted();
+import { Suspense, use } from 'react';
+import { browser } from 'react-dom';
 
-  return <p>is component mounted?: {isMounted ? 'yes!' : 'no!'}</p>;
-};
+function BrowserContent() {
+  use(browser());
+  return <p>브라우저에서 렌더링된 콘텐츠</p>;
+}
+
+function Example() {
+  return (
+    <Suspense fallback={<p>브라우저에서 준비 중...</p>}>
+      <BrowserContent />
+    </Suspense>
+  );
+}
 ```

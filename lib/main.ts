@@ -440,15 +440,23 @@ export type {
 };
 
 export type {
-  ColumnDef,
-  Table as TableInstance,
+  DataTableFeatures,
+  DataTableInstance,
+  DataTableColumnDef,
+  DataTableRow,
+  DataTableColumnDef as ColumnDef,
+  DataTableInstance as TableInstance,
+  DataTableRow as Row,
+} from './hooks/use-data-table';
+
+export type {
   SortingState,
   PaginationState,
   ColumnFiltersState,
   RowSelectionState,
-  VisibilityState,
+  ColumnVisibilityState,
+  ColumnVisibilityState as VisibilityState,
   ExpandedState,
   ColumnPinningState,
-  Row,
   OnChangeFn,
 } from '@tanstack/react-table';

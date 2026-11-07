@@ -1,5 +1,12 @@
-import type { ColumnDef } from '@tanstack/react-table';
+import type { Row } from '@tanstack/react-table';
+import type {
+  DataTableFeatures,
+  DataTableColumnDef as ColumnDef,
+} from 'lib/hooks/use-data-table';
 
+import { memo } from 'react';
+
+import { Subscribe } from '@tanstack/react-table';
 import { render } from 'vitest-browser-react';
 import { page, userEvent } from 'vitest/browser';
 
@@ -349,7 +356,7 @@ describe('Column Pinning', () => {
       <DataTable
         data={testData.slice(0, 3)}
         columns={columns}
-        columnPinning={{ left: ['id'] }}
+        columnPinning={{ start: ['id'], end: [] }}
       >
         <DataTableContent />
       </DataTable>,
@@ -446,4 +453,43 @@ describe('Accessibility', () => {
     const nameTh = page.getByTestId('data-table-head-name');
     await expect.element(nameTh).toHaveAttribute('aria-sort', 'descending');
   });
+});
+
+const MemoizedSelectionCell = memo(function SelectionCell({
+  row,
+}: {
+  row: Row<DataTableFeatures, TestData>;
+}) {
+  return (
+    <Subscribe
+      source={row.table.atoms.rowSelection}
+      selector={() => row.getIsSelected()}
+    >
+      {(selected) => (
+        <input
+          type="checkbox"
+          aria-label={`Memoized select ${row.original.id}`}
+          checked={selected}
+          onChange={row.getToggleSelectedHandler()}
+        />
+      )}
+    </Subscribe>
+  );
+});
+
+it('should update a subscribed selection cell with stable memoized row props', async () => {
+  const memoColumns: ColumnDef<TestData>[] = [
+    { id: 'select', cell: ({ row }) => <MemoizedSelectionCell row={row} /> },
+    ...columns,
+  ];
+  await render(
+    <DataTable data={testData.slice(0, 1)} columns={memoColumns} rowSelection>
+      <DataTableContent />
+    </DataTable>,
+  );
+  const checkbox = page.getByRole('checkbox', { name: 'Memoized select 1' });
+  await checkbox.click();
+  await expect.element(checkbox).toBeChecked();
+  await checkbox.click();
+  await expect.element(checkbox).not.toBeChecked();
 });

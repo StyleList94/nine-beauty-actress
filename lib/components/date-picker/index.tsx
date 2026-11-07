@@ -4,9 +4,7 @@ import {
   createContext,
   use,
   useCallback,
-  useEffect,
   useMemo,
-  useRef,
   useState,
   type AriaAttributes,
   type ReactNode,
@@ -198,7 +196,7 @@ function buildCalendarProps(
   mode: 'single' | 'range',
   options: {
     pendingRange: DateRange | undefined;
-    onRangeSelect: (range: DateRange | undefined) => void;
+    onRangeSelect: (range: DateRange | undefined, triggerDate: Date) => void;
     singleValue: Date | undefined;
     onSingleSelect: (date: Date | undefined) => void;
     calendarProps?: Omit<
@@ -393,39 +391,42 @@ function Input({
   );
 }
 
-// ── DatePicker.Calendar ──
-
-/**
- * DatePicker의 팝업 캘린더 패널입니다.
- *
- * @remarks
- * - single 모드: 날짜 선택 시 자동으로 닫힘 (`showTimePicker` 활성화 시 제외)
- * - range 모드: 두 번째 날짜 선택 시 자동으로 닫힘
- * - `showTimePicker`로 시간 선택 UI 추가 가능 (single 모드 전용)
- *
- * @example
- * ```tsx
- * <DatePicker.Calendar showTimePicker align="center" />
- * ```
- *
- * @see {@link Presets} - 날짜 프리셋 패널
- */
-function DatePickerCalendar({
+// The keyed editor keeps in-progress selections local to one open session.
+function DatePickerCalendarPanel({
   showTimePicker,
-  align = 'start',
   calendarProps,
   children,
-  className,
-}: DatePickerCalendarProps) {
+}: Pick<
+  DatePickerCalendarProps,
+  'showTimePicker' | 'calendarProps' | 'children'
+>) {
   const context = useDatePickerContext();
-  const [time, setTime] = useState(() =>
-    getInitialTime(showTimePicker, context.mode, context.value),
+  const initialTime = getInitialTime(
+    showTimePicker,
+    context.mode,
+    context.value,
   );
+  const timeValue =
+    context.value instanceof Date ? context.value.getTime() : undefined;
+  const [timeDraft, setTimeDraft] = useState({
+    value: timeValue,
+    showTimePicker,
+    mode: context.mode,
+    time: initialTime,
+  });
+  const timeSourceChanged =
+    !Object.is(timeDraft.value, timeValue) ||
+    timeDraft.showTimePicker !== showTimePicker ||
+    timeDraft.mode !== context.mode;
+  const time = timeSourceChanged ? initialTime : timeDraft.time;
 
-  useEffect(() => {
-    if (showTimePicker && context.mode === 'single')
-      setTime(getInitialTime(showTimePicker, context.mode, context.value));
-  }, [showTimePicker, context.mode, context.value]);
+  if (timeSourceChanged)
+    setTimeDraft({
+      value: timeValue,
+      showTimePicker,
+      mode: context.mode,
+      time: initialTime,
+    });
 
   const applyTime = (date: Date, timeStr: string): Date => {
     const [hours, minutes] = timeStr.split(':').map(Number);
@@ -443,56 +444,69 @@ function DatePickerCalendar({
     }
   };
 
-  // ── Range: 내부 pending 상태 (완성 전까지 onValueChange 미호출) ──
-  const [pendingRange, setPendingRange] = useState<DateRange | undefined>(
+  // Keep in-progress clicks local until the second date is selected.
+  const rangeValue =
     context.mode === 'range'
       ? (context.value as DateRange | undefined)
-      : undefined,
-  );
-  const rangeClickCount = useRef(0);
-  const needsFreshStart = useRef(false);
-  const valueRef = useRef(context.value);
-  valueRef.current = context.value;
+      : undefined;
+  const rangeFrom = rangeValue?.from?.getTime();
+  const rangeTo = rangeValue?.to?.getTime();
+  const [rangeDraft, setRangeDraft] = useState({
+    mode: context.mode,
+    from: rangeFrom,
+    to: rangeTo,
+    pendingRange: rangeValue,
+    clickCount: 0,
+  });
+  const rangeSourceChanged =
+    rangeDraft.mode !== context.mode ||
+    !Object.is(rangeDraft.from, rangeFrom) ||
+    !Object.is(rangeDraft.to, rangeTo);
+  const pendingRange = rangeSourceChanged
+    ? rangeValue
+    : rangeDraft.pendingRange;
+  const clickCount = rangeSourceChanged ? 0 : rangeDraft.clickCount;
 
-  useEffect(() => {
-    if (context.open) {
-      const val = valueRef.current as DateRange | undefined;
-      setPendingRange(val);
-      rangeClickCount.current = 0;
-      needsFreshStart.current = !!(val?.from && val.to);
-    }
-  }, [context.open]);
+  if (rangeSourceChanged)
+    setRangeDraft({
+      mode: context.mode,
+      from: rangeFrom,
+      to: rangeTo,
+      pendingRange: rangeValue,
+      clickCount: 0,
+    });
 
-  const handleRangeSelect = (range: DateRange | undefined) => {
-    if (needsFreshStart.current) {
-      needsFreshStart.current = false;
-      let clickedDate: Date | undefined;
-      if (range?.from && range.from.getTime() !== pendingRange?.from?.getTime())
-        clickedDate = range.from;
-      else if (range?.to && range.to.getTime() !== pendingRange?.to?.getTime())
-        clickedDate = range.to;
-      else clickedDate = range?.from ?? range?.to;
+  const handleRangeSelect = (
+    range: DateRange | undefined,
+    triggerDate: Date,
+  ) => {
+    const needsFreshStart =
+      clickCount === 0 && !!(pendingRange?.from && pendingRange.to);
+    const nextRange = needsFreshStart
+      ? { from: triggerDate, to: undefined }
+      : range;
+    setRangeDraft({
+      mode: context.mode,
+      from: rangeFrom,
+      to: rangeTo,
+      pendingRange: nextRange,
+      clickCount: clickCount >= 1 ? 0 : 1,
+    });
 
-      setPendingRange(
-        clickedDate ? { from: clickedDate, to: undefined } : undefined,
-      );
-      rangeClickCount.current = 1;
-      return;
-    }
-
-    rangeClickCount.current += 1;
-    setPendingRange(range);
-
-    if (rangeClickCount.current >= 2) {
-      context.onValueChange(range);
-      rangeClickCount.current = 0;
+    if (clickCount >= 1) {
+      context.onValueChange(nextRange);
       context.setOpen(false);
     }
   };
 
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = event.target.value;
-    setTime(newTime);
+    setTimeDraft({
+      value: timeValue,
+      showTimePicker,
+      mode: context.mode,
+      time: newTime,
+    });
     if (context.mode === 'single' && context.value instanceof Date)
       context.onValueChange(applyTime(context.value, newTime));
   };
@@ -542,20 +556,60 @@ function DatePickerCalendar({
     </div>
   );
 
+  return hasPresets ? (
+    <div className={styles.datePickerPanel}>
+      {children}
+      {calendarWithTime}
+    </div>
+  ) : (
+    calendarWithTime
+  );
+}
+
+// ── DatePicker.Calendar ──
+
+/**
+ * DatePicker의 팝업 캘린더 패널입니다.
+ *
+ * @remarks
+ * - single 모드: 날짜 선택 시 자동으로 닫힘 (`showTimePicker` 활성화 시 제외)
+ * - range 모드: 두 번째 날짜 선택 시 자동으로 닫힘
+ * - `showTimePicker`로 시간 선택 UI 추가 가능 (single 모드 전용)
+ *
+ * @example
+ * ```tsx
+ * <DatePicker.Calendar showTimePicker align="center" />
+ * ```
+ *
+ * @see {@link Presets} - 날짜 프리셋 패널
+ */
+function DatePickerCalendar({
+  showTimePicker,
+  align = 'start',
+  calendarProps,
+  children,
+  className,
+}: DatePickerCalendarProps) {
+  const { open } = useDatePickerContext();
+  const [session, setSession] = useState({ open, key: 0 });
+
+  // Reset only when opening, so an exiting Popover retains its content.
+  if (session.open !== open)
+    setSession({ open, key: session.key + (open ? 1 : 0) });
+
   return (
     <PopoverContent
       align={align}
       sideOffset={4}
       className={cn(styles.datePickerContent, className)}
     >
-      {hasPresets ? (
-        <div className={styles.datePickerPanel}>
-          {children}
-          {calendarWithTime}
-        </div>
-      ) : (
-        calendarWithTime
-      )}
+      <DatePickerCalendarPanel
+        key={session.key}
+        showTimePicker={showTimePicker}
+        calendarProps={calendarProps}
+      >
+        {children}
+      </DatePickerCalendarPanel>
     </PopoverContent>
   );
 }
