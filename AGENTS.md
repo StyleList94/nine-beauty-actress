@@ -1,0 +1,254 @@
+# AGENTS.md
+
+Shared guidance for coding agents working in this repository.
+
+## Project Overview
+
+**Nine Beauty Actress (구미호)** - A React UI component library with type-safe CSS-in-TS via Vanilla Extract, zero runtime CSS, and Motion animations. Published to GitHub Packages as `@stylelist94/nine-beauty-actress`.
+
+## Commands
+
+```bash
+pnpm install          # Install dependencies
+pnpm dev              # Start Storybook dev server (port 6006)
+pnpm build            # Type check + Vite build
+pnpm test             # Run Vitest once
+pnpm test:watch       # Run Vitest in watch mode
+pnpm lint             # Oxlint check
+pnpm lint:fix         # Oxlint auto-fix
+pnpm format           # Oxfmt format all
+pnpm format:check     # Oxfmt check formatting
+pnpm build-storybook  # Build static Storybook
+```
+
+## Architecture
+
+### Library Structure (`lib/`)
+
+```text
+lib/
+├── main.ts                    # Main entry - exports all components/hooks
+├── core/
+│   ├── utils.ts               # cn(), mergeRefs(), isFileAccepted(), debounce()
+│   ├── styles.ts              # Re-exports all style exports
+│   ├── tokens.ts              # Re-exports all token exports
+│   └── styles/
+│       ├── theme.css.ts       # Semantic color variables (vars)
+│       └── tokens/            # Primitive tokens
+│           ├── colors.css.ts  # palette (OKLCH colors + alpha variants)
+│           ├── font.css.ts    # font (family, size, weight, lineHeight)
+│           ├── typography.css.ts # typography (compositions)
+│           ├── spacing.css.ts # spacing (px-keyed rem scale)
+│           ├── radius.css.ts  # radius (border-radius)
+│           ├── shadows.css.ts # shadows (box-shadow)
+│           └── motion.css.ts  # motion (duration, easing)
+├── components/                # UI components (Button, Card, TextInput, Switch, Dialog, Tooltip, etc.)
+└── hooks/                     # useDebounce, useMounted, useVirtualScroll
+```
+
+### Component Pattern
+
+Each component follows:
+
+```text
+component-name/
+├── index.tsx        # Component + types
+└── style.css.ts     # Vanilla Extract styles
+```
+
+### Styling System
+
+- **Vanilla Extract**: Type-safe CSS-in-TS with zero runtime
+- **@vanilla-extract/recipes**: Used for component variant management (CVA equivalent)
+- **OKLCH color space**: Perceptually uniform colors
+- **Dark mode**: Media queries + `.dark` class + `[data-theme="dark"]` attribute
+- **Data attributes**: `data-slot`, `data-variant`, `data-size` for styling hooks
+
+### Token System (`lib/core/styles/tokens/`)
+
+**Primitives** (raw design values):
+
+- `font` - family, size, weight, lineHeight, letterSpacing
+- `palette` - OKLCH colors with alpha variants (e.g., `palette.purple['500/10']`)
+- `spacing` - rem-based spacing scale
+- `radius`, `motion`, `shadows` - other design tokens
+
+**Semantic** (meaningful CSS variables via `vars`):
+
+- `vars.color.*` - auto-handles dark mode via CSS variables
+- Layout: `background`, `foreground`, `muted`, `border`, `accent`
+- Status: `primary`, `brand`, `success`, `warning`, `error`, `info` (with `.base`, `.strong`, `.muted`, `.foreground`)
+- Overlay: `success.overlay`, `error.overlay`, `surfaceSubtle`, `borderSubtle`, `ring`
+
+**Compositions** (`typography`):
+
+- Predefined text styles combining font tokens: `heading`, `body`, `label`, `caption`, `code`
+
+**Import Patterns**:
+
+```typescript
+// In component style.css.ts files
+import { vars } from 'lib/core/styles/theme.css';
+import {
+  palette,
+  spacing,
+  radius,
+  motion,
+  font,
+  shadows,
+} from 'lib/core/styles/tokens';
+
+// For library consumers
+import { palette, spacing } from '@stylelist94/nine-beauty-actress/tokens';
+import { vars } from '@stylelist94/nine-beauty-actress/styles';
+```
+
+**Usage Rules**:
+
+```typescript
+// ✅ Use semantic tokens for theme-aware colors
+background: vars.color.primary.base;
+
+// ✅ Use palette for fixed colors (gradients, brand)
+background: `linear-gradient(${palette.purple[500]}, ${palette.orange[400]})`;
+
+// ✅ Alpha variants in palette (format: 'level/opacity')
+background: palette.purple['500/10']; // 10% opacity
+
+// ❌ Don't wrap OKLCH in oklch() - already OKLCH format
+background: `oklch(from ${palette.green[500]} l c h / 0.5)`; // Wrong!
+
+// ❌ Don't append hex alpha to VE vars — produces `var(--_hash)20` (invalid CSS)
+boxShadow: `0 0 0 3px ${vars.color.destructive.base}20`; // Wrong!
+
+// ❌ Don't append hex alpha to OKLCH values — produces `oklch(...)40` (invalid CSS)
+boxShadow: `0 0 24px ${palette.orange[400]}40`; // Wrong!
+
+// ✅ Use color-mix for transparency with VE vars or OKLCH values
+boxShadow: `0 0 0 3px color-mix(in oklch, ${vars.color.destructive.base} 20%, transparent)`;
+```
+
+### Core Utilities (`lib/core/utils.ts`)
+
+- `cn()` — class name merging (clsx wrapper)
+- `mergeRefs()` — combines multiple refs into one callback ref (use instead of manual ref-merging boilerplate)
+- `isFileAccepted()` — validates file against accept string
+- `debounce()` — standard debounce
+
+### Styling Gotchas
+
+- **VE CSS vars are hashed** - `vars.color.*` compiles to `--_1ndu90r0` etc, can't reference in plain CSS
+- **Tailwind + VE incompatible in same file** - use one per file (PostCSS vs build-time)
+- **Library shouldn't set global body styles** - app-level responsibility, use `src/styles.css` for Storybook only
+- **CSS transition needs initial value** - e.g., `boxShadow: 'none'` required for shadow transitions
+- **Token tests sync** - update `src/tests/tokens.test.ts` when adding new tokens
+- **No Tailwind in library components** - components in `lib/` must use VE styles only. Tailwind is for Storybook (`src/`) only
+
+### Key Technologies
+
+- **Build**: Vite 8 + Rolldown (Rust bundler)
+- **CSS**: Vanilla Extract + TailwindCSS v4
+- **Animation**: Motion library (Framer Motion successor)
+- **UI Primitives**: Radix UI (Checkbox, Collapsible, Dialog, Label, Popover, Scroll Area, Separator, Slider, Switch, ToggleGroup, Tooltip)
+- **Date**: react-day-picker v9, date-fns v4 (Calendar, DatePicker)
+- **Lint/Format**: Oxlint + Oxfmt (VoidZero/Oxc toolchain)
+- **Testing**: Vitest (globals enabled) — Browser tests via Playwright chromium (`*.spec.tsx`), Unit tests via jsdom (`*.test.ts`)
+- **Storybook**: React + Vite with autodocs
+
+### Build Outputs
+
+Vite builds to `dist/` with ESM-only output:
+
+- `main.es.js` - Components and hooks
+- `styles.es.js` - Style exports only
+- `style.css` - All CSS bundled
+
+### Peer Dependencies
+
+React ≥19.3, React-DOM ≥19.3, Motion ≥12 (not bundled)
+
+## Development Workflow
+
+1. **Components**: Create in `lib/components/` with `index.tsx` + `style.css.ts`
+2. **Stories**: Add to `src/stories/*.stories.tsx` with Meta + argTypes
+3. **Tests**: Browser tests → `src/tests/*.spec.tsx`, Unit tests → `src/tests/*.test.ts`
+4. **Export**: Add to `lib/main.ts`
+
+### Testing Conventions
+
+**Browser tests (`*.spec.tsx`)** — component rendering, interaction, accessibility:
+
+```tsx
+import { render } from 'vitest-browser-react';
+import { page, userEvent } from 'vitest/browser';
+```
+
+- `vitest/globals` enabled — no need to import `describe`, `it`, `expect`, `vi`
+- Use Locator API: `page.getByRole()`, `page.getByText()` (Testing Library style)
+- Async assertions: `await expect.element(locator).toBeVisible()`
+- Click: `await locator.click()` or `await userEvent.click(locator)`
+- Describe groups: `Rendering and Props`, `Popup Open/Close`, `Props`, `Sub-components`, `Accessibility`
+- Dialog without `DialogDescription` needs `aria-describedby={undefined}` on `DialogContent` (suppresses Radix warning)
+- Overlay components (Dialog, Popover, Combobox): test open/close/ESC/outside-click patterns
+
+**Unit tests (`*.test.ts`)** — pure functions, hooks, token validation:
+
+```ts
+// globals enabled, no imports needed
+describe('cn', () => {
+  it('should merge classes', () => {
+    expect(cn('foo', 'bar')).toBe('foo bar');
+  });
+});
+```
+
+### Storybook Conventions
+
+- Use **Tailwind classes** for story layout (not inline styles) — Storybook has TailwindCSS configured
+- List components **vertically** (`flex flex-col`) by default; use **horizontal** (`flex flex-wrap`) only for size comparisons
+- Group variants together in a single story (e.g., all button variants in one `Variants` story)
+- Use `noControls` helper function for showcase stories: `const noControls = (story: string) => ({ parameters: { controls: { disable: true }, docs: { description: { story } } } })`
+- Use `parameters.docs.description.component` on meta for component-level description (matches TSDoc summary)
+- For composition components (Card), use custom `StoryObj<CustomArgs>` type with `_prefixed` internal arg keys, `name` for display, and `table.category` for sub-component grouping
+- Use library's own components in stories (TextInput, Switch, etc.) instead of raw HTML elements
+
+### TSDoc Convention
+
+- Main component: one-line summary + `@remarks` (bullet points) + `@example` (tsx code block)
+- Sub-components: single-line `/** description */`
+- Storybook `docs.description.component` should match the TSDoc summary line
+
+## Code Quality
+
+- Oxlint with native plugins (eslint, typescript, unicorn, oxc, react, import, jsx-a11y, vitest) + JS plugins (react, import, jsx-a11y, testing-library, storybook)
+- Oxfmt: 80 char width, single quotes, trailing commas, Tailwind CSS class sorting
+- Pre-commit: Husky runs lint-staged (oxfmt --write, oxlint --fix)
+- TypeScript strict mode enabled
+- Prefer functional paradigm (`.filter()/.forEach()/.map()`) over imperative loops
+- React 19: `MutableRefObject` is deprecated — `RefObject` is mutable by default, no cast needed
+- `no-param-reassign` with refs: assign to local variable before mutating `.current`
+- `exhaustive-deps` with context: destructure stable `useState` setters from context, add to deps
+
+## PR Review Checklist
+
+When reviewing PRs via `claude-code-action`, verify:
+
+- New components are exported in `lib/main.ts` with Story and tests
+- New tokens are synced in `src/tests/tokens.test.ts`
+- `package.json` exports paths match actual `dist/` output structure
+- Build output maintains `preserveModules` structure (no single-bundle regression)
+- No unintended dependency changes (deps should remain externalized, not inlined)
+
+## Distribution
+
+Published to GitHub Packages. Users configure `.npmrc`:
+
+```ini
+@stylelist94:registry=https://npm.pkg.github.com
+```
+
+### Tailwind Theme Integration
+
+- `build/generate-tailwind-theme.js` — auto-generates Tailwind v4 `@theme prefix(nine)` CSS from VE tokens
+- Prefix `nine` — utilities like `bg-nine-purple-500`, `text-nine-neutral-950` to avoid overriding Tailwind defaults
+- Radix Toast `duration: 0` → converted to `Infinity` (Radix treats 0 as falsy, falling back to default 5s)
