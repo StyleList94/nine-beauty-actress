@@ -1,10 +1,12 @@
+import type { DataTableColumnDef as ColumnDef } from 'lib/hooks/use-data-table';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type {
-  ColumnDef,
   SortingState,
   PaginationState,
   ColumnFiltersState,
 } from '@tanstack/react-table';
+
+import { Subscribe } from '@tanstack/react-table';
 
 import { useState } from 'react';
 
@@ -55,8 +57,10 @@ const invoiceColumns: ColumnDef<Invoice>[] = [
 ];
 
 const statusStyle: Record<string, string> = {
-  결제완료: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
-  대기중: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+  결제완료:
+    'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+  대기중:
+    'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
   실패: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
 };
 
@@ -193,7 +197,7 @@ export const Default: StoryObj<DefaultArgs> = {
       description: '컬럼 정의 배열',
       table: {
         category: 'DataTable',
-        type: { summary: 'ColumnDef<TData>[]' },
+        type: { summary: 'DataTableColumnDef<TData>[]' },
       },
     },
     _children: {
@@ -343,10 +347,10 @@ export const Default: StoryObj<DefaultArgs> = {
       name: 'columnVisibility',
       control: false,
       description:
-        '컬럼 가시성 활성화. true면 전체 표시, VisibilityState면 초기 상태',
+        '컬럼 가시성 활성화. true면 전체 표시, ColumnVisibilityState면 초기 상태',
       table: {
         category: 'DataTable',
-        type: { summary: 'boolean | VisibilityState' },
+        type: { summary: 'boolean | ColumnVisibilityState' },
         defaultValue: { summary: 'undefined' },
       },
     },
@@ -356,7 +360,7 @@ export const Default: StoryObj<DefaultArgs> = {
       description: '컬럼 가시성 변경 핸들러 (controlled)',
       table: {
         category: 'DataTable',
-        type: { summary: 'OnChangeFn<VisibilityState>' },
+        type: { summary: 'OnChangeFn<ColumnVisibilityState>' },
       },
     },
     _expanding: {
@@ -578,18 +582,29 @@ const selectionColumns: ColumnDef<Invoice>[] = [
   {
     id: 'select',
     header: ({ table: t }) => (
-      <Checkbox
-        checked={t.getIsAllPageRowsSelected()}
-        onCheckedChange={(v) => t.toggleAllPageRowsSelected(!!v)}
-        aria-label="전체 선택"
-      />
+      <Subscribe source={t.store} selector={() => t.getIsAllPageRowsSelected()}>
+        {(selected) => (
+          <Checkbox
+            checked={selected}
+            onCheckedChange={(v) => t.toggleAllPageRowsSelected(!!v)}
+            aria-label="전체 선택"
+          />
+        )}
+      </Subscribe>
     ),
     cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(v) => row.toggleSelected(!!v)}
-        aria-label="행 선택"
-      />
+      <Subscribe
+        source={row.table.atoms.rowSelection}
+        selector={() => row.getIsSelected()}
+      >
+        {(selected) => (
+          <Checkbox
+            checked={selected}
+            onCheckedChange={(v) => row.toggleSelected(!!v)}
+            aria-label="행 선택"
+          />
+        )}
+      </Subscribe>
     ),
     enableSorting: false,
   },
@@ -598,7 +613,7 @@ const selectionColumns: ColumnDef<Invoice>[] = [
 
 export const RowSelection: StoryObj = {
   ...noControls(
-    'rowSelection으로 체크박스 행 선택을 구현합니다. children function으로 선택 수를 표시합니다.',
+    'rowSelection으로 체크박스 행 선택을 구현합니다. memo/React Compiler에서도 갱신되도록 커스텀 header/cell 내부의 Subscribe에서 선택 상태를 구독합니다.',
   ),
   render: () => (
     <div className="flex w-[600px] flex-col gap-3">
@@ -667,14 +682,21 @@ const expandColumns: ColumnDef<Invoice>[] = [
     id: 'expand',
     header: '',
     cell: ({ row }) => (
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => row.toggleExpanded()}
-        aria-label={row.getIsExpanded() ? '접기' : '펼치기'}
+      <Subscribe
+        source={row.table.atoms.expanded}
+        selector={() => row.getIsExpanded()}
       >
-        {row.getIsExpanded() ? '▼' : '▶'}
-      </Button>
+        {(expanded) => (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => row.toggleExpanded()}
+            aria-label={expanded ? '접기' : '펼치기'}
+          >
+            {expanded ? '▼' : '▶'}
+          </Button>
+        )}
+      </Subscribe>
     ),
     enableSorting: false,
   },
@@ -682,7 +704,9 @@ const expandColumns: ColumnDef<Invoice>[] = [
 ];
 
 export const RowExpanding: StoryObj = {
-  ...noControls('expanding으로 행을 펼쳐 상세 정보를 표시합니다.'),
+  ...noControls(
+    'expanding으로 상세 행의 펼침 상태를 토글합니다. 커스텀 셀 내부의 Subscribe가 expanded 상태를 구독하므로 memo/React Compiler에서도 버튼이 갱신됩니다.',
+  ),
   render: () => (
     <div className="w-[600px]">
       <DataTable
@@ -746,7 +770,7 @@ export const ColumnPinning: StoryObj = {
         data={employees}
         columns={employeeColumns}
         sorting
-        columnPinning={{ left: ['id', 'name'] }}
+        columnPinning={{ start: ['id', 'name'], end: [] }}
       >
         <DataTableContent />
       </DataTable>

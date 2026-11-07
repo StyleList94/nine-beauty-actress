@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { Suspense } from 'react';
+
 import useMounted from 'lib/hooks/use-mounted';
 
 const MountedDemo = () => {
@@ -7,7 +9,7 @@ const MountedDemo = () => {
 
   return (
     <p className="text-sm">
-      is component mounted?: {isMounted ? 'yes!' : 'no!'}
+      browser rendering ready?: {isMounted ? 'yes!' : 'no!'}
     </p>
   );
 };
@@ -20,7 +22,8 @@ const meta: Meta<typeof MountedDemo> = {
     layout: 'centered',
     docs: {
       description: {
-        component: '컴포넌트 마운트 여부를 반환하는 훅입니다.',
+        component:
+          'React 19.3 브라우저 전용 렌더링을 위한 deprecated 호환 훅입니다. 새 코드는 use(browser())를 사용합니다.',
       },
     },
   },
@@ -30,4 +33,12 @@ export default meta;
 
 type Story = StoryObj<typeof MountedDemo>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  decorators: [
+    (StoryContent) => (
+      <Suspense fallback={<p>브라우저에서 준비 중...</p>}>
+        <StoryContent />
+      </Suspense>
+    ),
+  ],
+};
