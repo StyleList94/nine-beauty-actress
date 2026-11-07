@@ -1,5 +1,6 @@
 # Build stage
-FROM node:24-alpine AS builder
+# Storybook emits static files; build once natively for both runtime platforms.
+FROM --platform=$BUILDPLATFORM node:24-alpine AS builder
 
 # Enable corepack for pnpm
 RUN corepack enable && corepack prepare pnpm@12.18.0 --activate
